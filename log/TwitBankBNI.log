@@ -79,4 +79,463 @@
  2015-10-02 07:45:10,501 INFO - Establishing connection.
  2015-10-02 07:45:12,172 INFO - Connection established.
  2015-10-02 07:45:12,173 INFO - Receiving status stream.
+ 2015-10-02 08:14:28,034 INFO - Establishing connection.
+ 2015-10-02 08:14:29,805 INFO - Connection established.
+ 2015-10-02 08:14:29,806 INFO - Receiving status stream.
+ 2015-10-02 08:42:42,653 INFO - Stream closed.
+ 2015-10-02 08:42:42,654 INFO - Stream closed.
+ 2015-10-02 08:42:42,654 INFO - Waiting for 250 milliseconds
+ 2015-10-02 08:42:42,904 INFO - Establishing connection.
+ 2015-10-02 08:42:44,966 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:42:44,967 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 08:42:45,324 INFO - Stream closed.
+ 2015-10-02 08:42:45,328 INFO - Stream closed.
+ 2015-10-02 08:42:45,330 INFO - Waiting for 250 milliseconds
+ 2015-10-02 08:42:45,580 INFO - Establishing connection.
+ 2015-10-02 08:42:47,202 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:42:47,204 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 08:42:54,969 INFO - Establishing connection.
+ 2015-10-02 08:42:56,362 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:42:56,362 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 08:42:57,208 INFO - Establishing connection.
+ 2015-10-02 08:42:58,930 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:42:58,930 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 08:43:16,363 INFO - Establishing connection.
+ 2015-10-02 08:43:18,740 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:43:18,741 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 08:43:18,933 INFO - Establishing connection.
+ 2015-10-02 08:43:20,582 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:43:20,582 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 08:43:58,740 INFO - Establishing connection.
+ 2015-10-02 08:44:00,586 INFO - Establishing connection.
+ 2015-10-02 08:44:00,618 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:44:00,618 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 08:44:02,210 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:44:02,210 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 08:45:20,616 INFO - Establishing connection.
+ 2015-10-02 08:45:22,210 INFO - Establishing connection.
+ 2015-10-02 08:45:35,685 INFO - Connection reset
+ 2015-10-02 08:45:35,700 INFO - Waiting for 160000 milliseconds
+ 2015-10-02 08:45:36,323 INFO - Connection reset
+ 2015-10-02 08:45:36,324 INFO - Waiting for 160000 milliseconds
+ 2015-10-02 08:48:15,698 INFO - Establishing connection.
+ 2015-10-02 08:48:16,323 INFO - Establishing connection.
+ 2015-10-02 08:48:17,398 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:48:17,398 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 08:48:17,591 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:48:17,592 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 08:48:33,399 INFO - Establishing connection.
+ 2015-10-02 08:48:33,593 INFO - Establishing connection.
+ 2015-10-02 08:48:35,469 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:48:35,496 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 08:48:35,736 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:48:35,737 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 08:49:07,499 INFO - Establishing connection.
+ 2015-10-02 08:49:07,741 INFO - Establishing connection.
+ 2015-10-02 08:49:24,845 INFO - Unexpected end of file from server
+ 2015-10-02 08:49:24,845 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 08:49:24,872 INFO - Unexpected end of file from server
+ 2015-10-02 08:49:24,873 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 08:50:28,847 INFO - Establishing connection.
+ 2015-10-02 08:50:28,873 INFO - Establishing connection.
+ 2015-10-02 08:50:33,109 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:50:33,110 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 08:50:33,210 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:50:33,211 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 08:50:49,113 INFO - Establishing connection.
+ 2015-10-02 08:50:49,212 INFO - Establishing connection.
+ 2015-10-02 08:50:50,416 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:50:50,417 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 08:50:50,441 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:50:50,442 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 08:51:22,419 INFO - Establishing connection.
+ 2015-10-02 08:51:22,443 INFO - Establishing connection.
+ 2015-10-02 08:51:24,225 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:51:24,226 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 08:51:24,234 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:51:24,234 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 08:52:28,225 INFO - Establishing connection.
+ 2015-10-02 08:52:28,233 INFO - Establishing connection.
+ 2015-10-02 08:52:30,228 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:52:30,229 INFO - Waiting for 128000 milliseconds
+ 2015-10-02 08:52:30,779 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:52:30,780 INFO - Waiting for 128000 milliseconds
+ 2015-10-02 08:54:38,228 INFO - Establishing connection.
+ 2015-10-02 08:54:38,780 INFO - Establishing connection.
+ 2015-10-02 08:54:41,145 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:54:41,146 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 08:54:41,157 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:54:41,157 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 08:58:41,143 INFO - Establishing connection.
+ 2015-10-02 08:58:41,150 INFO - Establishing connection.
+ 2015-10-02 08:58:42,657 INFO - Connection established.
+ 2015-10-02 08:58:42,657 INFO - Receiving status stream.
+ 2015-10-02 08:58:42,686 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 08:58:42,686 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 09:02:42,680 INFO - Establishing connection.
+ 2015-10-02 09:02:44,571 INFO - Connection established.
+ 2015-10-02 09:02:44,571 INFO - Receiving status stream.
+ 2015-10-02 09:18:59,145 INFO - Establishing connection.
+ 2015-10-02 09:19:01,478 INFO - Connection established.
+ 2015-10-02 09:19:01,478 INFO - Receiving status stream.
+ 2015-10-02 09:19:09,380 INFO - Establishing connection.
+ 2015-10-02 09:19:11,925 INFO - Connection established.
+ 2015-10-02 09:19:11,926 INFO - Receiving status stream.
+ 2015-10-02 09:20:44,374 INFO - Establishing connection.
+ 2015-10-02 09:21:17,393 INFO - Connection established.
+ 2015-10-02 09:21:17,393 INFO - Receiving status stream.
+ 2015-10-02 09:24:59,325 INFO - Establishing connection.
+ 2015-10-02 09:25:20,013 INFO - Establishing connection.
+ 2015-10-02 09:25:22,113 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:25:22,116 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 09:25:32,545 INFO - Connection established.
+ 2015-10-02 09:25:32,545 INFO - Receiving status stream.
+ 2015-10-02 09:32:28,319 INFO - Establishing connection.
+ 2015-10-02 09:32:31,572 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:32:31,575 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 09:32:41,576 INFO - Establishing connection.
+ 2015-10-02 09:32:42,972 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:32:42,972 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 09:33:02,975 INFO - Establishing connection.
+ 2015-10-02 09:33:04,749 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:33:04,750 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 09:33:44,753 INFO - Establishing connection.
+ 2015-10-02 09:33:48,995 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:33:48,996 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 09:59:10,036 INFO - Establishing connection.
+ 2015-10-02 09:59:12,407 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:59:12,410 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 09:59:22,412 INFO - Establishing connection.
+ 2015-10-02 09:59:24,698 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:59:24,699 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 09:59:44,704 INFO - Establishing connection.
+ 2015-10-02 09:59:46,678 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 09:59:46,679 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 10:00:26,678 INFO - Establishing connection.
+ 2015-10-02 10:00:28,897 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:00:28,898 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 10:05:03,860 INFO - Establishing connection.
+ 2015-10-02 10:05:06,307 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:05:06,309 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 10:05:16,310 INFO - Establishing connection.
+ 2015-10-02 10:05:17,769 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:05:17,769 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 10:05:37,769 INFO - Establishing connection.
+ 2015-10-02 10:05:39,326 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:05:39,327 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 10:06:19,328 INFO - Establishing connection.
+ 2015-10-02 10:06:21,023 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:06:21,024 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 10:07:41,023 INFO - Establishing connection.
+ 2015-10-02 10:07:43,898 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:07:43,898 INFO - Waiting for 160000 milliseconds
+ 2015-10-02 10:10:23,895 INFO - Establishing connection.
+ 2015-10-02 10:10:26,104 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:10:26,104 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 10:14:26,102 INFO - Establishing connection.
+ 2015-10-02 10:14:28,688 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:14:28,689 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 10:18:28,684 INFO - Establishing connection.
+ 2015-10-02 10:18:30,594 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 10:18:30,595 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 10:36:31,428 INFO - Stream closed.
+ 2015-10-02 10:36:31,432 INFO - Stream closed.
+ 2015-10-02 10:36:31,433 INFO - Waiting for 250 milliseconds
+ 2015-10-02 10:36:31,688 INFO - Establishing connection.
+ 2015-10-02 10:36:42,518 INFO - Stream closed.
+ 2015-10-02 10:36:42,521 INFO - Stream closed.
+ 2015-10-02 10:36:42,523 INFO - Waiting for 250 milliseconds
+ 2015-10-02 10:36:42,776 INFO - Establishing connection.
+ 2015-10-02 10:37:04,327 INFO - Stream closed.
+ 2015-10-02 10:37:04,331 INFO - Stream closed.
+ 2015-10-02 10:37:04,332 INFO - Waiting for 250 milliseconds
+ 2015-10-02 10:37:04,586 INFO - Establishing connection.
+ 2015-10-02 10:37:21,382 INFO - Remote host closed connection during handshake
+ 2015-10-02 10:37:21,383 INFO - Waiting for 500 milliseconds
+ 2015-10-02 10:37:21,402 INFO - Remote host closed connection during handshake
+ 2015-10-02 10:37:21,403 INFO - Waiting for 500 milliseconds
+ 2015-10-02 10:37:21,888 INFO - Establishing connection.
+ 2015-10-02 10:37:21,903 INFO - Establishing connection.
+ 2015-10-02 10:37:47,515 INFO - Read timed out
+ 2015-10-02 10:37:47,516 INFO - Waiting for 500 milliseconds
+ 2015-10-02 10:37:48,021 INFO - Establishing connection.
+ 2015-10-02 10:38:18,521 INFO - Remote host closed connection during handshake
+ 2015-10-02 10:38:18,522 INFO - Remote host closed connection during handshake
+ 2015-10-02 10:38:18,522 INFO - Waiting for 1000 milliseconds
+ 2015-10-02 10:38:18,523 INFO - Waiting for 1000 milliseconds
+ 2015-10-02 10:38:19,526 INFO - Establishing connection.
+ 2015-10-02 10:38:19,526 INFO - Establishing connection.
+ 2015-10-02 10:38:21,482 INFO - Connection established.
+ 2015-10-02 10:38:21,482 INFO - Receiving status stream.
+ 2015-10-02 10:38:26,500 INFO - Connection established.
+ 2015-10-02 10:38:26,500 INFO - Receiving status stream.
+ 2015-10-02 10:38:51,391 INFO - Connection established.
+ 2015-10-02 10:38:51,392 INFO - Receiving status stream.
+ 2015-10-02 11:29:56,858 INFO - Establishing connection.
+ 2015-10-02 11:30:29,507 INFO - Connection established.
+ 2015-10-02 11:30:29,507 INFO - Receiving status stream.
+ 2015-10-02 15:11:16,613 INFO - Establishing connection.
+ 2015-10-02 15:11:18,876 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:11:18,880 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 15:11:28,884 INFO - Establishing connection.
+ 2015-10-02 15:11:30,255 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:11:30,256 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 15:11:50,260 INFO - Establishing connection.
+ 2015-10-02 15:11:53,127 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:11:53,128 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 15:12:33,130 INFO - Establishing connection.
+ 2015-10-02 15:12:35,092 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:12:35,093 INFO - Waiting for 80000 milliseconds
+ 2015-10-02 15:13:55,095 INFO - Establishing connection.
+ 2015-10-02 15:13:58,015 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:13:58,016 INFO - Waiting for 160000 milliseconds
+ 2015-10-02 15:16:38,015 INFO - Establishing connection.
+ 2015-10-02 15:16:39,626 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:16:39,627 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 15:20:39,621 INFO - Establishing connection.
+ 2015-10-02 15:20:41,669 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:20:41,670 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 15:24:41,665 INFO - Establishing connection.
+ 2015-10-02 15:24:43,744 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2015-10-02 15:24:43,745 INFO - Waiting for 240000 milliseconds
  

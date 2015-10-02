@@ -33,8 +33,8 @@ public class TwitterStreamBuilderUtil {
 		if(twitterHandler.equals("amartha")){
 			this.CONSUMER_KEY 		 = "NtbORNZdwwCaeLelSiUJll14z";
 			this.CONSUMER_SECRET 	 = "CuGeg1yDQJGj6WFCivYqZltj5PvRWDRWadsEaX9a11agNUzaci";
-			this.ACCESS_TOKEN 		 = "3825555556-EzMlPf990ZrL0U0HnAR1OSyhSBR3xkgSrOkDSF3";
-			this.ACCESS_TOKEN_SECRET = "RenSLFtVJ931XxniN75Xx2wR7qWjWE1G8p0Qsn2pO9ysA";
+			this.ACCESS_TOKEN 		 = "3825555556-0yPXCBEvlqWqmKVmfYWSqU1hDLUjKcNoZLFvAWb";
+			this.ACCESS_TOKEN_SECRET = "oB7vp6SCnhBdBa6gI4YvmZeQAVOtgMjD3BqPEo84TXjiR";
 		}
 		else if(twitterHandler.equals("bni46")){
 			this.CONSUMER_KEY		  = "ieQr4cnkzw8vQHaamX3LcZOWL";

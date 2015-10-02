@@ -77,6 +77,8 @@ public final class PrintFilterStream {
         twitterStream.addListener(listener);
         ArrayList<Long> follow = new ArrayList<Long>();
         ArrayList<String> track = new ArrayList<String>();
+        //args[0] = [1145,1426,2456]
+        //args[1] = [#microfinance,#amartha,#life]
         for (String arg : args) {
             if (isNumericalArgument(arg)) {
                 for (String id : arg.split(",")) {

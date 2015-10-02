@@ -10,6 +10,9 @@ import twitter4j.AsyncTwitter;
 import twitter4j.AsyncTwitterFactory;
 import twitter4j.DirectMessage;
 import twitter4j.FilterQuery;
+import twitter4j.RateLimitStatus;
+import twitter4j.RateLimitStatusEvent;
+import twitter4j.RateLimitStatusListener;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
@@ -22,7 +25,10 @@ import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 
 
 public class TwitterDaemon {
@@ -32,8 +38,99 @@ public class TwitterDaemon {
 	private static String savedDirectory;
 	private static TwitterStream twitterStream;
 	private static String recipientId;
+	private static String directMsg;
 	private static Twitter twitter;
 	private static AsyncTwitter asyncTwitter;
+	
+	public TwitterDaemon() {	
+		//Constructor stub
+		setLatestStatus("default");
+		setSaveDirectory();
+	    //System.out.println("Saving Stream API Result into Destination File: ");
+	}
+
+	public static void main(String[] args) throws TwitterException {
+		/* Using RESTful API to Update Status */
+		// [INIT] 
+		// Create (min.) a requesting RESTful API instance
+		// If we want to have multiple RESTful API instances
+		   //Twitter twitter_one = new TwitterFactory().getInstance(new AccessToken("XXX","XXX"));
+		   //Twitter twitter_two = new TwitterFactory().getInstance(new AccessToken("YYY","YYY"));
+		// Else, we can use singleton to have only one instance, shared across application life-shelf
+		   //Twitter twitter = TwitterFactory.getSingleton();
+        
+		// [1] Posting New Status to User's Twitter Account
+		
+			//try {
+			//	setLatestStatus("default");
+			//	TwitterDaemon.status = twitter.updateStatus(latestStatus);
+			//	System.out.println("Successfully updated the status to [" + TwitterDaemon.status.getText() + "].");
+			//} catch (TwitterException e) {
+			//	e.printStackTrace();
+			//}
+		
+		// [2] Sending DM to User's Twitter Account
+		
+			//try {
+			//String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
+			//DirectMessage message = twitter.sendDirectMessage(recipientId, msg);
+		    //System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
+			//} catch (TwitterException e) {
+			//	e.printStackTrace();
+			//}
+		   
+		/* Using Stream API */
+		// [INIT]
+		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
+	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil("amartha");
+		   twitterStream = twitterStreamAmartha.getStream();
+		   //twitterStream = new TwitterStreamFactory().getInstance();
+		
+		// [1] User Stream API - Stream Tweets of a Twitter User 
+		// Sets who followed users id/handler name [+] what keywords to track from the Stream
+		   
+		   //args[0] = [1145,1426,2456]
+	       //args[1] = [#microfinance,#amartha,#life]
+		   
+		   //ArrayList<Long>   follow  = new ArrayList<Long>();
+	       //ArrayList<String> track   = new ArrayList<String>();
+		   ArrayList<String> track   = new ArrayList<String>();
+		   track.add("#microfinance"); track.add("#life");
+		   
+		   //for (String arg : args) {
+	       //   if (isNumericalArgument(arg)) {
+	       //     	  for (String id : arg.split(",")) {
+	       //       	follow.add(Long.parseLong(id));
+	       // 		  }
+           //   } else {
+	       //     track.addAll(Arrays.asList(arg.split(",")));
+	       //   }
+	       //}
+	       //long[] followArray = new long[follow.size()];
+	       //for (int i = 0; i < follow.size(); i++) {
+	       //      followArray[i] = follow.get(i);
+	       //}
+		   
+		   //String[] trackArray = track.toArray(new String[track.size()]);
+		   
+		// Sets a stream listener(s) to track events from the Stream: 
+		// (1) User stream & (2) stream's rate limit. 
+	       twitterStream.addListener(userStreamlistener);
+	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
+	       
+	       twitterStream.filter(new FilterQuery( track.toArray( new String[track.size()] ) ) );
+	       
+	       //FilterQuery fq = new FilterQuery();
+		   //String keywords[] = { "#microfinance", "#life" };
+		   //fq.track(keywords);
+	       //twitterStream.filter(fq);
+	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
+	       //twitterStream.user(fq);
+	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
+	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
+	       
+	}
+	
 	// *Implement a stream listener to track from the Stream prior to being assigned to stream. 
     // *A stream listener has multiple methods to respond to multiple events in streams accordingly.
 	private static final UserStreamListener userStreamlistener = new UserStreamListener() {
@@ -53,9 +150,10 @@ public class TwitterDaemon {
 	            //asyncTwitter = factory.getInstance();
 	            asyncTwitter = AsyncTwitterFactory.getSingleton();
 	            
-	            String msg = "You got async DM from @dev_amartha. Thanks for tweeting our hashtags!";
-    			asyncTwitter.sendDirectMessage(status.getUser().getScreenName(), msg);
-    		    System.out.println("Sent: " + msg + " to @" + status.getUser().getScreenName());
+	            recipientId = status.getUser().getScreenName();
+	            directMsg   = "You got async DM from @dev_amartha. Thanks for tweeting our hashtags!";
+    			asyncTwitter.sendDirectMessage(recipientId, directMsg);
+    		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 	    		
 	        }
 
@@ -243,65 +341,21 @@ public class TwitterDaemon {
 
 	};
 	
-	public TwitterDaemon() {	
-		//Constructor stub
-		setLatestStatus("default");
-		setSaveDirectory();
-	}
-
-	public static void main(String[] args) throws TwitterException {
-		/* Using RESTful API to Update Status */
-		// [INIT] 
-		// Create (min.) a requesting RESTful API instance
-		// If we want to have multiple RESTful API instances
-		   //Twitter twitter_one = new TwitterFactory().getInstance(new AccessToken("XXX","XXX"));
-		   //Twitter twitter_two = new TwitterFactory().getInstance(new AccessToken("YYY","YYY"));
-		// Else, we can use singleton to have only one instance, shared across application life-shelf
-		   //Twitter twitter = TwitterFactory.getSingleton();
-        
-		// [1] Posting New Status to User's Twitter Account
-		/*
-		try {
-			setLatestStatus("default");
-			TwitterDaemon.status = twitter.updateStatus(latestStatus);
-			System.out.println("Successfully updated the status to [" + TwitterDaemon.status.getText() + "].");
-		} catch (TwitterException e) {
-			e.printStackTrace();
-		}
-		*/
+	private static final RateLimitStatusListener rateLimitStatusListener = new RateLimitStatusListener() {
 		
-		// [2] Sending DM to User's Twitter Account
-		/*
-		try {
-			String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
-			DirectMessage message = twitter.sendDirectMessage(recipientId, msg);
-		    System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
-		} catch (TwitterException e) {
-			e.printStackTrace();
+		@Override
+		public void onRateLimitStatus(RateLimitStatusEvent event) {
+			System.out.println("onRateLimitStatus: " + event.toString());
+			System.out.println("Limit["+event.getRateLimitStatus().getLimit() + "], Remaining[" +event.getRateLimitStatus().getRemaining()+"]");
 		}
-		*/
-		   
-		/* Using Stream API */
-		// [INIT]
-		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
-	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil("amartha");
-		   twitterStream = twitterStreamAmartha.getStream();
-		   //twitterStream = new TwitterStreamFactory().getInstance();
 		
-		// [1] User Stream API - Stream Tweets of a Twitter User 
-		// Sets keywords to track from the Stream
-		   FilterQuery fq = new FilterQuery();
-		   String keywords[] = { "#microfinance", "#life" };
-		   fq.track(keywords);
-		// Sets a stream listener to track from the Stream. 
-	       twitterStream.addListener(userStreamlistener);
-	       //twitterStream.filter(fq);
-	       twitterStream.user("@dev_amartha #microfinance", "@dev_amartha #life");
-	    // user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets tweets that only mention @user
-	    // user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
-	       
-	       //System.out.println("Saving Stream API Result into Destination File: ");
-	}
+		@Override
+		public void onRateLimitReached(RateLimitStatusEvent event) {
+			System.out.println("onRateLimitReached: " + event.toString());
+			System.out.println("Limit["+event.getRateLimitStatus().getLimit() + "], Remaining[" +event.getRateLimitStatus().getRemaining()+"]");
+		}
+		
+	};
 	
 	public static void setSaveDirectory(){
 		TwitterDaemon.savedDirectory = "save";
