@@ -1,0 +1,82 @@
+2015-10-01 23:49:14,045 INFO - Establishing connection.
+ 2015-10-01 23:49:47,564 INFO - Connection established.
+ 2015-10-01 23:49:47,564 INFO - Receiving status stream.
+ 2015-10-01 23:53:15,353 INFO - Establishing connection.
+ 2015-10-01 23:53:18,781 INFO - Connection established.
+ 2015-10-01 23:53:18,781 INFO - Receiving status stream.
+ 2015-10-01 23:54:25,415 INFO - Establishing connection.
+ 2015-10-01 23:54:30,780 INFO - Connection established.
+ 2015-10-01 23:54:30,780 INFO - Receiving status stream.
+ 2015-10-02 00:09:47,552 INFO - Establishing connection.
+ 2015-10-02 00:09:51,205 INFO - Connection established.
+ 2015-10-02 00:09:51,206 INFO - Receiving status stream.
+ 2015-10-02 00:17:14,508 INFO - Establishing connection.
+ 2015-10-02 00:17:18,227 INFO - Connection established.
+ 2015-10-02 00:17:18,227 INFO - Receiving status stream.
+ 2015-10-02 01:01:20,737 INFO - Establishing connection.
+ 2015-10-02 01:01:24,023 INFO - Connection established.
+ 2015-10-02 01:01:24,023 INFO - Receiving status stream.
+ 2015-10-02 02:58:49,946 INFO - Stream closed.
+ 2015-10-02 02:58:49,949 INFO - Stream closed.
+ 2015-10-02 02:58:49,950 INFO - Waiting for 250 milliseconds
+ 2015-10-02 02:58:50,204 INFO - Establishing connection.
+ 2015-10-02 02:58:51,422 INFO - Connection established.
+ 2015-10-02 02:58:51,422 INFO - Receiving status stream.
+ 2015-10-02 02:58:53,995 INFO - Stream closed.
+ 2015-10-02 02:58:53,998 INFO - Stream closed.
+ 2015-10-02 02:58:53,999 INFO - Waiting for 250 milliseconds
+ 2015-10-02 02:58:54,255 INFO - Establishing connection.
+ 2015-10-02 02:58:56,667 INFO - Connection established.
+ 2015-10-02 02:58:56,667 INFO - Receiving status stream.
+ 2015-10-02 04:47:26,832 INFO - Stream closed.
+ 2015-10-02 04:47:26,833 INFO - Stream closed.
+ 2015-10-02 04:47:26,834 INFO - Waiting for 250 milliseconds
+ 2015-10-02 04:47:27,093 INFO - Establishing connection.
+ 2015-10-02 04:47:28,352 INFO - Connection established.
+ 2015-10-02 04:47:28,352 INFO - Receiving status stream.
+ 2015-10-02 04:47:32,305 INFO - Stream closed.
+ 2015-10-02 04:47:32,307 INFO - Stream closed.
+ 2015-10-02 04:47:32,308 INFO - Waiting for 250 milliseconds
+ 2015-10-02 04:47:32,564 INFO - Establishing connection.
+ 2015-10-02 04:47:34,473 INFO - Connection established.
+ 2015-10-02 04:47:34,473 INFO - Receiving status stream.
+ 2015-10-02 06:36:39,001 INFO - Stream closed.
+ 2015-10-02 06:36:39,002 INFO - Stream closed.
+ 2015-10-02 06:36:39,003 INFO - Waiting for 250 milliseconds
+ 2015-10-02 06:36:39,263 INFO - Establishing connection.
+ 2015-10-02 06:36:40,474 INFO - Connection established.
+ 2015-10-02 06:36:40,474 INFO - Receiving status stream.
+ 2015-10-02 06:36:45,287 INFO - Stream closed.
+ 2015-10-02 06:36:45,288 INFO - Stream closed.
+ 2015-10-02 06:36:45,290 INFO - Waiting for 250 milliseconds
+ 2015-10-02 06:36:45,547 INFO - Establishing connection.
+ 2015-10-02 06:36:47,002 INFO - Connection established.
+ 2015-10-02 06:36:47,002 INFO - Receiving status stream.
+ 2015-10-02 07:44:54,705 INFO - Stream closed.
+ 2015-10-02 07:44:54,706 INFO - Stream closed.
+ 2015-10-02 07:44:54,706 INFO - Waiting for 250 milliseconds
+ 2015-10-02 07:44:54,962 INFO - Establishing connection.
+ 2015-10-02 07:44:54,968 INFO - userstream.twitter.com
+ 2015-10-02 07:44:54,969 INFO - Waiting for 500 milliseconds
+ 2015-10-02 07:44:55,474 INFO - Establishing connection.
+ 2015-10-02 07:44:55,479 INFO - userstream.twitter.com
+ 2015-10-02 07:44:55,479 INFO - Waiting for 1000 milliseconds
+ 2015-10-02 07:44:56,483 INFO - Establishing connection.
+ 2015-10-02 07:44:56,487 INFO - userstream.twitter.com
+ 2015-10-02 07:44:56,487 INFO - Waiting for 2000 milliseconds
+ 2015-10-02 07:44:58,492 INFO - Establishing connection.
+ 2015-10-02 07:44:58,496 INFO - userstream.twitter.com
+ 2015-10-02 07:44:58,496 INFO - Waiting for 4000 milliseconds
+ 2015-10-02 07:45:01,229 INFO - Stream closed.
+ 2015-10-02 07:45:01,230 INFO - Stream closed.
+ 2015-10-02 07:45:01,231 INFO - Waiting for 250 milliseconds
+ 2015-10-02 07:45:01,483 INFO - Establishing connection.
+ 2015-10-02 07:45:02,497 INFO - Establishing connection.
+ 2015-10-02 07:45:02,499 INFO - userstream.twitter.com
+ 2015-10-02 07:45:02,500 INFO - Waiting for 8000 milliseconds
+ 2015-10-02 07:45:02,719 INFO - Connection established.
+ 2015-10-02 07:45:02,719 INFO - Receiving status stream.
+ 2015-10-02 07:45:10,501 INFO - Establishing connection.
+ 2015-10-02 07:45:12,172 INFO - Connection established.
+ 2015-10-02 07:45:12,173 INFO - Receiving status stream.
+ 
