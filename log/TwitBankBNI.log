@@ -538,4 +538,181 @@ Returned by the Streaming API:
 Exceeded connection limit for user
 
  2015-10-02 15:24:43,745 INFO - Waiting for 240000 milliseconds
+ 2015-10-02 17:38:45,337 INFO - Stream closed.
+ 2015-10-02 17:38:45,339 INFO - Stream closed.
+ 2015-10-02 17:38:45,340 INFO - Waiting for 250 milliseconds
+ 2015-10-02 17:38:45,598 INFO - Establishing connection.
+ 2015-10-02 17:38:47,187 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 17:38:47,189 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 17:38:49,336 INFO - Stream closed.
+ 2015-10-02 17:38:49,339 INFO - Stream closed.
+ 2015-10-02 17:38:49,340 INFO - Waiting for 250 milliseconds
+ 2015-10-02 17:38:49,593 INFO - Establishing connection.
+ 2015-10-02 17:38:50,754 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 17:38:50,756 INFO - Waiting for 10000 milliseconds
+ 2015-10-02 17:38:57,198 INFO - Establishing connection.
+ 2015-10-02 17:38:58,551 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 17:38:58,552 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 17:39:00,762 INFO - Establishing connection.
+ 2015-10-02 17:39:01,998 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 17:39:01,999 INFO - Waiting for 20000 milliseconds
+ 2015-10-02 19:27:12,796 INFO - Establishing connection.
+ 2015-10-02 19:27:13,277 INFO - stream.twitter.com
+ 2015-10-02 19:27:13,278 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 19:27:16,245 INFO - Establishing connection.
+ 2015-10-02 19:27:16,251 INFO - stream.twitter.com
+ 2015-10-02 19:27:16,252 INFO - Waiting for 40000 milliseconds
+ 2015-10-02 19:27:53,283 INFO - Establishing connection.
+ 2015-10-02 21:15:51,408 INFO - Establishing connection.
+ 2015-10-02 21:15:51,750 INFO - stream.twitter.com
+ 2015-10-02 21:15:51,751 INFO - stream.twitter.com
+ 2015-10-02 21:15:51,751 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 21:15:51,752 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 21:16:07,754 INFO - Establishing connection.
+ 2015-10-02 21:16:07,753 INFO - Establishing connection.
+ 2015-10-02 21:16:09,425 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 21:16:09,425 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 21:16:09,583 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 21:16:09,583 INFO - Waiting for 16000 milliseconds
+ 2015-10-02 21:16:25,433 INFO - Establishing connection.
+ 2015-10-02 21:16:25,584 INFO - Establishing connection.
+ 2015-10-02 21:16:27,021 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 21:16:27,021 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 21:16:27,078 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 21:16:27,079 INFO - Waiting for 32000 milliseconds
+ 2015-10-02 22:36:51,345 INFO - Establishing connection.
+ 2015-10-02 22:36:51,406 INFO - Establishing connection.
+ 2015-10-02 22:36:52,856 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 22:36:52,856 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 22:36:52,861 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 22:36:52,861 INFO - Waiting for 64000 milliseconds
+ 2015-10-02 22:37:56,854 INFO - Establishing connection.
+ 2015-10-02 22:37:58,548 INFO - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+<pre>    Unauthorized</pre>
+</body>
+</html>
+
+ 2015-10-02 22:37:58,548 INFO - Waiting for 128000 milliseconds
+ 2015-10-02 23:19:51,156 INFO - Establishing connection.
+ 2015-10-02 23:19:55,895 INFO - Connection established.
+ 2015-10-02 23:19:55,895 INFO - Receiving status stream.
+ 2015-10-02 23:24:16,326 INFO - Establishing connection.
+ 2015-10-02 23:24:50,365 INFO - Connection established.
+ 2015-10-02 23:24:50,365 INFO - Receiving status stream.
+ 2015-10-03 00:03:03,859 INFO - Establishing connection.
+ 2015-10-03 00:03:36,507 INFO - Connection established.
+ 2015-10-03 00:03:36,507 INFO - Receiving status stream.
+ 2015-10-03 00:38:20,634 INFO - Establishing connection.
+ 2015-10-03 00:38:53,236 INFO - Connection established.
+ 2015-10-03 00:38:53,237 INFO - Receiving status stream.
+ 2015-10-03 00:53:37,906 INFO - Establishing connection.
+ 2015-10-03 00:54:10,731 INFO - Connection established.
+ 2015-10-03 00:54:10,731 INFO - Receiving status stream.
+ 2015-10-03 01:00:35,863 INFO - Establishing connection.
+ 2015-10-03 01:01:09,316 INFO - Connection established.
+ 2015-10-03 01:01:09,316 INFO - Receiving status stream.
+ 2015-10-03 01:13:56,017 INFO - Establishing connection.
+ 2015-10-03 01:13:56,017 INFO - Establishing connection.
+ 2015-10-03 01:13:58,082 INFO - Connection established.
+ 2015-10-03 01:13:58,082 INFO - Receiving status stream.
+ 2015-10-03 01:14:28,797 INFO - Connection established.
+ 2015-10-03 01:14:28,797 INFO - Receiving status stream.
+ 2015-10-03 01:36:02,433 INFO - Establishing connection.
+ 2015-10-03 01:36:34,691 INFO - Connection established.
+ 2015-10-03 01:36:34,692 INFO - Receiving status stream.
  

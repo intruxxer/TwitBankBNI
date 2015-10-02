@@ -20,7 +20,7 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
 //Usage// 
-//TwitterStreamBuilderUtil twitSBU = new TwitterStreamBuilderUtil("amartha");
+//TwitterStreamBuilderUtil twitSBU = new TwitterStreamBuilderUtil("amartha/fahmivanhero/bni46");
 public class TwitterStreamBuilderUtil {
 
 	private String CONSUMER_KEY;
@@ -36,11 +36,23 @@ public class TwitterStreamBuilderUtil {
 			this.ACCESS_TOKEN 		 = "3825555556-0yPXCBEvlqWqmKVmfYWSqU1hDLUjKcNoZLFvAWb";
 			this.ACCESS_TOKEN_SECRET = "oB7vp6SCnhBdBa6gI4YvmZeQAVOtgMjD3BqPEo84TXjiR";
 		}
+		else if(twitterHandler.equals("fahmivanhero")){
+			this.CONSUMER_KEY		  = "Q2V6Nx3160lSm8KAVgP67lpp9";
+			this.CONSUMER_SECRET 	  = "YimS1y7oDNF8Ni3nMRV9QxtOgDzD4PZ32qTqsI21NFQoeqWwCr";
+			this.ACCESS_TOKEN		  = "69868781-gvERueLmz8JRM4jBEYB4sVkSSC4pe1DPEm9v71d3f";
+			this.ACCESS_TOKEN_SECRET  = "8yhJKSFJlbfBxWEg3sXB51bBEdbrBpmNrnRZTxhkNq0AT";
+		}
 		else if(twitterHandler.equals("bni46")){
 			this.CONSUMER_KEY		  = "ieQr4cnkzw8vQHaamX3LcZOWL";
 			this.CONSUMER_SECRET 	  = "sAxJbBxZee39nXJSgKHhHbU4oRiSlfSZ6MBNddvaOsWKIFAGNk";
 			this.ACCESS_TOKEN		  = "62455266-yu62JxW5IiZmGICRNKItxzHlwAKD3vwpujkYPtt74";
 			this.ACCESS_TOKEN_SECRET  = "UEmx3nkIuSp8PfOHgxqbNvBZbEigJp7yRuaXd11uWPSLP";
+		}
+		else {
+			this.CONSUMER_KEY		  = "";
+			this.CONSUMER_SECRET 	  = "";
+			this.ACCESS_TOKEN		  = "";
+			this.ACCESS_TOKEN_SECRET  = "";
 		}
 	}
 	

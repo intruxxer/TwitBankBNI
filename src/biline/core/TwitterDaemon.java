@@ -43,7 +43,7 @@ public class TwitterDaemon {
 	private static AsyncTwitter asyncTwitter;
 	
 	public TwitterDaemon() {	
-		//Constructor stub
+		//Constructor
 		setLatestStatus("default");
 		setSaveDirectory();
 	    //System.out.println("Saving Stream API Result into Destination File: ");
@@ -59,7 +59,7 @@ public class TwitterDaemon {
 		// Else, we can use singleton to have only one instance, shared across application life-shelf
 		   //Twitter twitter = TwitterFactory.getSingleton();
         
-		// [1] Posting New Status to User's Twitter Account
+		// [1] Posting non-Async 'New Status' to User's Twitter Account
 		
 			//try {
 			//	setLatestStatus("default");
@@ -69,7 +69,7 @@ public class TwitterDaemon {
 			//	e.printStackTrace();
 			//}
 		
-		// [2] Sending DM to User's Twitter Account
+		// [2] Sending non-Async 'DM' to User's Twitter Account
 		
 			//try {
 			//String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
@@ -82,12 +82,13 @@ public class TwitterDaemon {
 		/* Using Stream API */
 		// [INIT]
 		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
-	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil("amartha");
+	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil("fahmivanhero");
 		   twitterStream = twitterStreamAmartha.getStream();
 		   //twitterStream = new TwitterStreamFactory().getInstance();
 		
 		// [1] User Stream API - Stream Tweets of a Twitter User 
-		// Sets who followed users id/handler name [+] what keywords to track from the Stream
+		// Sets (a) the followed users id/handler name (optional) [+] (b) what keywords 
+		// to be tracked from the Stream.
 		   
 		   //args[0] = [1145,1426,2456]
 	       //args[1] = [#microfinance,#amartha,#life]
@@ -95,7 +96,8 @@ public class TwitterDaemon {
 		   //ArrayList<Long>   follow  = new ArrayList<Long>();
 	       //ArrayList<String> track   = new ArrayList<String>();
 		   ArrayList<String> track   = new ArrayList<String>();
-		   track.add("#microfinance"); track.add("#life");
+		   track.add("@fahmivanhero #microfinance"); 
+		   track.add("@fahmivanhero #amartha");
 		   
 		   //for (String arg : args) {
 	       //   if (isNumericalArgument(arg)) {
@@ -113,8 +115,8 @@ public class TwitterDaemon {
 		   
 		   //String[] trackArray = track.toArray(new String[track.size()]);
 		   
-		// Sets a stream listener(s) to track events from the Stream: 
-		// (1) User stream & (2) stream's rate limit. 
+		// Sets stream listener(s) to track events from the Stream: 
+		// (1) User stream & (2) Stream's rate limit. 
 	       twitterStream.addListener(userStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
 	       
@@ -125,14 +127,14 @@ public class TwitterDaemon {
 		   //fq.track(keywords);
 	       //twitterStream.filter(fq);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
-	       //twitterStream.user(fq);
+	       //twitterStream.user();
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
 	       
 	}
 	
 	// *Implement a stream listener to track from the Stream prior to being assigned to stream. 
-    // *A stream listener has multiple methods to respond to multiple events in streams accordingly.
+    // *A stream listener has unimplemented multiple methods to respond to multiple events in streams accordingly.
 	private static final UserStreamListener userStreamlistener = new UserStreamListener() {
 	      
 		   @Override
@@ -151,8 +153,9 @@ public class TwitterDaemon {
 	            asyncTwitter = AsyncTwitterFactory.getSingleton();
 	            
 	            recipientId = status.getUser().getScreenName();
-	            directMsg   = "You got async DM from @dev_amartha. Thanks for tweeting our hashtags!";
-    			asyncTwitter.sendDirectMessage(recipientId, directMsg);
+	            directMsg   = "You got async DM from @fahmivanhero. Thanks for tweeting our hashtags!";
+    			
+	            asyncTwitter.sendDirectMessage(recipientId, directMsg);
     		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 	    		
 	        }
@@ -341,6 +344,8 @@ public class TwitterDaemon {
 
 	};
 	
+	// *Implement a Stream's rate limit listener to track from the Stream if limitation occurs esp. in Rate Limit Response 402. 
+    // *A Stream's rate limit listener has two unimplemented methods to respond to Rate Limit Response 402 events in streams accordingly.
 	private static final RateLimitStatusListener rateLimitStatusListener = new RateLimitStatusListener() {
 		
 		@Override
