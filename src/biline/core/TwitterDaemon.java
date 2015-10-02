@@ -140,7 +140,6 @@ public class TwitterDaemon {
 		   @Override
 	        public void onStatus(Status status) {
 	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
-	            //twitter = TwitterFactory.getSingleton();
 	            //try {
 	    			//String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
 	    			//DirectMessage message = twitter.sendDirectMessage(status.getUser().getScreenName(), msg);
@@ -150,12 +149,19 @@ public class TwitterDaemon {
 	    		//}
 	            //AsyncTwitterFactory factory = new AsyncTwitterFactory();
 	            //asyncTwitter = factory.getInstance();
-	            asyncTwitter = AsyncTwitterFactory.getSingleton();
+	            // OR //
+	            //asyncTwitter = AsyncTwitterFactory.getSingleton();
+	            twitter      = new TwitterFactory().getInstance();
 	            
 	            recipientId = status.getUser().getScreenName();
-	            directMsg   = "You got async DM from @fahmivanhero. Thanks for tweeting our hashtags!";
+	            directMsg   = "You got DM from @fahmivanhero. Thanks for tweeting our hashtags!";
     			
-	            asyncTwitter.sendDirectMessage(recipientId, directMsg);
+	            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
+	            try {
+					twitter.sendDirectMessage(recipientId, directMsg);
+				} catch (TwitterException e) {
+					e.printStackTrace();
+				}
     		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 	    		
 	        }
