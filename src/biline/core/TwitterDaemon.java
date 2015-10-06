@@ -119,7 +119,10 @@ public class TwitterDaemon {
 		   Statement stm = null; ResultSet rs = null; 
 		   
 		   try {
-			   
+			   if(con == null){
+				  db_object.openConnection();
+				  con = db_object.getConnection();
+	        }   
 			stm = con.createStatement();
 			rs  = stm.executeQuery(statusQuery);
 			while (rs.next()){
@@ -130,7 +133,17 @@ public class TwitterDaemon {
 	   		   }
 		   } catch (SQLException e) {
 			e.printStackTrace();
-		   } 
+		   } finally{
+			   if(con != null){
+					  try {
+						db_object.closeConnection();
+					  } catch (SQLException e) {
+						e.printStackTrace();
+					  } finally{
+						  con = null;
+					  }
+		        }
+		   }
 		   
 		   //for (String arg : args) {
 	       //   if (isNumericalArgument(arg)) {
@@ -209,6 +222,10 @@ public class TwitterDaemon {
 	            	System.out.println(statusQuery);
 	            	
 	     		   	try {
+			     		if(con == null){
+			     			db_object.openConnection();
+			  				con = db_object.getConnection();
+			  	        }
 		     			stm = con.createStatement();
 		     			rs  = stm.executeQuery(statusQuery);
 		     			while (rs.next()){
@@ -217,7 +234,17 @@ public class TwitterDaemon {
 		     	   		   }
 	     		   	} catch (SQLException e) {
 	     		   		e.printStackTrace();
-	     		   	} 
+	     		   	} finally{
+		     		   	if(con != null){
+		  				  try {
+							db_object.closeConnection();
+		  				  } catch (SQLException e) {
+							e.printStackTrace();
+		  				  } finally{
+		  				  		con = null;
+		     		   		}
+		     		   	}
+	     		   	}
 				}
 	            System.out.println("DMes are: "); 
 	            System.out.println(directMessages);

@@ -57,7 +57,9 @@ public class MysqlConnect {
 	}
 	
 	public Connection getConnection(){
-	    return connection;
+		System.out.println("Database Connection to be retrieved: " + String.valueOf(connection));
+    	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB retrieved.");
+		return connection;
 	}
 	
 	public void openConnection(){
@@ -81,6 +83,8 @@ public class MysqlConnect {
 	
 	public void closeConnection() throws SQLException{
         getConnection().close();
+        System.out.println("Database disconnected!");
+    	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB terminated.");
     }
 
 }
