@@ -45,8 +45,8 @@ public class TwitterStreamBuilderUtil {
 		else if(twitterHandler.equals("bni46")){
 			this.CONSUMER_KEY		  = "ieQr4cnkzw8vQHaamX3LcZOWL";
 			this.CONSUMER_SECRET 	  = "sAxJbBxZee39nXJSgKHhHbU4oRiSlfSZ6MBNddvaOsWKIFAGNk";
-			this.ACCESS_TOKEN		  = "62455266-yu62JxW5IiZmGICRNKItxzHlwAKD3vwpujkYPtt74";
-			this.ACCESS_TOKEN_SECRET  = "UEmx3nkIuSp8PfOHgxqbNvBZbEigJp7yRuaXd11uWPSLP";
+			this.ACCESS_TOKEN		  = "62455266-TbRhx8jNzSKNdU5eSKh9q4lnNCgtWSqdKXKNytCc2";
+			this.ACCESS_TOKEN_SECRET  = "aj5Ffh3xfvgBHtz3ahxE1T1M6jCiDCGNW7swo3WNgJV6x";
 		}
 		else {
 			this.CONSUMER_KEY		  = "";

@@ -29,6 +29,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -196,17 +197,22 @@ public class TwitterDaemon {
 	            String statusQuery = "";
 	            Statement stm = null; 
 	            ResultSet rs = null;
+	            SimpleDateFormat dateFormat =  new SimpleDateFormat("YYYY-MM-DD");
+	            String today = "";
 	            for (String tag : hashtags) {
+	            	Date now = new Date();
+	            	today    = dateFormat.format(now);
 	            	statusQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 	            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
-	            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "'";
+	            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
+	            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
 	            	System.out.println(statusQuery);
 	            	
 	     		   	try {
 		     			stm = con.createStatement();
 		     			rs  = stm.executeQuery(statusQuery);
 		     			while (rs.next()){
-		     				directMessages.add("Thanks! Your inquiry of " + tag + " is: " + rs.getString("promotion_slug"));
+		     				directMessages.add("[" + rs.getString("promotion_title") + "] " + rs.getString("promotion_content"));
 		     				System.out.println("DM with: " + tag);
 		     	   		   }
 	     		   	} catch (SQLException e) {
