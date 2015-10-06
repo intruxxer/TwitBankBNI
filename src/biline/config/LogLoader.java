@@ -35,7 +35,7 @@ public class LogLoader {
 	
 	public static Logger getLog() {
 		if (LOG == null) {
-		    PropertyConfigurator.configure(LogLoader.class.getClassLoader().getResourceAsStream("log4j-switching.properties"));
+		    PropertyConfigurator.configure(LogLoader.class.getClassLoader().getResourceAsStream("log4j.properties"));
 			LOG = LoggerFactory.getLogger(LogLoader.class);
 		
 			try {		 

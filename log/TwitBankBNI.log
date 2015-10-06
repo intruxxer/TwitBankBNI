@@ -721,4 +721,13 @@ Exceeded connection limit for user
  2015-10-03 02:11:21,240 INFO - Establishing connection.
  2015-10-03 02:11:53,884 INFO - Connection established.
  2015-10-03 02:11:53,884 INFO - Receiving status stream.
+ 2015-10-05 14:26:06,695 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-05 14:35:24,056 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-05 14:35:59,493 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-05 14:49:15,971 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-05 14:51:56,483 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-05 14:52:15,667 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-06 06:31:28,042 INFO - Establishing connection.
+ 2015-10-06 06:32:01,956 INFO - Connection established.
+ 2015-10-06 06:32:01,957 INFO - Receiving status stream.
  

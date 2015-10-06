@@ -25,10 +25,15 @@ import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.HashMap;
 
 
 public class TwitterDaemon {
@@ -41,12 +46,23 @@ public class TwitterDaemon {
 	private static String directMsg;
 	private static Twitter twitter;
 	private static AsyncTwitter asyncTwitter;
+	private static MysqlConnect db_object;
+	private static Connection con;
 	
 	public TwitterDaemon() {	
 		//Constructor
 		setLatestStatus("default");
 		setSaveDirectory();
 	    //System.out.println("Saving Stream API Result into Destination File: ");
+		try{
+			db_object = new MysqlConnect();
+			con 	  = db_object.getConnection(); 
+			//System.out.print(db_object.getConnection());
+		} catch(ClassNotFoundException nfe){
+			nfe.printStackTrace();
+		} catch(SQLException sqle){
+			sqle.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) throws TwitterException {
@@ -72,11 +88,11 @@ public class TwitterDaemon {
 		// [2] Sending non-Async 'DM' to User's Twitter Account
 		
 			//try {
-			//String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
-			//DirectMessage message = twitter.sendDirectMessage(recipientId, msg);
-		    //System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
+			//   String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
+			//   DirectMessage message = twitter.sendDirectMessage(recipientId, msg);
+		    //   System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
 			//} catch (TwitterException e) {
-			//	e.printStackTrace();
+			//	 e.printStackTrace();
 			//}
 		   
 		/* Using Stream API */
@@ -96,8 +112,21 @@ public class TwitterDaemon {
 		   //ArrayList<Long>   follow  = new ArrayList<Long>();
 	       //ArrayList<String> track   = new ArrayList<String>();
 		   ArrayList<String> track   = new ArrayList<String>();
-		   track.add("@fahmivanhero #microfinance"); 
-		   track.add("@fahmivanhero #amartha");
+		   String statusQuery = "SELECT * FROM tbl_hashtags";
+		   Statement stm = null; ResultSet rs = null; 
+		   
+		   try {
+			stm = con.createStatement();
+			rs  = stm.executeQuery(statusQuery);
+			while (rs.next()){
+				//track.add("@fahmivanhero #microfinance"); 
+				//track.add("@fahmivanhero #amartha");
+				System.out.println("Tracking: " + rs.getString("hashtag_term"));
+				track.add("@fahmivanhero #" + rs.getString("hashtag_term"));
+	   		   }
+		   } catch (SQLException e) {
+			e.printStackTrace();
+		   } 
 		   
 		   //for (String arg : args) {
 	       //   if (isNumericalArgument(arg)) {
@@ -150,19 +179,45 @@ public class TwitterDaemon {
 	            //AsyncTwitterFactory factory = new AsyncTwitterFactory();
 	            //asyncTwitter = factory.getInstance();
 	            // OR //
-	            //asyncTwitter = AsyncTwitterFactory.getSingleton();
-	            twitter      = new TwitterFactory().getInstance();
+	            asyncTwitter = AsyncTwitterFactory.getSingleton();
+	            //twitter      = new TwitterFactory().getInstance();
+	            // *twitter w/o Async must be prepared with TwitterException 
+	            // *either  (1) ..throws block OR (2) try-catch block
 	            
-	            recipientId = status.getUser().getScreenName();
-	            directMsg   = "You got DM from @fahmivanhero. Thanks for tweeting our hashtags!";
-    			
-	            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
-	            try {
-					twitter.sendDirectMessage(recipientId, directMsg);
-				} catch (TwitterException e) {
-					e.printStackTrace();
+	            // *We extract hashTAGS from status
+	            ArrayList<String> hashtags     = new ArrayList<String>();
+	            TwitterTweetExtractorUtil tags = new TwitterTweetExtractorUtil("");
+	            hashtags = tags.parseTweetForHashtags(status.getText());
+	            // *We compose DM per hashTAGS
+	            ArrayList<String> directMessages   = new ArrayList<String>();
+	            String statusQuery = "";
+	            Statement stm = null; 
+	            ResultSet rs = null;
+	            for (String tag : hashtags) {
+	            	statusQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
+	            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
+	            				+ "WHERE tbl_hashtags.hashtag_term = " + tag;
+	     		   	try {
+		     			stm = con.createStatement();
+		     			rs  = stm.executeQuery(statusQuery);
+		     			while (rs.next()){
+		     				directMessages.add("Thanks! Your inquiry of " + tag + " is " + rs.getString("promotion_slug"));
+		     				System.out.println("DM with: " + tag);
+		     	   		   }
+	     		   	} catch (SQLException e) {
+	     		   		e.printStackTrace();
+	     		   	} 
 				}
-    		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+	            System.out.println("DMes are: "); System.out.println(directMessages);
+	            
+	         // *We then send out all possible DM per hashTAGS
+	            for (String msg : directMessages) {
+		            recipientId = status.getUser().getScreenName();
+		            directMsg = msg;
+		            
+		            asyncTwitter.sendDirectMessage(recipientId, directMsg);
+	    		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+	            }
 	    		
 	        }
 
