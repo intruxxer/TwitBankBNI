@@ -38,6 +38,7 @@ import java.util.HashMap;
 
 public class TwitterDaemon {
 	
+	private final static String twitterUser = "fahmivanhero";
 	private static String latestStatus;
 	private static Status status;
 	private static String savedDirectory;
@@ -53,7 +54,10 @@ public class TwitterDaemon {
 		//Constructor
 		setLatestStatus("default");
 		setSaveDirectory();
-	    //System.out.println("Saving Stream API Result into Destination File: ");
+	}
+
+	public static void main(String[] args) throws TwitterException {
+		// *Connecting to DB
 		try{
 			db_object = new MysqlConnect();
 			con 	  = db_object.getConnection(); 
@@ -63,9 +67,7 @@ public class TwitterDaemon {
 		} catch(SQLException sqle){
 			sqle.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) throws TwitterException {
+		
 		/* Using RESTful API to Update Status */
 		// [INIT] 
 		// Create (min.) a requesting RESTful API instance
@@ -98,7 +100,7 @@ public class TwitterDaemon {
 		/* Using Stream API */
 		// [INIT]
 		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
-	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil("fahmivanhero");
+	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil(twitterUser);
 		   twitterStream = twitterStreamAmartha.getStream();
 		   //twitterStream = new TwitterStreamFactory().getInstance();
 		
@@ -116,13 +118,14 @@ public class TwitterDaemon {
 		   Statement stm = null; ResultSet rs = null; 
 		   
 		   try {
+			   
 			stm = con.createStatement();
 			rs  = stm.executeQuery(statusQuery);
 			while (rs.next()){
 				//track.add("@fahmivanhero #microfinance"); 
 				//track.add("@fahmivanhero #amartha");
 				System.out.println("Tracking: " + rs.getString("hashtag_term"));
-				track.add("@fahmivanhero #" + rs.getString("hashtag_term"));
+				track.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
 	   		   }
 		   } catch (SQLException e) {
 			e.printStackTrace();
@@ -196,19 +199,22 @@ public class TwitterDaemon {
 	            for (String tag : hashtags) {
 	            	statusQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 	            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
-	            				+ "WHERE tbl_hashtags.hashtag_term = " + tag;
+	            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "'";
+	            	System.out.println(statusQuery);
+	            	
 	     		   	try {
 		     			stm = con.createStatement();
 		     			rs  = stm.executeQuery(statusQuery);
 		     			while (rs.next()){
-		     				directMessages.add("Thanks! Your inquiry of " + tag + " is " + rs.getString("promotion_slug"));
+		     				directMessages.add("Thanks! Your inquiry of " + tag + " is: " + rs.getString("promotion_slug"));
 		     				System.out.println("DM with: " + tag);
 		     	   		   }
 	     		   	} catch (SQLException e) {
 	     		   		e.printStackTrace();
 	     		   	} 
 				}
-	            System.out.println("DMes are: "); System.out.println(directMessages);
+	            System.out.println("DMes are: "); 
+	            System.out.println(directMessages);
 	            
 	         // *We then send out all possible DM per hashTAGS
 	            for (String msg : directMessages) {
@@ -218,6 +224,7 @@ public class TwitterDaemon {
 		            asyncTwitter.sendDirectMessage(recipientId, directMsg);
 	    		    System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 	            }
+	            
 	    		
 	        }
 

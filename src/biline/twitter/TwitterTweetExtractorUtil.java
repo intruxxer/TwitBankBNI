@@ -17,7 +17,7 @@ public class TwitterTweetExtractorUtil {
 		else
 			tweetText = "";
 		
-		System.out.println("Original tweetText is: " + tweetText);	
+		//System.out.println("Original tweetText is: " + tweetText);	
 	}
 	
 	//public static void main(String args[]){
