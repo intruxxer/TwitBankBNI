@@ -39,7 +39,7 @@ import java.util.HashMap;
 
 public class TwitterDaemon {
 	
-	private final static String twitterUser = "fahmivanhero";
+	private static String twitterUser;
 	private static String latestStatus;
 	private static Status status;
 	private static String savedDirectory;
@@ -49,11 +49,13 @@ public class TwitterDaemon {
 	private static String directMsg;
 	private static Twitter twitter;
 	private static AsyncTwitter asyncTwitter;
+	private static AsyncTwitter asyncTwitterDM;
 	private static MysqlConnect db_object;
 	private static Connection con;
 	
 	public TwitterDaemon() {	
 		//Constructor
+		twitterUser = "fahmivanhero";//bni46
 		setLatestStatus("default");
 		setSaveDirectory();
 	}
@@ -509,8 +511,121 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
-	            System.out.println("onDirectMessage text:"
-	                + directMessage.getText());
+	            System.out.println("onDirectMessage text:" + directMessage.getText());
+	            //AsyncTwitterFactory factory = new AsyncTwitterFactory();
+	            //asyncTwitter = factory.getInstance();
+	            // OR //
+	            asyncTwitterDM = AsyncTwitterFactory.getSingleton();
+	            //twitter      = new TwitterFactory().getInstance();
+	            // *twitter w/o Async must be prepared with TwitterException 
+	            // *either  (1) ..throws block OR (2) try-catch block
+	            
+	            // *We extract hashTAGS from status
+	            ArrayList<String> hashtags     = new ArrayList<String>();
+	            TwitterTweetExtractorUtil tags = new TwitterTweetExtractorUtil("");
+	            hashtags = tags.parseTweetForHashtags(directMessage.getText());
+	            
+	            //LATER WE WILL DECIDE WHAT RESPONSE based on FIRST COMMAND
+	            String command = hashtags.get(0);
+	            // (1) #menu 
+	            if(command.equals("menu")){
+	            	hashtags.clear(); hashtags = null;
+	            }
+	            
+	            // (2) #register #name #phone
+	            else if(command.equals("register")){
+	            	String name  = hashtags.get(1);
+	            	String phone = hashtags.get(2);
+	            	
+		            String insertQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
+		            				   + "VALUES (" + name + ", " + directMessage.getSenderScreenName() + ", " + phone + ")";
+		            Statement stmt = null; 
+		            try {
+					     	if(con == null){
+					     		db_object.openConnection();
+					  			con = db_object.getConnection();
+					        }
+					     	stmt = con.createStatement();	     		
+					     	stmt.executeUpdate(insertQuery);
+					     	System.out.println("Registered user: " + directMessage.getSenderScreenName() 
+					     						+ "[" + name + " | " + phone + "]" );
+		            } catch (SQLException e) {
+			     	   	 	e.printStackTrace();
+			     	} 
+		            finally{
+			    		   	if(con != null){
+			  				  try {
+								db_object.closeConnection();
+			  				  } catch (SQLException e) {
+								e.printStackTrace();
+			  				  } finally{
+			  				  		con = null;
+			     		   		}
+			     		   	}
+	     		   	}
+		            
+		            hashtags.clear(); hashtags = null;
+	            }//else if(DM for Register)
+	            
+	            // (3) #promo #key #key --> Replied back by DMes
+	            else if(command.equals("promo")){
+	            	// *We compose DM per hashTAGS
+		            ArrayList<String> directMessages   = new ArrayList<String>();
+		            String statusQuery = "";
+		            Statement stm = null; 
+		            ResultSet rs = null;
+		            SimpleDateFormat dateFormat =  new SimpleDateFormat("YYYY-MM-DD");
+		            String today = "";
+		            for (String tag : hashtags) {
+		            	Date now = new Date();
+		            	today    = dateFormat.format(now);
+		            	statusQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
+		            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
+		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
+		            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+		            	System.out.println(statusQuery);
+		            	
+			     		try {
+					     		if(con == null){
+					     			db_object.openConnection();
+					  				con = db_object.getConnection();
+					  	        }
+				     			stm = con.createStatement();
+				     			rs  = stm.executeQuery(statusQuery);
+				     			while (rs.next()){
+				     				directMessages.add("[" + rs.getString("promotion_title") + "] " + rs.getString("promotion_content"));
+				     				System.out.println("DM with: " + tag);
+				     	   		   }
+			     			} catch (SQLException e) {
+			     		   		e.printStackTrace();
+			     			} finally{
+				     		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
+									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+			     		   	}
+						}
+		            
+			            System.out.println("DMes are: "); 
+			            System.out.println(directMessages);
+			            
+			            // *We then send out all possible DM per hashTAGS
+			            for (String msg : directMessages) {
+				            recipientId = directMessage.getSenderScreenName();
+				            directMsg = msg;
+				            
+				            asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+			            }
+			            
+			            hashtags.clear(); hashtags = null;
+	            }//else if(DM for Ask)
+	            
 	        }
 
 	        @Override
