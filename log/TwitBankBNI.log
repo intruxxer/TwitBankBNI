@@ -747,4 +747,261 @@ Exceeded connection limit for user
  2015-10-06 17:53:22,991 INFO - Connection established.
  2015-10-06 17:53:22,991 INFO - Receiving status stream.
  2015-10-06 17:55:22,387 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-07 10:14:19,233 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-07 10:14:19,235 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-07 10:14:19,251 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:14:19,251 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:14:19,937 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:14:19,938 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:14:19,941 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-07 10:14:19,941 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-07 10:14:19,948 INFO - Establishing connection.
+ 2015-10-07 10:14:19,948 INFO - Establishing connection.
+ 2015-10-07 10:14:54,145 INFO - Connection established.
+ 2015-10-07 10:14:54,164 INFO - Receiving status stream.
+ 2015-10-07 10:14:54,229 INFO - Connection established.
+ 2015-10-07 10:14:54,229 INFO - Receiving status stream.
+ 2015-10-07 10:16:35,592 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-07 10:16:35,592 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:16:35,593 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-07 10:16:35,593 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:16:35,595 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:16:35,596 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-07 10:16:35,596 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-07 10:16:35,597 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-07 11:52:30,132 INFO - Stream closed.
+ 2015-10-07 11:52:30,132 INFO - Stream closed.
+ 2015-10-07 13:41:34,897 INFO - Stream closed.
+ 2015-10-07 13:41:34,897 INFO - Stream closed.
+ 2015-10-07 13:41:34,900 INFO - Waiting for 250 milliseconds
+ 2015-10-07 13:41:34,900 INFO - Waiting for 250 milliseconds
+ 2015-10-07 13:41:35,158 INFO - Establishing connection.
+ 2015-10-07 13:41:35,158 INFO - Establishing connection.
+ 2015-10-07 13:41:35,170 INFO - stream.twitter.com
+ 2015-10-07 13:41:35,173 INFO - Waiting for 500 milliseconds
+ 2015-10-07 13:41:35,174 INFO - stream.twitter.com
+ 2015-10-07 13:41:35,175 INFO - Waiting for 500 milliseconds
+ 2015-10-07 13:41:35,678 INFO - Establishing connection.
+ 2015-10-07 13:41:35,679 INFO - Establishing connection.
+ 2015-10-07 13:41:35,689 INFO - stream.twitter.com
+ 2015-10-07 13:41:35,690 INFO - stream.twitter.com
+ 2015-10-07 13:41:35,690 INFO - Waiting for 1000 milliseconds
+ 2015-10-07 13:41:35,691 INFO - Waiting for 1000 milliseconds
+ 2015-10-07 13:41:36,694 INFO - Establishing connection.
+ 2015-10-07 13:41:36,694 INFO - Establishing connection.
+ 2015-10-07 13:41:36,697 INFO - stream.twitter.com
+ 2015-10-07 13:41:36,697 INFO - stream.twitter.com
+ 2015-10-07 13:41:36,699 INFO - Waiting for 2000 milliseconds
+ 2015-10-07 13:41:36,699 INFO - Waiting for 2000 milliseconds
+ 2015-10-07 13:41:38,703 INFO - Establishing connection.
+ 2015-10-07 13:41:38,703 INFO - Establishing connection.
+ 2015-10-07 13:41:38,706 INFO - stream.twitter.com
+ 2015-10-07 13:41:38,706 INFO - stream.twitter.com
+ 2015-10-07 13:41:38,707 INFO - Waiting for 4000 milliseconds
+ 2015-10-07 13:41:38,707 INFO - Waiting for 4000 milliseconds
+ 2015-10-07 13:41:42,712 INFO - Establishing connection.
+ 2015-10-07 13:41:42,712 INFO - Establishing connection.
+ 2015-10-07 13:41:42,718 INFO - stream.twitter.com
+ 2015-10-07 13:41:42,718 INFO - stream.twitter.com
+ 2015-10-07 13:41:42,719 INFO - Waiting for 8000 milliseconds
+ 2015-10-07 13:41:42,720 INFO - Waiting for 8000 milliseconds
+ 2015-10-07 13:41:50,720 INFO - Establishing connection.
+ 2015-10-07 13:41:50,721 INFO - Establishing connection.
+ 2015-10-07 13:41:50,800 INFO - stream.twitter.com
+ 2015-10-07 13:41:50,800 INFO - stream.twitter.com
+ 2015-10-07 13:41:50,801 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:41:50,801 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:06,805 INFO - Establishing connection.
+ 2015-10-07 13:42:06,805 INFO - Establishing connection.
+ 2015-10-07 13:42:06,820 INFO - stream.twitter.com
+ 2015-10-07 13:42:06,821 INFO - stream.twitter.com
+ 2015-10-07 13:42:06,822 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:06,823 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:22,825 INFO - Establishing connection.
+ 2015-10-07 13:42:22,825 INFO - Establishing connection.
+ 2015-10-07 13:42:22,831 INFO - stream.twitter.com
+ 2015-10-07 13:42:22,832 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:22,874 INFO - stream.twitter.com
+ 2015-10-07 13:42:22,874 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:38,837 INFO - Establishing connection.
+ 2015-10-07 13:42:38,843 INFO - stream.twitter.com
+ 2015-10-07 13:42:38,845 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:38,876 INFO - Establishing connection.
+ 2015-10-07 13:42:38,882 INFO - stream.twitter.com
+ 2015-10-07 13:42:38,883 INFO - Waiting for 16000 milliseconds
+ 2015-10-07 13:42:54,848 INFO - Establishing connection.
+ 2015-10-07 13:42:54,885 INFO - Establishing connection.
+ 2015-10-07 13:43:26,685 INFO - Connection established.
+ 2015-10-07 13:43:26,686 INFO - Receiving status stream.
+ 2015-10-07 13:43:27,161 INFO - Connection established.
+ 2015-10-07 13:43:27,162 INFO - Receiving status stream.
+ 2015-10-08 14:09:05,591 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:09:05,592 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:09:05,760 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:09:05,762 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:09:05,764 INFO - Establishing connection.
+ 2015-10-08 14:09:08,867 INFO - Connection established.
+ 2015-10-08 14:09:08,867 INFO - Receiving status stream.
+ 2015-10-08 14:09:56,183 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:09:56,183 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:09:56,184 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:09:56,185 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:10:05,194 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:10:05,194 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:05,195 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:05,195 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:10:05,203 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:10:05,203 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:05,204 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:05,204 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:10:34,246 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:10:34,246 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:34,247 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:34,248 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:10:36,079 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:10:36,079 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:36,081 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:10:36,081 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:15:02,322 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:15:02,323 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:15:02,324 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:15:02,324 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:18:38,688 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:18:38,688 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:18:38,689 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:18:38,689 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:18:42,168 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:18:42,168 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:18:42,168 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:18:42,169 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:19:13,605 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:19:13,605 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:13,606 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:13,606 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:19:30,505 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:19:30,505 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:30,506 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:30,506 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:19:30,514 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:19:30,514 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:30,515 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:19:30,515 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:20:20,155 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:20:20,155 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:20,156 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:20,157 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:20:20,165 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:20:20,165 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:20,166 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:20,166 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:20:31,807 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:20:31,807 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:31,808 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:20:31,808 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:25:00,195 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:25:00,195 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:00,225 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:00,225 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:25:13,952 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:25:13,952 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:13,952 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:13,953 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:25:13,960 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:25:13,960 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:13,961 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:25:13,961 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:29:04,864 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:29:04,864 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:04,865 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:04,865 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:29:12,983 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:29:12,983 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:12,984 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:12,984 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:29:13,390 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:29:13,391 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:13,392 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:29:13,393 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:30:02,277 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:30:02,277 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:30:02,278 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:30:02,278 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:30:53,338 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:30:53,338 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:30:53,339 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:30:53,339 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:31:10,342 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:31:10,343 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:31:10,343 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:31:10,344 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:31:26,189 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:31:26,190 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:31:26,190 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:31:26,191 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:32:06,424 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:32:06,425 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:06,425 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:06,426 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:32:08,163 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:32:08,163 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:08,164 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:08,165 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:32:09,190 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:32:09,190 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:09,191 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:32:09,191 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:04,586 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:04,586 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:04,587 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:04,587 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:06,635 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:06,635 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:06,636 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:06,636 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:06,646 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:06,646 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:06,647 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:06,648 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:08,281 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:08,281 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:08,282 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:08,282 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:09,323 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:09,323 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:09,324 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:09,325 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:17,488 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:17,488 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:17,489 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:17,489 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:34:20,664 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:34:20,664 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:20,666 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:34:20,666 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:36:58,564 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:36:58,564 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:36:58,565 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:36:58,565 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:37:26,159 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:37:26,159 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:37:26,160 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:37:26,160 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:38:34,513 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:38:34,513 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:38:34,514 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:38:34,514 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:52:59,033 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:52:59,060 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:52:59,295 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:52:59,313 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2015-10-08 14:52:59,319 INFO - Establishing connection.
+ 2015-10-08 14:52:59,324 INFO - Establishing connection.
+ 2015-10-08 14:53:01,981 INFO - Connection established.
+ 2015-10-08 14:53:01,981 INFO - Receiving status stream.
+ 2015-10-08 14:53:34,201 INFO - Connection established.
+ 2015-10-08 14:53:34,202 INFO - Receiving status stream.
+ 2015-10-08 14:54:22,960 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2015-10-08 14:54:22,960 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:54:22,965 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2015-10-08 14:54:22,965 INFO - MysqlConnect: Connection to MySQL DB terminated.
  

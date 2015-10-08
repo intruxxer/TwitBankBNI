@@ -44,6 +44,7 @@ public class TwitterDaemon {
 	private static Status status;
 	private static String savedDirectory;
 	private static TwitterStream twitterStream;
+	private static TwitterStream twitterStreamDM;
 	private static String recipientId;
 	private static String directMsg;
 	private static Twitter twitter;
@@ -101,8 +102,9 @@ public class TwitterDaemon {
 		/* Using Stream API */
 		// [INIT]
 		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
-	       TwitterStreamBuilderUtil twitterStreamAmartha = new TwitterStreamBuilderUtil(twitterUser);
-		   twitterStream = twitterStreamAmartha.getStream();
+	       TwitterStreamBuilderUtil twitterStreamBuilder = new TwitterStreamBuilderUtil(twitterUser);
+		   twitterStream   = twitterStreamBuilder.getStream();
+		   twitterStreamDM = twitterStreamBuilder.getStream();
 		   //twitterStream = new TwitterStreamFactory().getInstance();
 		
 		// [1] User Stream API - Stream Tweets of a Twitter User 
@@ -125,10 +127,11 @@ public class TwitterDaemon {
 	        }   
 			stm = con.createStatement();
 			rs  = stm.executeQuery(statusQuery);
+			System.out.print("Trackings: ");
 			while (rs.next()){
 				//track.add("@fahmivanhero #microfinance"); 
 				//track.add("@fahmivanhero #amartha");
-				System.out.println("Tracking: " + rs.getString("hashtag_term"));
+				System.out.print("#" + rs.getString("hashtag_term") + " ");
 				track.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
 	   		   }
 		   } catch (SQLException e) {
@@ -164,16 +167,18 @@ public class TwitterDaemon {
 		// Sets stream listener(s) to track events from the Stream: 
 		// (1) User stream & (2) Stream's rate limit. 
 	       twitterStream.addListener(userStreamlistener);
+	       twitterStreamDM.addListener(userDMStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
-	       
-	       twitterStream.filter(new FilterQuery( track.toArray( new String[track.size()] ) ) );
+	    // *TO LISTEN TO TIMELINE   
+	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
+	    // *TO LISTEN TO DM
+	       twitterStreamDM.user( );
 	       
 	       //FilterQuery fq = new FilterQuery();
 		   //String keywords[] = { "#microfinance", "#life" };
 		   //fq.track(keywords);
 	       //twitterStream.filter(fq);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
-	       //twitterStream.user();
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
 	       
@@ -435,6 +440,152 @@ public class TwitterDaemon {
 	                + " target:@" + target.getScreenName()
 	                + quotingTweet.getUser().getScreenName()
 	                + " - " + quotingTweet.getText());
+	        }
+
+	        @Override
+	        public void onException(Exception ex) {
+	            ex.printStackTrace();
+	            System.out.println("onException:" + ex.getMessage());
+	        }
+
+	};
+	
+	private static final UserStreamListener userDMStreamlistener = new UserStreamListener() {
+	      
+		   @Override
+	        public void onStatus(Status status) {
+	            //System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());	
+	        }
+
+	        @Override
+	        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+	            //System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+	        }
+
+	        @Override
+	        public void onDeletionNotice(long directMessageId, long userId) {
+	            //System.out.println("Got a direct message deletion notice id:" + directMessageId);
+	        }
+
+	        @Override
+	        public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+	            //System.out.println("Got a track limitation notice:" + numberOfLimitedStatuses);
+	        }
+
+	        @Override
+	        public void onScrubGeo(long userId, long upToStatusId) {
+	            
+	        }
+
+	        @Override
+	        public void onStallWarning(StallWarning warning) {
+	            
+	        }
+
+	        @Override
+	        public void onFriendList(long[] friendIds) {
+	            
+	        }
+
+	        @Override
+	        public void onFavorite(User source, User target, Status favoritedStatus) {
+	            
+	        }
+
+	        @Override
+	        public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
+	            
+	        }
+
+	        @Override
+	        public void onFollow(User source, User followedUser) {
+	         
+	        }
+
+	        @Override
+	        public void onUnfollow(User source, User followedUser) {
+	            
+	        }
+
+	        @Override
+	        public void onDirectMessage(DirectMessage directMessage) {
+	            System.out.println("onDirectMessage text:"
+	                + directMessage.getText());
+	        }
+
+	        @Override
+	        public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
+	           
+	        }
+
+	        @Override
+	        public void onUserListCreation(User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserListUpdate(User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserListDeletion(User listOwner, UserList list) {
+	            
+	        }
+
+	        @Override
+	        public void onUserProfileUpdate(User updatedUser) {
+	            
+	        }
+
+	        @Override
+	        public void onUserDeletion(long deletedUser) {
+	        
+	        }
+
+	        @Override
+	        public void onUserSuspension(long suspendedUser) {
+	            
+	        }
+
+	        @Override
+	        public void onBlock(User source, User blockedUser) {
+	            
+	        }
+
+	        @Override
+	        public void onUnblock(User source, User unblockedUser) {
+	            
+	        }
+
+	        @Override
+	        public void onRetweetedRetweet(User source, User target, Status retweetedStatus) {
+	            
+	        }
+
+	        @Override
+	        public void onFavoritedRetweet(User source, User target, Status favoritedRetweet) {
+	            
+	        }
+
+	        @Override
+	        public void onQuotedTweet(User source, User target, Status quotingTweet) {
+	            
 	        }
 
 	        @Override
