@@ -533,7 +533,7 @@ public class TwitterDaemon {
 	            }
 	            
 	            // (2) #register #name #phone
-	            else if(command.equals("register")){
+	            else if(command.equals("daftar")){
 	            	String name  = hashtags.get(1);
 	            	String phone = hashtags.get(2);
 	            	
