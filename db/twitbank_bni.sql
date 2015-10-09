@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2015 at 10:06 AM
+-- Generation Time: Oct 09, 2015 at 01:50 AM
 -- Server version: 5.6.23
 -- PHP Version: 5.5.20
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `tbl_hashtags` (
 --
 
 INSERT INTO `tbl_hashtags` (`hashtag_id`, `hashtag_category`, `hashtag_term`) VALUES
-(1, 'menu', 'category'),
+(1, 'menu', 'menu'),
 (2, 'menu', 'daftar'),
 (3, 'menu', 'promo'),
 (4, 'promo', 'shopping '),
@@ -125,6 +125,20 @@ INSERT INTO `tbl_promotions` (`promotion_id`, `promotion_title`, `promotion_slug
 (15, 'Joint Promo BNI - Graha Lifestyle tahun 2015-2016', 'Come & enjoy BNI Installment 0% up to 12 months at Diane von Furstenberg, ETRO and & Halston Heritage stores with BNI Credit Card until 30 A', 'Come & enjoy BNI Installment 0% up to 12 months at Diane von Furstenberg, ETRO and & Halston Heritage stores with BNI Credit Card until 30 Apr16. T&C. 021500046', 15, '2016-04-30'),
 (16, 'Program Join Promo BNI-Emirates Airlines', 'Enjoy Disc. Up to 15% Emirates Airline for departure from JKT/DPS with BNI Credit Cards, book via www.emirates.com/id/bni until 30Mar16.T&C ', 'Enjoy Disc. Up to 15% Emirates Airline for departure from JKT/DPS with BNI Credit Cards, book via www.emirates.com/id/bni until 30Mar16.T&C Apply.1500046', 16, '2016-03-30');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_users`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_users` (
+  `user_id` int(11) NOT NULL,
+  `user_fullname` varchar(50) NOT NULL,
+  `user_twitname` varchar(20) NOT NULL,
+  `user_phonenum` varchar(16) NOT NULL,
+  `user_accnum` varchar(20) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Indexes for dumped tables
 --
@@ -155,6 +169,12 @@ ALTER TABLE `tbl_promotions`
   ADD KEY `promotion_hashtag` (`promotion_hashtag`);
 
 --
+-- Indexes for table `tbl_users`
+--
+ALTER TABLE `tbl_users`
+  ADD PRIMARY KEY (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -178,6 +198,11 @@ ALTER TABLE `tbl_mentions`
 --
 ALTER TABLE `tbl_promotions`
   MODIFY `promotion_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT for table `tbl_users`
+--
+ALTER TABLE `tbl_users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
