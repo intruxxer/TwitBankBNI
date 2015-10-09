@@ -88,7 +88,6 @@ public class TwitterDaemon {
 		try{
 			db_object = new MysqlConnect();
 			con 	  = db_object.getConnection(); 
-			//System.out.print(db_object.getConnection());
 		} catch(ClassNotFoundException nfe){
 			nfe.printStackTrace();
 		} catch(SQLException sqle){
@@ -203,14 +202,16 @@ public class TwitterDaemon {
 	       twitterStream.addListener(userStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
 	       twitterStreamDM.addListener(userDMStreamlistener);
-	    // *TO LISTEN TO TIMELINE   
-	       //FilterQuery fq = new FilterQuery();
+	    
+	       // *TO LISTEN TO TIMELINE   
+	       //FilterQuery filter = new FilterQuery();
 		   //String keywords[] = { "#microfinance", "#life" };
 		   //fq.track(keywords);
-	       //twitterStream.filter(fq);
+	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
-	    // *TO LISTEN TO DM
+	    
+	       // *TO LISTEN TO DM
 	       twitterStreamDM.user( );
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
