@@ -48,7 +48,7 @@ public class MysqlConnect {
             		+ "user=" + PropertiesLoader.getProperty("DB_USERNAME") +"&password=" + PropertiesLoader.getProperty("DB_PASSWORD")
             		);
             if(connection != null){
-            	System.out.println("Database connected via channel: "+String.valueOf(connection));
+            	//System.out.println("Database connected via channel: "+String.valueOf(connection));
             	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB established.");
             }
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class MysqlConnect {
 	}
 	
 	public Connection getConnection(){
-		System.out.println("Database Connection to be retrieved: " + String.valueOf(connection));
+		//System.out.println("Database Connection to be retrieved: " + String.valueOf(connection));
     	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB retrieved.");
 		return connection;
 	}
@@ -71,7 +71,7 @@ public class MysqlConnect {
             		+ "user=" + PropertiesLoader.getProperty("DB_USERNAME") +"&password=" + PropertiesLoader.getProperty("DB_PASSWORD")
             		);
             if(connection != null){
-            	System.out.println("Database connected via channel: "+String.valueOf(connection));
+            	//System.out.println("Database connected via channel: "+String.valueOf(connection));
             	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB established.");
             }
         } catch (ClassNotFoundException e) {
@@ -83,7 +83,7 @@ public class MysqlConnect {
 	
 	public void closeConnection() throws SQLException{
         getConnection().close();
-        System.out.println("Database disconnected!");
+        //System.out.println("Database disconnected!");
     	LogLoader.setInfo(MysqlConnect.class.getSimpleName(), "Connection to MySQL DB terminated.");
     }
 

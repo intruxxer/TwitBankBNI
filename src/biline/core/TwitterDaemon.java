@@ -3,7 +3,6 @@ package biline.core;
 import biline.config.*;
 import biline.db.*;
 import biline.twitter.*;
-import twitter4j.auth.RequestToken;
 import twitter4j.AsyncTwitter;
 import twitter4j.AsyncTwitterFactory;
 import twitter4j.DirectMessage;
@@ -29,10 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
-import java.util.HashMap;
 
 
 public class TwitterDaemon {
@@ -76,7 +72,7 @@ public class TwitterDaemon {
 	}
 
 	public static void main(String[] args) throws TwitterException {
-		// *Listener objects
+		// *Listener shared objects
 		hashtags     = new ArrayList<String>();
 		menus 		 = new ArrayList<String>();
 		
@@ -85,7 +81,7 @@ public class TwitterDaemon {
 		directMessagesForMentions   = new ArrayList<String>();
 		directMessagesPromo   		= new ArrayList<String>();
 		
-		dateFormat =  new SimpleDateFormat("YYYY-MM-DD");
+		dateFormat   =  new SimpleDateFormat("YYYY-MM-DD");
 		
 		// *Connecting to DB & Instantiate Accessing DB Object
 		stm = null; rs = null;
