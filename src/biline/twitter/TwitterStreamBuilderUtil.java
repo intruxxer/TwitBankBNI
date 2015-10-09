@@ -39,8 +39,8 @@ public class TwitterStreamBuilderUtil {
 		else if(twitterHandler.equals("fahmivanhero")){
 			this.CONSUMER_KEY		  = "Q2V6Nx3160lSm8KAVgP67lpp9";
 			this.CONSUMER_SECRET 	  = "YimS1y7oDNF8Ni3nMRV9QxtOgDzD4PZ32qTqsI21NFQoeqWwCr";
-			this.ACCESS_TOKEN		  = "69868781-gvERueLmz8JRM4jBEYB4sVkSSC4pe1DPEm9v71d3f";
-			this.ACCESS_TOKEN_SECRET  = "8yhJKSFJlbfBxWEg3sXB51bBEdbrBpmNrnRZTxhkNq0AT";
+			this.ACCESS_TOKEN		  = "69868781-pCFlQfzOW5y182tcLAvkkSpwz9EEx7W3OuD5f2eXb";
+			this.ACCESS_TOKEN_SECRET  = "6rtdaoMZJ6gJPwUcuKt8yHDkJKoQ8M5etXmzZK6jLxrBA";
 		}
 		else if(twitterHandler.equals("bni46")){
 			this.CONSUMER_KEY		  = "ieQr4cnkzw8vQHaamX3LcZOWL";
