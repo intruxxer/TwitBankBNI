@@ -39,7 +39,7 @@ import java.util.HashMap;
 
 public class TwitterDaemon {
 	
-	private static String twitterUser;
+	private static final String twitterUser = "fahmivanhero";//bni46
 	private static String latestStatus;
 	private static Status status;
 	private static String savedDirectory;
@@ -55,7 +55,6 @@ public class TwitterDaemon {
 	
 	public TwitterDaemon() {	
 		//Constructor
-		twitterUser = "fahmivanhero";//bni46
 		setLatestStatus("default");
 		setSaveDirectory();
 	}
@@ -169,8 +168,8 @@ public class TwitterDaemon {
 		// Sets stream listener(s) to track events from the Stream: 
 		// (1) User stream & (2) Stream's rate limit. 
 	       twitterStream.addListener(userStreamlistener);
-	       twitterStreamDM.addListener(userDMStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
+	       twitterStreamDM.addListener(userDMStreamlistener);
 	    // *TO LISTEN TO TIMELINE   
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
 	    // *TO LISTEN TO DM
@@ -456,22 +455,18 @@ public class TwitterDaemon {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-	            //System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());	
 	        }
 
 	        @Override
 	        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-	            //System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
 	        }
 
 	        @Override
 	        public void onDeletionNotice(long directMessageId, long userId) {
-	            //System.out.println("Got a direct message deletion notice id:" + directMessageId);
 	        }
 
 	        @Override
 	        public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-	            //System.out.println("Got a track limitation notice:" + numberOfLimitedStatuses);
 	        }
 
 	        @Override
@@ -529,7 +524,61 @@ public class TwitterDaemon {
 	            String command = hashtags.get(0);
 	            // (1) #menu 
 	            if(command.equals("menu")){
-	            	hashtags.clear(); hashtags = null;
+	            	// *We compose a DM sending list of menus
+	            	ArrayList<String> menus     = new ArrayList<String>();
+	            	Statement stm = null; ResultSet rs = null;
+	            	String menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = '" + command + "' ";
+	            	System.out.println(menuQuery);
+	            	
+		     		try {
+				     		if(con == null){
+				     			db_object.openConnection();
+				  				con = db_object.getConnection();
+				  	        }
+			     			stm = con.createStatement();
+			     			rs  = stm.executeQuery(menuQuery);
+			     			
+			     			while (rs.next()){
+			     				menus.add( rs.getString("hashtag_term") );
+			     	   		   }
+		     			} catch (SQLException e) {
+		     		   		e.printStackTrace();
+		     			} finally{
+			     		   	if(con != null){
+			  				  try {
+								db_object.closeConnection();
+			  				  } catch (SQLException e) {
+								e.printStackTrace();
+			  				  } finally{
+			  				  		con = null;
+			     		   		}
+			     		   	}
+		     		   	}
+		     		
+		     		// *We then send out all possible menu via a single DM
+		     		recipientId = directMessage.getSenderScreenName();
+		            for (String msg : menus) {
+			            
+			            switch (msg) {
+			            	case "menu":  
+			            		 directMsg 	= "Anda dapat mengirim DM dengan #" + msg + " untuk mengakses daftar menu layanan BNI (@bni46) via Twitter.";
+			                     break;
+			            	case "daftar":
+			            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format #daftar #namalengkap #handphone";
+			            		 break;
+			            	case "promo":
+			            		 directMsg 	= "Anda dapat mengakses layanan promo BNI (@bni46) via Twitter DM dengan format #promo #keyword sesuai yang anda inginkan.";
+			            		 break;
+			            	default:
+			            		 break;
+			            }
+
+			            asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+		    		    System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+		            }
+		            
+		            menus.clear(); //menus = null;
+	            	hashtags.clear(); //hashtags = null;
 	            }
 	            
 	            // (2) #register #name #phone
@@ -538,7 +587,9 @@ public class TwitterDaemon {
 	            	String phone = hashtags.get(2);
 	            	
 		            String insertQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
-		            				   + "VALUES (" + name + ", " + directMessage.getSenderScreenName() + ", " + phone + ")";
+		            				   + "VALUES ('" + name + "', '" + directMessage.getSenderScreenName() + "', '" + phone + "')";
+	            	System.out.println(insertQuery);
+	            	
 		            Statement stmt = null; 
 		            try {
 					     	if(con == null){
@@ -564,10 +615,15 @@ public class TwitterDaemon {
 			     		   	}
 	     		   	}
 		            
-		            hashtags.clear(); hashtags = null;
+		            recipientId = directMessage.getSenderScreenName();
+		            directMsg   = "Terimakasih. Anda telah terdaftar sebagai pengguna layanan BNI46 via Twitter.";
+			        asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+		    		System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+		            
+		            hashtags.clear(); //hashtags = null;
 	            }//else if(DM for Register)
 	            
-	            // (3) #promo #key #key --> Replied back by DMes
+	            // (3) #promo #keyword #keyword
 	            else if(command.equals("promo")){
 	            	// *We compose DM per hashTAGS
 		            ArrayList<String> directMessages   = new ArrayList<String>();
@@ -610,10 +666,7 @@ public class TwitterDaemon {
 				     		   	}
 			     		   	}
 						}
-		            
-			            System.out.println("DMes are: "); 
-			            System.out.println(directMessages);
-			            
+		
 			            // *We then send out all possible DM per hashTAGS
 			            for (String msg : directMessages) {
 				            recipientId = directMessage.getSenderScreenName();
@@ -623,7 +676,7 @@ public class TwitterDaemon {
 			    		    System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
 			            }
 			            
-			            hashtags.clear(); hashtags = null;
+			            hashtags.clear(); //hashtags = null;
 	            }//else if(DM for Ask)
 	            
 	        }
