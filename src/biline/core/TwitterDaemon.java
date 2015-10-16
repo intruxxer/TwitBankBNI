@@ -208,7 +208,11 @@ public class TwitterDaemon {
 	       // *TO LISTEN TO TIMELINE   
 	       //FilterQuery filter = new FilterQuery();
 		   //String keywords[] = { "#microfinance", "#life" };
+<<<<<<< HEAD
 		   //filter.track(keywords);
+=======
+		   //fq.track(keywords);
+>>>>>>> origin/master
 	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
