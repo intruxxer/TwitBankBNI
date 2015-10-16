@@ -208,11 +208,11 @@ public class TwitterDaemon {
 	       // *TO LISTEN TO TIMELINE   
 	       //FilterQuery filter = new FilterQuery();
 		   //String keywords[] = { "#microfinance", "#life" };
-<<<<<<< HEAD
+
 		   //filter.track(keywords);
-=======
+
 		   //fq.track(keywords);
->>>>>>> origin/master
+
 	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
@@ -936,7 +936,7 @@ public class TwitterDaemon {
 				     			stm = con.createStatement();
 				     			rs  = stm.executeQuery(promoQuery);
 				     			if ( !rs.next() ) { 
-				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo dari BNI yang Anda inginkan tidak tersedia.");
+				     				//directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo dari BNI yang Anda inginkan tidak tersedia.");
 				     			} 
 				     			else
 				     			{
@@ -960,7 +960,7 @@ public class TwitterDaemon {
 			     		   	}
 			     		
 						}
-		
+		            	
 			            // *We then send out all possible DM per hashTAGS
 			            for (String msg : directMessagesPromoAndServices) {
 				            recipientId = directMessage.getSenderScreenName();
@@ -985,6 +985,8 @@ public class TwitterDaemon {
 		            String csQuery = "";
 		            stm = null; rs = null;
 		            for (String tag : hashtags) {
+		            	if ( tag.equals("cs") )
+		            	      continue;
 		            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
 		            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
 		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' ";
