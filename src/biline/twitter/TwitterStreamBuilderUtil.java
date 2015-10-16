@@ -20,7 +20,7 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
 //Usage// 
-//TwitterStreamBuilderUtil twitSBU = new TwitterStreamBuilderUtil("amartha/fahmivanhero/bni46");
+//TwitterStreamBuilderUtil twitBuilder = new TwitterStreamBuilderUtil("amartha/fahmivanhero/bni46");
 public class TwitterStreamBuilderUtil {
 
 	private String CONSUMER_KEY;
@@ -30,7 +30,7 @@ public class TwitterStreamBuilderUtil {
 	
 	public TwitterStreamBuilderUtil(String twitterHandler) {
 		// Constructor
-		if(twitterHandler.equals("amartha")){
+		if(twitterHandler.equals("dev_amartha")){
 			this.CONSUMER_KEY 		 = "NtbORNZdwwCaeLelSiUJll14z";
 			this.CONSUMER_SECRET 	 = "CuGeg1yDQJGj6WFCivYqZltj5PvRWDRWadsEaX9a11agNUzaci";
 			this.ACCESS_TOKEN 		 = "3825555556-0yPXCBEvlqWqmKVmfYWSqU1hDLUjKcNoZLFvAWb";

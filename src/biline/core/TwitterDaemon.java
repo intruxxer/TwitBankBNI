@@ -28,12 +28,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser = "fahmivanhero";//bni46//fahmivanhero
+	private static final String twitterUser = "bni46";
+	//bni46 //fahmivanhero //amartha 
 	
 	private static String latestStatus;
 	private static Status status;
@@ -49,21 +51,21 @@ public class TwitterDaemon {
 	private static Twitter twitterDM;
 	private static AsyncTwitter asyncTwitter;
 	private static AsyncTwitter asyncTwitterDM;
-	
-	private static MysqlConnect db_object;
+
 	private static Connection con;
 	private static Statement stm;
 	private static ResultSet rs;
 	private static String command;
+	private static MysqlConnect db_object;
 	
 	private static SimpleDateFormat dateFormat;
 	private static String today;
 	
 	private static ArrayList<String> hashtags;
-	private static TwitterTweetExtractorUtil tagExtractor;
 	private static ArrayList<String> menus;
+	private static ArrayList<String> directMessagesPromoAndServices;
 	private static ArrayList<String> directMessagesForMentions;
-	private static ArrayList<String> directMessagesPromo;
+	private static TwitterTweetExtractorUtil tagExtractor;
 	
 	public TwitterDaemon() {	
 		//Constructor
@@ -78,17 +80,16 @@ public class TwitterDaemon {
 		
 		tagExtractor = new TwitterTweetExtractorUtil("");
 		
-		directMessagesForMentions   = new ArrayList<String>();
-		directMessagesPromo   		= new ArrayList<String>();
+		directMessagesForMentions       = new ArrayList<String>();
+		directMessagesPromoAndServices  = new ArrayList<String>();
 		
-		dateFormat   =  new SimpleDateFormat("YYYY-MM-DD");
+		dateFormat   =  new SimpleDateFormat("yyyy-MM-dd");
 		
 		// *Connecting to DB & Instantiate Accessing DB Object
 		stm = null; rs = null;
 		try{
 			db_object = new MysqlConnect();
 			con 	  = db_object.getConnection(); 
-			//System.out.print(db_object.getConnection());
 		} catch(ClassNotFoundException nfe){
 			nfe.printStackTrace();
 		} catch(SQLException sqle){
@@ -203,14 +204,16 @@ public class TwitterDaemon {
 	       twitterStream.addListener(userStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
 	       twitterStreamDM.addListener(userDMStreamlistener);
-	    // *TO LISTEN TO TIMELINE   
-	       //FilterQuery fq = new FilterQuery();
+	    
+	       // *TO LISTEN TO TIMELINE   
+	       //FilterQuery filter = new FilterQuery();
 		   //String keywords[] = { "#microfinance", "#life" };
-		   //fq.track(keywords);
-	       //twitterStream.filter(fq);
+		   //filter.track(keywords);
+	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
-	    // *TO LISTEN TO DM
+	    
+	       // *TO LISTEN TO DM
 	       twitterStreamDM.user( );
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
@@ -255,7 +258,7 @@ public class TwitterDaemon {
 		     			stm = con.createStatement();
 		     			rs  = stm.executeQuery(promotionsQuery);
 		     			while (rs.next()){
-		     				directMessagesForMentions.add("[" + rs.getString("promotion_title") + "] " + rs.getString("promotion_content"));
+		     				directMessagesForMentions.add(rs.getString("promotion_content"));
 		     				System.out.println("DM with: " + tag);
 		     	   		   }
 	     		   	} catch (SQLException e) {
@@ -348,7 +351,7 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onFollow(User source, User followedUser) {
-	            System.out.println("onFollow source:@"
+	            System.out.println("onFollow fromFilterStream source:@"
 	                + source.getScreenName() + " target:@"
 	                + followedUser.getScreenName());
 	        }
@@ -477,11 +480,76 @@ public class TwitterDaemon {
 	        }
 
 	};
+
 	
 	private static final UserStreamListener userDMStreamlistener = new UserStreamListener() {
 	      
 		   @Override
 	        public void onStatus(Status status) {
+			   /*
+			   System.out.println("onStatus from DM Stream @" + status.getUser().getScreenName() + " - " + status.getText());
+	            
+	            // *We extract hashTAGS from status
+	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
+	            // *We compose DM per hashTAGS
+	            String promotionsQuery = "";
+	            stm = null; rs = null;
+	            
+	            for (String tag : hashtags) {
+	            	Date now = new Date();
+	            	today    = dateFormat.format(now);
+	            	promotionsQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
+	            					+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
+	            					+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
+	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+	            	System.out.println(promotionsQuery);
+	            	
+	     		   	try {
+			     		if(con == null){
+			     			db_object.openConnection();
+			  				con = db_object.getConnection();
+			  	        }
+		     			stm = con.createStatement();
+		     			rs  = stm.executeQuery(promotionsQuery);
+		     			while (rs.next()){
+		     				directMessagesForMentions.add("[" + rs.getString("promotion_title") + "] " + rs.getString("promotion_content"));
+		     				System.out.println("DM with: " + tag);
+		     	   		   }
+	     		   	} catch (SQLException e) {
+	     		   		e.printStackTrace();
+	     		   	} finally{
+		     		   	if(con != null){
+		  				  try {
+							db_object.closeConnection();
+		  				  } catch (SQLException e) {
+							e.printStackTrace();
+		  				  } finally{
+		  				  		con = null;
+		     		   		}
+		     		   	}
+	     		   	}
+				}
+	            //System.out.println("DMes are: "); 
+	            //System.out.println(directMessagesForMentions);
+	            
+	         // *We then send out all possible DM per hashTAGS
+	            for (String msg : directMessagesForMentions) {
+		            recipientId = status.getUser().getScreenName();
+		            directMsg = msg;
+		            try {
+						DirectMessage message = twitter.sendDirectMessage(recipientId, directMsg);
+						System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+			            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
+		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+					} catch (TwitterException e) {
+						e.printStackTrace();
+					}
+	            }
+	            
+	         // *Freeing up memory   
+	            hashtags.clear(); 
+	            directMessagesForMentions.clear();
+	            */
 	        }
 
 	        @Override
@@ -523,7 +591,49 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onFollow(User source, User followedUser) {
-	         
+	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
+		                + source.getScreenName() + " Followed:@"
+		                + followedUser.getScreenName());
+	        	/*
+	        	String responseDMQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'followed' ORDER BY message_id ASC";
+     			String responseDM      = "";
+     			
+	        	try {
+		     		if(con == null){
+		     			db_object.openConnection();
+		  				con = db_object.getConnection();
+		  	        }
+	     			stm = con.createStatement();
+	     			rs  = stm.executeQuery(responseDMQuery);
+	     			
+	     			while (rs.next()){
+	     				responseDM = responseDM + rs.getString("message_content") + " ";
+	     	   		   }
+     			} catch (SQLException e) {
+     		   		e.printStackTrace();
+     			} finally{
+	     		   	if(con != null){
+	  				  try {
+						db_object.closeConnection();
+	  				  } catch (SQLException e) {
+						e.printStackTrace();
+	  				  } finally{
+	  				  		con = null;
+	     		   		}
+	     		   	}
+     		   	}
+     		
+	        	// *We then send out all possible menu via a single DM
+	        	recipientId = followedUser.getScreenName(); directMsg = responseDM;
+	     		try {
+					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					System.out.println("Sent: " + message.getText() + " to @" + source.getScreenName());
+		            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+	    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+				} catch (TwitterException e) {
+					e.printStackTrace();
+				}
+				*/
 	        }
 
 	        @Override
@@ -537,37 +647,45 @@ public class TwitterDaemon {
 	            
 	            // *We extract hashTAGS from status
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
+	            System.out.println("Hashtags are: " + hashtags.toString());
 	            
-	            //LATER WE WILL DECIDE WHAT RESPONSE based on FIRST COMMAND
+	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
+	            // BASED ON FIRST COMMAND/FIRST TAG
+	            // (1) #menu / #helppromo / #helpcs | (2) #daftar #namalengkap #hape | (3) #promo keywords | (4) #cs keywords
 	            if(hashtags.size() > 0)
-	            	command = hashtags.get(0);
+	            	command = hashtags.get(0).toLowerCase();
 	            else
 	            	command = "";
-	            // (1) #menu 
-	            if( command.equals("menu") || command.equals("help") ){
-	            	// *We compose a DM sending list of menus
+	            System.out.println("Command is: " + command);
+	            
+	            // (1) #menu / #helppromo / #helpcs
+	            if( command.equals("menu") || command.equals("helppromo") || command.equals("helpcs"))
+	            {
+	            	// *We compose DMes sending list of menus/helps/cses
 	            	stm = null; rs = null;
 	            	String menuQuery = "";
 	            	if( command.equals("menu") )
 	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'menu' ";
-	            	else if( command.equals("help") )
+	            	else if( command.equals("helppromo") )
 	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'promo' ";
+	            	else if( command.equals("helpcs") )
+	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'cs' ";
 	            	//System.out.println(menuQuery);
 	            	
-		     		try {
-				     		if(con == null){
-				     			db_object.openConnection();
-				  				con = db_object.getConnection();
-				  	        }
-			     			stm = con.createStatement();
-			     			rs  = stm.executeQuery(menuQuery);
-			     			
-			     			while (rs.next()){
-			     				menus.add( rs.getString("hashtag_term") );
-			     	   		   }
-		     			} catch (SQLException e) {
+	            	try {
+			     		if(con == null){
+			     			db_object.openConnection();
+			  				con = db_object.getConnection();
+			  	        }
+		     			stm = con.createStatement();
+		     			rs  = stm.executeQuery(menuQuery);
+		     			
+		     			while (rs.next()){
+		     				menus.add( rs.getString("hashtag_term") );
+		     	   		   }
+		     		} catch (SQLException e) {
 		     		   		e.printStackTrace();
-		     			} finally{
+		     		} finally{
 			     		   	if(con != null){
 			  				  try {
 								db_object.closeConnection();
@@ -577,23 +695,31 @@ public class TwitterDaemon {
 			  				  		con = null;
 			     		   		}
 			     		   	}
-		     		   	}
-		     		
+		     		}
+	            	
 		     		// *We then send out all possible menu via a single DM
 		     		recipientId = directMessage.getSenderScreenName();
+		     		//(1A) #menu [DONE]
 		     		if( command.equals("menu") )
 		     		{
 			            for (String msg : menus) {
 				            switch (msg) {
 				            	case "menu":  
-				            		 directMsg 	= "Anda dapat mengirim DM dengan #" + msg + " untuk mengakses daftar menu layanan BNI (@bni46) via Twitter.";
+				            		 directMsg 	= "Anda dapat mengirim DM dengan \"#menu\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
 				                     break;
 				            	case "daftar":
-				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format #daftar #namalengkap #handphone";
+				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format: \"#daftar #nama_lengkap #nohandphone\" (tanpa double quote). ";
+				            		 directMsg += "Cth: #daftar #Andi_Waluyo #+62213456789 Note: Nama Awal dan Akhir dipisah dengan \"_\". Gunakan +62 sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
 				            		 break;
-				            	case "promo":
-				            		 directMsg 	= "Anda dapat mengakses layanan promo BNI (@bni46) via Twitter DM dengan format #promo + #keyword sesuai yang anda inginkan.";
-				            		 directMsg += "Cth: #promo #travel , #promo #hotel #travel. Ketik #help untuk mengetahui semua #keyword promo dari BNI.";
+				            	//case "promo":
+				            	case "helppromo":
+				            		 directMsg 	= "Anda dapat mengakses layanan promo BNI (@bni46) via Twitter DM dengan format #promo + #keyword sesuai yang anda inginkan. ";
+				            		 directMsg += "Cth: #promo #travel, #promo #hotel #travel. DM kami dengan mengetik #helppromo untuk mengetahui semua #keyword promo dari BNI.";
+				            		 break;
+				            	//case "cs":	 
+				            	case "helpcs":
+				            		 directMsg 	= "Anda dapat mengakses layanan Customer Service BNI (@bni46) via Twitter DM dengan format #cs + #keyword sesuai yang anda inginkan. ";
+				            		 directMsg += "Cth: #cs #taplus, #cs #kartuhilang. DM kami dengan mengetik #helpcs untuk mengetahui semua #keyword customer services dari BNI.";
 				            		 break;
 				            	default:
 				            		 break;
@@ -601,7 +727,7 @@ public class TwitterDaemon {
 				            
 				            try {
 								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-								System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+								System.out.println("Sent: " + message.getText() + " to @" + recipientId);
 					            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 				    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 							} catch (TwitterException e) {
@@ -609,7 +735,9 @@ public class TwitterDaemon {
 							}
 			            }
 		     		}
-		     		else if( command.equals("help") )
+		     		
+		     		//(1B) #helppromo
+		     		else if( command.equals("helppromo") )
 		     		{
 		     			String keywords = "";
 		     			for (String msg : menus) {
@@ -626,69 +754,171 @@ public class TwitterDaemon {
 							e.printStackTrace();
 						}
 		     		}
-		            
+		     		
+		     		//(1C) #helpcs
+		     		else if( command.equals("helpcs") )
+		     		{
+		     			String keywords = "";
+		     			for (String msg : menus) {
+		     				keywords += "#" + msg + " ";
+		     			}
+		     			
+		     			directMsg = "Ketik #cs dan gunakan keywords berikut: " + keywords + " untuk mengakses topik-topik layanan nasabah dari BNI.";
+		     			try {
+							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+		     		}
+  
 		            menus.clear(); 
 		            hashtags.clear();
 	            }
 	            
-	            // (2) #daftar #nama #phone
+	            // (2) #daftar #namalengkap #phone [DONE]
 	            else if(command.equals("daftar")){
-	            	String name  = hashtags.get(1);
-	            	String phone = hashtags.get(2);
+	            	Boolean errorDaftar = false;
+	            	//System.out.println("Register Tags: " + hashtags.get(0) + " & " + hashtags.get(1) + " & " + hashtags.get(2));
+	            	System.out.println("Hashtags:" + hashtags.toString());
 	            	
-		            String daftarQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
-		            				   + "VALUES ('" + name + "', '" + directMessage.getSenderScreenName() + "', '" + phone + "')";
-	            	//System.out.println(daftarQuery);
+	            	String rawName = ""; String name = "";
+	            	if(hashtags.size() > 1)
+	            	{
+	            		rawName   = hashtags.get(1); 
+	            		name	  = rawName.replace("_", " "); 
+	            		name      = name.replace(".", " ");
+	            	}
 	            	
-		            stm = null; 
-		            try {
+	            	String  rawPhoneNo = ""; String  ccPhoneNo  = ""; String  NumPhoneNo = "";
+	            	if(hashtags.size() > 2)
+	            	{
+		            	rawPhoneNo  = hashtags.get(2);
+		            	ccPhoneNo   = rawPhoneNo.substring(0, 2);
+		            	NumPhoneNo  = rawPhoneNo.substring(2);
+	            	}
+	            	
+	            	if(!ccPhoneNo.equals("62"))
+	            	{
+	            		errorDaftar = true;
+	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk format penulisan nomor telepon membutuhkan prefix 62 sebagai pengganti angka 0 pada digit depan nomor telepon Anda. Cth: 0811345890 menjadi 62811345890.";
+	            	}
+	            	
+	            	if(rawPhoneNo.length() < 11 || rawPhoneNo.length() > 15)
+	            	{
+	            		errorDaftar = true;
+	            		System.out.println( "Phone No length: " + rawPhoneNo.length() );
+	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 11 digit, maksimal 15 digit (termasuk prefix kode negara 62 & no telepon Anda).";
+	            	}
+	            	
+	            	if(errorDaftar)
+	            	{
+	            		recipientId = directMessage.getSenderScreenName();
+			            try {
+							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+	            	}
+	            	
+	            	else
+	            	{
+	            		rawPhoneNo = "+" + rawPhoneNo;
+	            		String daftarQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
+	            				   		   + "VALUES ('" + name + "', '" + directMessage.getSenderScreenName() + "', '" + rawPhoneNo + "')";
+	            		
+	            		String daftarResponseQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'daftar' ORDER BY message_id ASC";
+	            		//System.out.println(daftarQuery); //System.out.println(daftarResponseQuery);
+		         	
+			            stm = null; 
+			            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	stm.executeUpdate(daftarQuery);
+						     	System.out.println("Registered user: " + directMessage.getSenderScreenName() 
+						     						+ " [" + name + " | " + rawPhoneNo + "]" );
+			            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+				     	} 
+			            finally{
+				    		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
+									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+		  		   		}
+			            
+			            recipientId = directMessage.getSenderScreenName();
+			            directMsg   = "Terima kasih telah mendaftar dengan data \nNAMA: " + name + " \nNOMOR HP: " +  rawPhoneNo + "\n";
+			            
+			            stm = null; rs = null;
+			            try {
 					     	if(con == null){
 					     		db_object.openConnection();
 					  			con = db_object.getConnection();
 					        }
 					     	stm = con.createStatement();	     		
-					     	stm.executeUpdate(daftarQuery);
-					     	System.out.println("Registered user: " + directMessage.getSenderScreenName() 
-					     						+ " [" + name + " | " + phone + "]" );
-		            } catch (SQLException e) {
+					     	rs  = stm.executeQuery(daftarResponseQuery);
+					     	while (rs.next()){
+					     		directMsg   += " " + rs.getString("message_content");
+					     	}
+			            } catch (SQLException e) {
 			     	   	 	e.printStackTrace();
-			     	} 
-		            finally{
-			    		   	if(con != null){
-			  				  try {
-								db_object.closeConnection();
-			  				  } catch (SQLException e) {
-								e.printStackTrace();
-			  				  } finally{
-			  				  		con = null;
-			     		   		}
-			     		   	}
-	     		   	}
-		            
-		            recipientId = directMessage.getSenderScreenName();
-		            directMsg   = "Yth Bp/Ibu " + name + ", Terimakasih. Anda telah terdaftar sebagai pengguna layanan social banking BNI46 via Twitter.";
-		            
-		            try {
-						DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-						System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
-			            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
-		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
-					} catch (TwitterException e) {
-						e.printStackTrace();
-					}
-		            
-		            hashtags.clear(); 
+				     	} 
+			            finally{
+				    		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
+									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+		  		   		}
+			            
+			            System.out.println("Registered user:" + directMessage.getSenderScreenName() + " will be responded by DM." );
+			            
+			            try {
+							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+			        }
+	            	
+	            	hashtags.clear();
+		             
 	            }//else if(DM for Register)
 	            
-	            // (3) #promo #keyword #keyword
+	            // (3) #promo #keyword #keyword [DONE]
 	            else if(command.equals("promo")){
 	            	// *We compose DM per hashTAGS
 		            String promoQuery = "";
 		            stm = null; rs = null;
 		            for (String tag : hashtags) {
+		            	if ( tag.equals("promo") )
+		            	      continue;
 		            	Date now = new Date();
+		            	//Date now = Calendar.getInstance().getTime();
 		            	today    = dateFormat.format(now);
-		            	promoQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
+		            	System.out.println(today);
+		            	
+		            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 		            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
 		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
 		            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
@@ -702,13 +932,13 @@ public class TwitterDaemon {
 				     			stm = con.createStatement();
 				     			rs  = stm.executeQuery(promoQuery);
 				     			if ( !rs.next() ) { 
-				     				directMessagesPromo.add("Yth. Bp/Ibu, Mohon maaf. Promo BNI yang anda inginkan tidak tersedia.");
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo dari BNI yang Anda inginkan tidak tersedia.");
 				     			} 
 				     			else
 				     			{
 				     				rs.beforeFirst();
 				     				while (rs.next()){
-					     				directMessagesPromo.add("[" + rs.getString("promotion_title") + "] \n\r" + rs.getString("promotion_content"));
+					     				directMessagesPromoAndServices.add(rs.getString("promotion_content"));
 					     	   		}
 				     			}
 			     			} catch (SQLException e) {
@@ -728,12 +958,12 @@ public class TwitterDaemon {
 						}
 		
 			            // *We then send out all possible DM per hashTAGS
-			            for (String msg : directMessagesPromo) {
+			            for (String msg : directMessagesPromoAndServices) {
 				            recipientId = directMessage.getSenderScreenName();
 				            directMsg = msg;
 				            try {
 								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-								System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+								System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 								//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 				    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
 							} catch (TwitterException e) {
@@ -742,8 +972,70 @@ public class TwitterDaemon {
 			            }
 			            
 			            hashtags.clear(); 
-			            directMessagesPromo.clear();
+			            directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
+	            
+	         // (4) #cs #keyword #keyword
+	            else if(command.equals("cs")){
+	            	// *We compose DM per hashTAGS
+		            String csQuery = "";
+		            stm = null; rs = null;
+		            for (String tag : hashtags) {
+		            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
+		            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
+		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' ";
+		            	System.out.println(csQuery);
+		            	
+			     		try {
+					     		if(con == null){
+					     			db_object.openConnection();
+					  				con = db_object.getConnection();
+					  	        }
+				     			stm = con.createStatement();
+				     			rs  = stm.executeQuery(csQuery);
+				     			if ( !rs.next() ) { 
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI yang Anda inginkan tidak tersedia.");
+				     			} 
+				     			else
+				     			{
+				     				rs.beforeFirst();
+				     				while (rs.next()){
+					     				directMessagesPromoAndServices.add("[" + rs.getString("cs_title") + "] \n\r" + rs.getString("cs_content"));
+					     	   		}
+				     			}
+			     			} catch (SQLException e) {
+			     		   		e.printStackTrace();
+			     			} finally{
+				     		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
+									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+			     		   	}
+			     		
+						}
+		
+			            // *We then send out all possible DM per hashTAGS
+			            for (String msg : directMessagesPromoAndServices) {
+				            recipientId = directMessage.getSenderScreenName();
+				            directMsg = msg;
+				            try {
+								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+								System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+								//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+				    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+			            }
+			            
+			            hashtags.clear(); 
+			            directMessagesPromoAndServices.clear();
+	            }//else if(DM for CS)
 	            
 	        }
 
@@ -819,9 +1111,12 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onQuotedTweet(User source, User target, Status quotingTweet) {
-	            
+	        	System.out.println("onQuotedTweet: " + source.getScreenName()
+                + " target:@" + target.getScreenName()
+                + quotingTweet.getUser().getScreenName()
+                + " - " + quotingTweet.getText());
 	        }
-
+	        
 	        @Override
 	        public void onException(Exception ex) {
 	            ex.printStackTrace();
