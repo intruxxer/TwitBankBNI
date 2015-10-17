@@ -213,11 +213,12 @@ public class TwitterDaemon {
 
 		   //fq.track(keywords);
 
+	       // *TO LISTEN TO STATUS MENTIONS
 	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
 	    
-	       // *TO LISTEN TO DM
+	       // *TO LISTEN TO DM & OUR USER'S ACTIVITY
 	       twitterStreamDM.user( );
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
@@ -936,7 +937,7 @@ public class TwitterDaemon {
 				     			stm = con.createStatement();
 				     			rs  = stm.executeQuery(promoQuery);
 				     			if ( !rs.next() ) { 
-				     				//directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo dari BNI yang Anda inginkan tidak tersedia.");
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo #" + tag + " dari BNI yang Anda inginkan tidak tersedia.");
 				     			} 
 				     			else
 				     			{
@@ -979,7 +980,7 @@ public class TwitterDaemon {
 			            directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
 	            
-	         // (4) #cs #keyword #keyword
+	         // (4) #cs #keyword #keyword [DONE]
 	            else if(command.equals("cs")){
 	            	// *We compose DM per hashTAGS
 		            String csQuery = "";
@@ -1000,7 +1001,7 @@ public class TwitterDaemon {
 				     			stm = con.createStatement();
 				     			rs  = stm.executeQuery(csQuery);
 				     			if ( !rs.next() ) { 
-				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI yang Anda inginkan tidak tersedia.");
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI tentang #" + tag + " yang Anda inginkan tidak tersedia.");
 				     			} 
 				     			else
 				     			{
