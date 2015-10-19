@@ -651,7 +651,6 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
-	        if(!directMessage.getSenderScreenName().equals(twitterUser)){
 	        	
 	            System.out.println("onDirectMessage text:" + directMessage.getText());
 	            
@@ -698,8 +697,9 @@ public class TwitterDaemon {
 		     			while (rs.next()){
 		     				menus.add( rs.getString("hashtag_term") );
 		     				aliasmenus.add( rs.getString("hashtag_alias") );
-		     	   		   }
-		     			System.out.println(aliasmenus.toString());
+		     	   		}
+		     			//System.out.println(menus.toString());
+		     			//System.out.println(aliasmenus.toString());
 		     		} catch (SQLException e) {
 		     		   		e.printStackTrace();
 		     		} finally{
@@ -792,7 +792,8 @@ public class TwitterDaemon {
 						}
 		     		}
   
-		            menus.clear(); 
+		            menus.clear();
+		            aliasmenus.clear();
 		            hashtags.clear();
 	            }
 	            
@@ -934,7 +935,7 @@ public class TwitterDaemon {
 			            	Date now = new Date();
 			            	//Date now = Calendar.getInstance().getTime();
 			            	today    = dateFormat.format(now);
-			            	System.out.println(today);
+			            	//System.out.println(today);
 			            	
 			            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 			            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
@@ -1086,9 +1087,7 @@ public class TwitterDaemon {
 	            	}    
 			            hashtags.clear(); 
 			            directMessagesPromoAndServices.clear();
-	            }//else if(DM for CS)
-	            
-	          }//IF sender username IS NOT BNI46   
+	            }//else if(DM for CS)  
 	        }
 
 	        @Override
