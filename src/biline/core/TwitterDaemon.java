@@ -599,7 +599,7 @@ public class TwitterDaemon {
 	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
 		                + source.getScreenName() + " Followed:@"
 		                + followedUser.getScreenName());
-	        	/*
+	        	
 	        	String responseDMQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'followed' ORDER BY message_id ASC";
      			String responseDM      = "";
      			
@@ -634,11 +634,11 @@ public class TwitterDaemon {
 					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 					System.out.println("Sent: " + message.getText() + " to @" + source.getScreenName());
 		            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
-	    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+	    		    //System.out.println("Sent: " + directMsg + " to @" + source.getScreenName());
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
-				*/
+				
 	        }
 
 	        @Override
@@ -656,7 +656,8 @@ public class TwitterDaemon {
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
-	            // (1) #menu / #helppromo / #helpcs | (2) #daftar #namalengkap #hape | (3) #promo keywords | (4) #cs keywords
+	            // (1) #menu / #helppromo / #helpcs | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords
+	            // 1B, 1C only left
 	            if(hashtags.size() > 0)
 	            	command = hashtags.get(0).toLowerCase();
 	            else
@@ -741,7 +742,7 @@ public class TwitterDaemon {
 			            }
 		     		}
 		     		
-		     		//(1B) #helppromo
+		     		//(1B) #helppromo [DONE]
 		     		else if( command.equals("helppromo") )
 		     		{
 		     			String keywords = "";
@@ -752,7 +753,7 @@ public class TwitterDaemon {
 		     			directMsg = "Ketik #promo dan gunakan keywords berikut: " + keywords + " untuk mendapatkan promo-promo menarik & terbaru dari BNI.";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-							System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+							System.out.println("Sent: " + directMessage.getSenderScreenName() + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 						} catch (TwitterException e) {
@@ -760,7 +761,7 @@ public class TwitterDaemon {
 						}
 		     		}
 		     		
-		     		//(1C) #helpcs
+		     		//(1C) #helpcs [DONE]
 		     		else if( command.equals("helpcs") )
 		     		{
 		     			String keywords = "";
@@ -771,7 +772,7 @@ public class TwitterDaemon {
 		     			directMsg = "Ketik #cs dan gunakan keywords berikut: " + keywords + " untuk mengakses topik-topik layanan nasabah dari BNI.";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-							System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 						} catch (TwitterException e) {
@@ -912,134 +913,164 @@ public class TwitterDaemon {
 	            
 	            // (3) #promo #keyword #keyword [DONE]
 	            else if(command.equals("promo")){
-	            	// *We compose DM per hashTAGS
-		            String promoQuery = "";
-		            stm = null; rs = null;
-		            for (String tag : hashtags) {
-		            	if ( tag.equals("promo") )
-		            	      continue;
-		            	Date now = new Date();
-		            	//Date now = Calendar.getInstance().getTime();
-		            	today    = dateFormat.format(now);
-		            	System.out.println(today);
-		            	
-		            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
-		            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
-		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-		            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
-		            	System.out.println(promoQuery);
-		            	
-			     		try {
-					     		if(con == null){
-					     			db_object.openConnection();
-					  				con = db_object.getConnection();
-					  	        }
-				     			stm = con.createStatement();
-				     			rs  = stm.executeQuery(promoQuery);
-				     			if ( !rs.next() ) { 
-				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo #" + tag + " dari BNI yang Anda inginkan tidak tersedia.");
-				     			} 
-				     			else
-				     			{
-				     				rs.beforeFirst();
-				     				while (rs.next()){
-					     				directMessagesPromoAndServices.add(rs.getString("promotion_content"));
-					     	   		}
-				     			}
-			     			} catch (SQLException e) {
-			     		   		e.printStackTrace();
-			     			} finally{
-				     		   	if(con != null){
-				  				  try {
-									db_object.closeConnection();
-				  				  } catch (SQLException e) {
-									e.printStackTrace();
-				  				  } finally{
-				  				  		con = null;
-				     		   		}
+	            	if(hashtags.size() > 1){
+		            	// *We compose DM per hashTAGS
+			            String promoQuery = "";
+			            stm = null; rs = null;
+			            for (String tag : hashtags) {
+			            	if ( tag.equals("promo") )
+			            	      continue;
+			            	Date now = new Date();
+			            	//Date now = Calendar.getInstance().getTime();
+			            	today    = dateFormat.format(now);
+			            	System.out.println(today);
+			            	
+			            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
+			            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
+			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
+			            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+			            	System.out.println(promoQuery);
+			            	
+				     		try {
+						     		if(con == null){
+						     			db_object.openConnection();
+						  				con = db_object.getConnection();
+						  	        }
+					     			stm = con.createStatement();
+					     			rs  = stm.executeQuery(promoQuery);
+					     			if ( !rs.next() ) { 
+					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo #" + tag + " dari BNI yang Anda inginkan tidak tersedia.");
+					     			} 
+					     			else
+					     			{
+					     				rs.beforeFirst();
+					     				while (rs.next()){
+						     				directMessagesPromoAndServices.add(rs.getString("promotion_content"));
+						     	   		}
+					     			}
+				     			} catch (SQLException e) {
+				     		   		e.printStackTrace();
+				     			} finally{
+					     		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
 				     		   	}
-			     		   	}
-			     		
+				     		
 						}
-		            	
-			            // *We then send out all possible DM per hashTAGS
-			            for (String msg : directMessagesPromoAndServices) {
-				            recipientId = directMessage.getSenderScreenName();
-				            directMsg = msg;
-				            try {
-								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-								System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
-								//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
-				    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
-							} catch (TwitterException e) {
-								e.printStackTrace();
-							}
-			            }
-			            
-			            hashtags.clear(); 
-			            directMessagesPromoAndServices.clear();
+			            	
+				        // *We then send out all possible DM per hashTAGS
+				        for (String msg : directMessagesPromoAndServices) {
+					            recipientId = directMessage.getSenderScreenName();
+					            directMsg = msg;
+					            try {
+									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+									System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+									//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+					    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+								} catch (TwitterException e) {
+									e.printStackTrace();
+								}
+				        }
+			        
+	            	}
+	            	else if(hashtags.size() == 1)
+	            	{
+	            		recipientId = directMessage.getSenderScreenName();
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #promo memerlukan minimal satu #keyword topik. Cth: #promo #travel, #promo #hotel #ecommerce. ";
+		     			try {
+							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+	            	}
+	            	
+			        hashtags.clear(); 
+			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
 	            
 	         // (4) #cs #keyword #keyword [DONE]
 	            else if(command.equals("cs")){
-	            	// *We compose DM per hashTAGS
-		            String csQuery = "";
-		            stm = null; rs = null;
-		            for (String tag : hashtags) {
-		            	if ( tag.equals("cs") )
-		            	      continue;
-		            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
-		            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
-		            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' ";
-		            	System.out.println(csQuery);
-		            	
-			     		try {
-					     		if(con == null){
-					     			db_object.openConnection();
-					  				con = db_object.getConnection();
-					  	        }
-				     			stm = con.createStatement();
-				     			rs  = stm.executeQuery(csQuery);
-				     			if ( !rs.next() ) { 
-				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI tentang #" + tag + " yang Anda inginkan tidak tersedia.");
-				     			} 
-				     			else
-				     			{
-				     				rs.beforeFirst();
-				     				while (rs.next()){
-					     				directMessagesPromoAndServices.add("[" + rs.getString("cs_title") + "] \n\r" + rs.getString("cs_content"));
-					     	   		}
-				     			}
-			     			} catch (SQLException e) {
-			     		   		e.printStackTrace();
-			     			} finally{
-				     		   	if(con != null){
-				  				  try {
-									db_object.closeConnection();
-				  				  } catch (SQLException e) {
-									e.printStackTrace();
-				  				  } finally{
-				  				  		con = null;
-				     		   		}
+	            	if(hashtags.size() > 1){
+		            	// *We compose DM per hashTAGS
+			            String csQuery = "";
+			            stm = null; rs = null;
+			            for (String tag : hashtags) {
+			            	if ( tag.equals("cs") )
+			            	      continue;
+			            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
+			            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
+			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' ";
+			            	System.out.println(csQuery);
+			            	
+				     		try {
+						     		if(con == null){
+						     			db_object.openConnection();
+						  				con = db_object.getConnection();
+						  	        }
+					     			stm = con.createStatement();
+					     			rs  = stm.executeQuery(csQuery);
+					     			if ( !rs.next() ) { 
+					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI tentang #" + tag + " yang Anda inginkan tidak tersedia.");
+					     			} 
+					     			else
+					     			{
+					     				rs.beforeFirst();
+					     				while (rs.next()){
+						     				directMessagesPromoAndServices.add("[" + rs.getString("cs_title") + "] \n\r" + rs.getString("cs_content"));
+						     	   		}
+					     			}
+				     			} catch (SQLException e) {
+				     		   		e.printStackTrace();
+				     			} finally{
+					     		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
 				     		   	}
-			     		   	}
-			     		
-						}
-		
-			            // *We then send out all possible DM per hashTAGS
-			            for (String msg : directMessagesPromoAndServices) {
-				            recipientId = directMessage.getSenderScreenName();
-				            directMsg = msg;
-				            try {
-								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-								System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
-								//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
-				    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
-							} catch (TwitterException e) {
-								e.printStackTrace();
+				     		
 							}
-			            }
-			            
+			
+				         // *We then send out all possible DM per hashTAGS
+				         for (String msg : directMessagesPromoAndServices) {
+					            recipientId = directMessage.getSenderScreenName();
+					            directMsg = msg;
+					            try {
+									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+									System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+									//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+					    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+								} catch (TwitterException e) {
+									e.printStackTrace();
+								}
+				         }
+	            	}
+	            	else if(hashtags.size() == 1)
+	            	{
+	            		recipientId = directMessage.getSenderScreenName();
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #cs memerlukan minimal satu #keyword topik. Cth: #cs #kartuhilang, #cs #taplusmuda #kartutertelan. ";
+		     			try {
+							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+	            	}    
 			            hashtags.clear(); 
 			            directMessagesPromoAndServices.clear();
 	            }//else if(DM for CS)
