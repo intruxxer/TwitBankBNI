@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ListIterator;
 
 
 public class TwitterDaemon {
@@ -264,7 +265,7 @@ public class TwitterDaemon {
 		     			rs  = stm.executeQuery(promotionsQuery);
 		     			while (rs.next()){
 		     				directMessagesForMentions.add(rs.getString("promotion_content"));
-		     				System.out.println("DM with: " + tag);
+		     				//System.out.println("DM with: " + tag);
 		     	   		   }
 	     		   	} catch (SQLException e) {
 	     		   		e.printStackTrace();
@@ -289,7 +290,7 @@ public class TwitterDaemon {
 		            directMsg = msg;
 		            try {
 						DirectMessage message = twitter.sendDirectMessage(recipientId, directMsg);
-						System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
+						//System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
 			            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
 		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 					} catch (TwitterException e) {
@@ -481,7 +482,7 @@ public class TwitterDaemon {
 	        @Override
 	        public void onException(Exception ex) {
 	            ex.printStackTrace();
-	            System.out.println("onException:" + ex.getMessage());
+	            System.out.println("onException filterListener:" + ex.getMessage());
 	        }
 
 	};
@@ -599,7 +600,7 @@ public class TwitterDaemon {
 	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
 		                + source.getScreenName() + " Followed:@"
 		                + followedUser.getScreenName());
-	        	
+	        	/*
 	        	String responseDMQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'followed' ORDER BY message_id ASC";
      			String responseDM      = "";
      			
@@ -638,7 +639,7 @@ public class TwitterDaemon {
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
-				
+				*/
 	        }
 
 	        @Override
@@ -650,22 +651,26 @@ public class TwitterDaemon {
 	        public void onDirectMessage(DirectMessage directMessage) {
 	            System.out.println("onDirectMessage text:" + directMessage.getText());
 	            
-	            // *We extract hashTAGS from status
+	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
-	            System.out.println("Hashtags are: " + hashtags.toString());
+	            ListIterator<String> iterator = hashtags.listIterator();
+	            while (iterator.hasNext())
+	            {
+	                iterator.set(iterator.next().toLowerCase());
+	            }
+	            //System.out.println("Hashtags are: " + hashtags.toString());
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
-	            // (1) #menu / #helppromo / #helpcs | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords
-	            // 1B, 1C only left
+	            // (1) #menu / #helppromo / #helpcs -> #HelpBNI | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords -> #AskBNI
 	            if(hashtags.size() > 0)
 	            	command = hashtags.get(0).toLowerCase();
 	            else
 	            	command = "";
-	            System.out.println("Command is: " + command);
+	            //System.out.println("Command: " + command);
 	            
 	            // (1) #menu / #helppromo / #helpcs
-	            if( command.equals("menu") || command.equals("helppromo") || command.equals("helpcs"))
+	            if( command.equals("menu") || command.equals("helppromo") || command.equals("helpcs") || command.equals("helpbni") )
 	            {
 	            	// *We compose DMes sending list of menus/helps/cses
 	            	stm = null; rs = null;
@@ -674,7 +679,7 @@ public class TwitterDaemon {
 	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'menu' ";
 	            	else if( command.equals("helppromo") )
 	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'promo' ";
-	            	else if( command.equals("helpcs") )
+	            	else if( command.equals("helpcs") || command.equals("helpbni") )
 	            		menuQuery = "SELECT hashtag_term FROM tbl_hashtags WHERE hashtag_category = 'cs' ";
 	            	//System.out.println(menuQuery);
 	            	
@@ -709,23 +714,24 @@ public class TwitterDaemon {
 		     		if( command.equals("menu") )
 		     		{
 			            for (String msg : menus) {
-				            switch (msg) {
+				            switch (msg.toLowerCase()) {
 				            	case "menu":  
 				            		 directMsg 	= "Anda dapat mengirim DM dengan \"#menu\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
 				                     break;
 				            	case "daftar":
 				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format: \"#daftar #nama_lengkap #nohandphone\" (tanpa double quote). ";
-				            		 directMsg += "Cth: #daftar #Andi_Waluyo #+62213456789 Note: Nama Awal dan Akhir dipisah dengan \"_\". Gunakan +62 sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
+				            		 directMsg += "Contoh: #daftar #Andi_Waluyo #62213456789 Note: Nama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
 				            		 break;
 				            	//case "promo":
 				            	case "helppromo":
 				            		 directMsg 	= "Anda dapat mengakses layanan promo BNI (@bni46) via Twitter DM dengan format #promo + #keyword sesuai yang anda inginkan. ";
-				            		 directMsg += "Cth: #promo #travel, #promo #hotel #travel. DM kami dengan mengetik #helppromo untuk mengetahui semua #keyword promo dari BNI.";
+				            		 directMsg += "Contoh: #promo #travel, #promo #hotel #travel. DM kami dengan mengetik #helppromo untuk mengetahui semua #keyword promo dari BNI.";
 				            		 break;
 				            	//case "cs":	 
 				            	case "helpcs":
-				            		 directMsg 	= "Anda dapat mengakses layanan Customer Service BNI (@bni46) via Twitter DM dengan format #cs + #keyword sesuai yang anda inginkan. ";
-				            		 directMsg += "Cth: #cs #taplus, #cs #kartuhilang. DM kami dengan mengetik #helpcs untuk mengetahui semua #keyword customer services dari BNI.";
+				            	case "helpbni":
+				            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI + #Keyword \n";
+				            		 directMsg += "\nContoh:\n #AskBNI #Taplus. \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
 				            		 break;
 				            	default:
 				            		 break;
@@ -762,14 +768,14 @@ public class TwitterDaemon {
 		     		}
 		     		
 		     		//(1C) #helpcs [DONE]
-		     		else if( command.equals("helpcs") )
+		     		else if( command.equals("helpcs") || command.equals("helpbni") )
 		     		{
 		     			String keywords = "";
 		     			for (String msg : menus) {
 		     				keywords += "#" + msg + " ";
 		     			}
 		     			
-		     			directMsg = "Ketik #cs dan gunakan keywords berikut: " + keywords + " untuk mengakses topik-topik layanan nasabah dari BNI.";
+		     			directMsg = "Ketik #AskBNI dan gunakan keywords berikut: " + keywords + " untuk mengakses topik-topik layanan nasabah dari BNI.";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -785,10 +791,10 @@ public class TwitterDaemon {
 	            }
 	            
 	            // (2) #daftar #namalengkap #phone [DONE]
-	            else if(command.equals("daftar")){
+	            else if( command.equals("daftar") ){
 	            	Boolean errorDaftar = false;
 	            	//System.out.println("Register Tags: " + hashtags.get(0) + " & " + hashtags.get(1) + " & " + hashtags.get(2));
-	            	System.out.println("Hashtags:" + hashtags.toString());
+	            	//System.out.println("Hashtags Daftar User:" + hashtags.toString());
 	            	
 	            	String rawName = ""; String name = "";
 	            	if(hashtags.size() > 1)
@@ -816,7 +822,7 @@ public class TwitterDaemon {
 	            	{
 	            		errorDaftar = true;
 	            		System.out.println( "Phone No length: " + rawPhoneNo.length() );
-	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 11 digit, maksimal 15 digit (termasuk prefix kode negara 62 & no telepon Anda).";
+	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 11 digit, maksimal 15 digit (termasuk prefix kode negara 62 pada no telepon Anda).";
 	            	}
 	            	
 	            	if(errorDaftar)
@@ -912,13 +918,13 @@ public class TwitterDaemon {
 	            }//else if(DM for Register)
 	            
 	            // (3) #promo #keyword #keyword [DONE]
-	            else if(command.equals("promo")){
+	            else if( command.equals("promo") ){
 	            	if(hashtags.size() > 1){
 		            	// *We compose DM per hashTAGS
 			            String promoQuery = "";
 			            stm = null; rs = null;
 			            for (String tag : hashtags) {
-			            	if ( tag.equals("promo") )
+			            	if ( tag.toLowerCase().equals("promo") )
 			            	      continue;
 			            	Date now = new Date();
 			            	//Date now = Calendar.getInstance().getTime();
@@ -998,13 +1004,13 @@ public class TwitterDaemon {
 	            }//else if(DM for Promo)
 	            
 	         // (4) #cs #keyword #keyword [DONE]
-	            else if(command.equals("cs")){
+	            else if( command.equals("cs") || command.equals("askbni") ){
 	            	if(hashtags.size() > 1){
 		            	// *We compose DM per hashTAGS
 			            String csQuery = "";
 			            stm = null; rs = null;
 			            for (String tag : hashtags) {
-			            	if ( tag.equals("cs") )
+			            	if ( tag.toLowerCase().equals("cs") || tag.toLowerCase().equals("askbni") )
 			            	      continue;
 			            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
 			            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
@@ -1061,7 +1067,7 @@ public class TwitterDaemon {
 	            	else if(hashtags.size() == 1)
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #cs memerlukan minimal satu #keyword topik. Cth: #cs #kartuhilang, #cs #taplusmuda #kartutertelan. ";
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #kartuhilang, #AskBNI #taplusmuda #kartutertelan. ";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
