@@ -602,8 +602,8 @@ public class TwitterDaemon {
 	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
 		                + source.getScreenName() + " Followed:@"
 		                + followedUser.getScreenName());
-	        	/*
-	        	String responseDMQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'followed' ORDER BY message_id ASC";
+	        	
+	        	String responseDMQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'followed' ORDER BY message_id ASC";
      			String responseDM      = "";
      			
 	        	try {
@@ -632,16 +632,16 @@ public class TwitterDaemon {
      		   	}
      		
 	        	// *We then send out all possible menu via a single DM
-	        	recipientId = followedUser.getScreenName(); directMsg = responseDM;
+	        	recipientId = source.getScreenName(); directMsg = responseDM;
 	     		try {
 					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-					System.out.println("Sent: " + message.getText() + " to @" + source.getScreenName());
+					//System.out.println("Sent: " + message.getText() + " to @" + source.getScreenName());
 		            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 	    		    //System.out.println("Sent: " + directMsg + " to @" + source.getScreenName());
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
-				*/
+				
 	        }
 
 	        @Override
@@ -850,7 +850,7 @@ public class TwitterDaemon {
 	            		String daftarQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
 	            				   		   + "VALUES ('" + name + "', '" + directMessage.getSenderScreenName() + "', '" + rawPhoneNo + "')";
 	            		
-	            		String daftarResponseQuery = "SELECT message_content FROM tbl_direct_messages WHERE message_type = 'daftar' ORDER BY message_id ASC";
+	            		String daftarResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'daftar' ORDER BY message_id ASC";
 	            		//System.out.println(daftarQuery); //System.out.println(daftarResponseQuery);
 		         	
 			            stm = null; 
