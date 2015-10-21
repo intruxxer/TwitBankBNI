@@ -679,11 +679,11 @@ public class TwitterDaemon {
 	            	stm = null; rs = null;
 	            	String menuQuery = "";
 	            	if( command.equals("menu") )
-	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'menu' ";
+	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'menu' AND hashtag_deleted = '0'";
 	            	else if( command.equals("helppromo") )
-	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'promo' ";
+	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'promo' AND hashtag_deleted = '0'";
 	            	else if( command.equals("helpcs") || command.equals("helpbni") )
-	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'cs' ";
+	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'cs' AND hashtag_deleted = '0'";
 	            	//System.out.println(menuQuery);
 	            	
 	            	try {
