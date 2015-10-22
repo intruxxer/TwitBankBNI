@@ -940,7 +940,8 @@ public class TwitterDaemon {
 			            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 			            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
 			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-			            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
+			            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "' " 
+			            				+ "AND tbl_promotions.promotion_deleted = '0' AND tbl_hashtags.hashtag_deleted = '0'";
 			            	//System.out.println(promoQuery);
 			            	
 				     		try {
