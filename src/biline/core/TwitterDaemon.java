@@ -255,7 +255,7 @@ public class TwitterDaemon {
 	            	promotionsQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 	            					+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
 	            					+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
 	            	//System.out.println(promotionsQuery);
 	            	
 	     		   	try {
@@ -509,7 +509,7 @@ public class TwitterDaemon {
 	            	promotionsQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 	            					+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
 	            					+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
 	            	System.out.println(promotionsQuery);
 	            	
 	     		   	try {
@@ -850,7 +850,7 @@ public class TwitterDaemon {
 	            		String daftarQuery = "INSERT INTO tbl_users(user_fullname, user_twitname, user_phonenum) " 
 	            				   		   + "VALUES ('" + name + "', '" + directMessage.getSenderScreenName() + "', '" + rawPhoneNo + "')";
 	            		
-	            		String daftarResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'daftar' ORDER BY message_id ASC";
+	            		String daftarResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'daftar' AND message_deleted = '0' ORDER BY message_id ASC";
 	            		//System.out.println(daftarQuery); //System.out.println(daftarResponseQuery);
 		         	
 			            stm = null; 
@@ -940,7 +940,7 @@ public class TwitterDaemon {
 			            	promoQuery  = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
 			            				+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
 			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-			            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "'";
+			            				+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
 			            	//System.out.println(promoQuery);
 			            	
 				     		try {
@@ -1021,7 +1021,7 @@ public class TwitterDaemon {
 			            	      continue;
 			            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
 			            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
-			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' ";
+			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' AND tbl_hashtags.hashtag_deleted = '0' AND tbl_customerservices.cs_deleted = '0'";
 			            	//System.out.println(csQuery);
 			            	
 				     		try {
