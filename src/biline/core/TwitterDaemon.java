@@ -656,18 +656,23 @@ public class TwitterDaemon {
 	            
 	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
-	            ListIterator<String> iterator = hashtags.listIterator();
-	            while (iterator.hasNext())
-	            {
-	                iterator.set(iterator.next().toLowerCase());
-	            }
 	            //System.out.println("Hashtags are: " + hashtags.toString());
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
 	            // (1) #menu / #helppromo / #helpcs -> #HelpBNI | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords -> #AskBNI
 	            if(hashtags.size() > 0)
+	            {
 	            	command = hashtags.get(0).toLowerCase();
+	            	if(!command.equals("daftar"))
+	            	{
+	            		ListIterator<String> iterator = hashtags.listIterator();
+			            while (iterator.hasNext())
+			            {
+			                iterator.set(iterator.next().toLowerCase());
+			            }
+	            	}
+	            }
 	            else
 	            	command = "";
 	            //System.out.println("Command: " + command);
