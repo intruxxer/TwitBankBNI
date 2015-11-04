@@ -660,7 +660,7 @@ public class TwitterDaemon {
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
-	            // (1) #menu / #helppromo / #helpcs -> #HelpBNI | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords -> #AskBNI
+	            // (1) #menu | #help / #helppromo / #helpcs -> #HelpBNI | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords -> #AskBNI
 	            if(hashtags.size() > 0)
 	            {
 	            	command = hashtags.get(0).toLowerCase();
@@ -677,13 +677,15 @@ public class TwitterDaemon {
 	            	command = "";
 	            //System.out.println("Command: " + command);
 	            
-	            // (1) #menu / #helppromo / #helpcs
-	            if( command.equals("menu") || command.equals("helppromo") || command.equals("helpcs") || command.equals("helpbni") )
+	            // (1) #menu | #help / #helppromo / #helpcs
+	            if( command.equals("menu") || command.equals("help") || 
+	            	command.equals("helppromo") || command.equals("helpcs") || 
+	            	command.equals("helpbni") )
 	            {
 	            	// *We compose DMes sending list of menus/helps/cses
 	            	stm = null; rs = null;
 	            	String menuQuery = "";
-	            	if( command.equals("menu") )
+	            	if( command.equals("menu") || command.equals("help") )
 	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'menu' AND hashtag_deleted = '0'";
 	            	else if( command.equals("helppromo") )
 	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'promo' AND hashtag_deleted = '0'";
@@ -721,17 +723,19 @@ public class TwitterDaemon {
 	            	
 		     		// *We then send out all possible menu via a single DM
 		     		recipientId = directMessage.getSenderScreenName();
-		     		//(1A) #menu [DONE]
-		     		if( command.equals("menu") )
+		     		//(1A) #menu | #help [DONE]
+		     		if( command.equals("menu") || command.equals("help") )
 		     		{
 			            for (String msg : menus) {
 				            switch (msg.toLowerCase()) {
-				            	case "menu":  
-				            		 directMsg 	= "Anda dapat mengirim DM dengan \"#menu\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+				            	case "menu":
+				            	case "help":
+				            		 directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
 				                     break;
 				            	case "daftar":
 				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
-				            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
+				            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 (tanpa prefix \"+\") ";
+				            		 directMsg += "sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
 				            		 break;
 				            	//case "promo":
 				            	case "helppromo":
@@ -767,7 +771,7 @@ public class TwitterDaemon {
 		     				keywords += "#" + alias + "\n";
 		     			}
 		     			
-		     			directMsg = "Ketik #promo dan gunakan keywords berikut: \n" + keywords + "\nuntuk mendapatkan promo-promo menarik & terbaru dari BNI.";
+		     			directMsg = "Ketik #Promo dan gunakan keywords berikut: \n" + keywords + "\nuntuk mendapatkan promo-promo menarik & terbaru dari BNI.";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + directMessage.getSenderScreenName() + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -827,13 +831,15 @@ public class TwitterDaemon {
 	            	if(!ccPhoneNo.equals("62"))
 	            	{
 	            		errorDaftar = true;
-	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk format penulisan nomor telepon membutuhkan prefix 62 sebagai pengganti angka 0 pada digit depan nomor telepon Anda. Cth: 0811345890 menjadi 62811345890.";
+	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk format penulisan nomor telepon membutuhkan prefix 62 (tanpa prefix \"+\") ";
+	            		directMsg  += "sebagai pengganti angka 0 pada digit depan nomor telepon Anda. Cth: 0811345890 menjadi 62811345890.";
 	            	}
 	            	
-	            	if(rawPhoneNo.length() < 11 || rawPhoneNo.length() > 15)
+	            	if(rawPhoneNo.length() < 9 || rawPhoneNo.length() > 15)
 	            	{
 	            		errorDaftar = true;
-	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 11 digit, maksimal 15 digit (termasuk prefix kode negara 62 pada no telepon Anda).";
+	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 9 digit, maksimal 15 digit ";
+	            		directMsg  += "(termasuk prefix kode negara 62 (tanpa \"+\") pada no telepon Anda).";
 	            	}
 	            	
 	            	if(errorDaftar)
@@ -1000,7 +1006,7 @@ public class TwitterDaemon {
 	            	else if(hashtags.size() == 1)
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #promo memerlukan minimal satu #keyword topik. Cth: #promo #travel, #promo #hotel #ecommerce. ";
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -1081,7 +1087,7 @@ public class TwitterDaemon {
 	            	else if(hashtags.size() == 1)
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #kartuhilang, #AskBNI #taplusmuda #kartutertelan. ";
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
