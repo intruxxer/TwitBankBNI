@@ -723,7 +723,7 @@ public class TwitterDaemon {
 	            	
 		     		// *We then send out all possible menu via a single DM
 		     		recipientId = directMessage.getSenderScreenName();
-		     		//(1A) #menu | #help [DONE]
+		     		//(1A) #menu | #help [DONE] >> also #askbni
 		     		if( command.equals("menu") || command.equals("help") )
 		     		{
 			            for (String msg : menus) {
@@ -782,7 +782,7 @@ public class TwitterDaemon {
 						}
 		     		}
 		     		
-		     		//(1C) #helpcs /#AskBNI [DONE]
+		     		//(1C) #helpcs /#helpbni [DONE]
 		     		else if( command.equals("helpcs") || command.equals("helpbni") )
 		     		{
 		     			String keywords = "";
@@ -1006,7 +1006,7 @@ public class TwitterDaemon {
 	            	else if(hashtags.size() == 1)
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #Promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -1021,7 +1021,7 @@ public class TwitterDaemon {
 			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
 	            
-	         // (4) #cs #keyword #keyword [DONE]
+	         // (4) #cs or #askbni + #keyword #keyword [DONE]
 	            else if( command.equals("cs") || command.equals("askbni") ){
 	            	if(hashtags.size() > 1)
 	            	{
@@ -1084,10 +1084,10 @@ public class TwitterDaemon {
 				         }
 	            	}
 	            	
-	            	else if(hashtags.size() == 1)
+	            	else if( hashtags.size() == 1 && command.equals("cs") )
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
+	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #CS yang melalui #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -1096,10 +1096,79 @@ public class TwitterDaemon {
 						} catch (TwitterException e) {
 							e.printStackTrace();
 						}
-	            	}    
-			            hashtags.clear(); 
-			            directMessagesPromoAndServices.clear();
-	            }//else if(DM for CS)  
+	            	}
+	            	else if( hashtags.size() == 1 && command.equals("askbni") )
+	            	{
+	            		// *We compose DMes sending list of menus/helps/cses
+		            	stm = null; rs = null;
+		            	String menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'menu' AND hashtag_deleted = '0'";
+		            	try {
+				     		if(con == null){
+				     			db_object.openConnection();
+				  				con = db_object.getConnection();
+				  	        }
+			     			stm = con.createStatement();
+			     			rs  = stm.executeQuery(menuQuery);
+			     			
+			     			while (rs.next()){
+			     				menus.add( rs.getString("hashtag_term") );
+			     				aliasmenus.add( rs.getString("hashtag_alias") );
+			     	   		}
+			     			
+			     		} catch (SQLException e) {
+			     		   		e.printStackTrace();
+			     		} finally{
+				     		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
+									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+			     		}
+		            	
+		            	// *We then send out all possible menu via a single DM
+			     		recipientId = directMessage.getSenderScreenName();
+				        for (String msg : menus) {
+					            switch (msg.toLowerCase()) {
+					            	case "menu":
+					            	case "help":
+					            		 directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+					                     break;
+					            	case "daftar":
+					            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
+					            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 (tanpa prefix \"+\") ";
+					            		 directMsg += "sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
+					            		 break;
+					            	//case "promo":
+					            	case "helppromo":
+					            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo + #Keyword \n";
+					            		 directMsg += "\nContoh:\n #Promo #Travel \n\nDM kami dengan mengetik #HelpPromo untuk mengetahui semua #Keyword yang ada untuk #Promo dari BNI.";
+					            		 break;
+					            	//case "cs":	 
+					            	case "helpcs":
+					            	case "helpbni":
+					            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI + #Keyword \n";
+					            		 directMsg += "\nContoh:\n #AskBNI #Taplus \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
+					            		 break;
+					            	default:
+					            		 break;
+					            }
+					            
+					            try {
+									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+								} catch (TwitterException e) {
+									e.printStackTrace();
+								}
+				        }
+		            	
+	            	}
+			        
+	            	hashtags.clear(); menus.clear(); aliasmenus.clear();
+			        directMessagesPromoAndServices.clear();
+	            }//else if(DM for CS & AskBNI)  
 	        }
 
 	        @Override
