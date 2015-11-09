@@ -837,8 +837,14 @@ public class TwitterDaemon {
 	            	
 	            	if(rawPhoneNo.length() < 9 || rawPhoneNo.length() > 15)
 	            	{
+	            		String regex = "\\d+";
+	            		if(name.matches(regex))
+	            			name = "";
+	            		else
+	            			name = " " + name;
+	            		
 	            		errorDaftar = true;
-	            		directMsg   = "Yth Bp/Ibu " + name + ", Mohon Maaf. Untuk panjang nomor telepon anda minimal 9 digit, maksimal 15 digit ";
+	            		directMsg   = "Yth Bp/Ibu" + name + ", Mohon Maaf. Nomor telepon anda haruslah numerik/digit. Panjang nomor telepon anda minimal 9 digit, maksimal 15 digit ";
 	            		directMsg  += "(termasuk prefix kode negara 62 (tanpa \"+\") pada no telepon Anda).";
 	            	}
 	            	
