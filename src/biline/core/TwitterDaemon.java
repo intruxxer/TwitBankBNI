@@ -1050,7 +1050,8 @@ public class TwitterDaemon {
 					     			stm = con.createStatement();
 					     			rs  = stm.executeQuery(csQuery);
 					     			if ( !rs.next() ) { 
-					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Layanan Customer Services BNI tentang #" + tag + " yang Anda inginkan tidak tersedia.");
+					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
+					     												+  "Contoh penulisan yang benar:\n#Promo [spasi] #Travel \n#AskBNI [spasi] #Taplus");
 					     			} 
 					     			else
 					     			{
