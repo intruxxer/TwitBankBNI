@@ -56,6 +56,8 @@ public class TwitterDaemon {
 	private static Connection con;
 	private static Statement stm;
 	private static ResultSet rs;
+	private static ResultSet rs2;
+	private static ResultSet rs3;
 	private static String command;
 	private static MysqlConnect db_object;
 	
@@ -89,7 +91,7 @@ public class TwitterDaemon {
 		dateFormat   =  new SimpleDateFormat("yyyy-MM-dd");
 		
 		// *Connecting to DB & Instantiate Accessing DB Object
-		stm = null; rs = null;
+		stm = null; rs = null; rs2 = null; rs3 = null;
 		try{
 			db_object = new MysqlConnect();
 			con 	  = db_object.getConnection(); 
@@ -1027,68 +1029,142 @@ public class TwitterDaemon {
 			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
 	            
-	         // (4) #cs or #askbni + #keyword #keyword [DONE]
+	         // (4) #cs or #askbni + #keyword #keyword [DONE] || #askbni + #poin + #cardNo
 	            else if( command.equals("cs") || command.equals("askbni") ){
 	            	if(hashtags.size() > 1)
 	            	{
-		            	// *We compose DM per hashTAGS
-			            String csQuery = "";
-			            stm = null; rs = null;
-			            for (String tag : hashtags) {
-			            	if ( tag.toLowerCase().equals("cs") || tag.toLowerCase().equals("askbni") )
-			            	      continue;
-			            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
-			            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
-			            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' AND tbl_hashtags.hashtag_deleted = '0' AND tbl_customerservices.cs_deleted = '0'";
-			            	//System.out.println(csQuery);
-			            	
-				     		try {
-						     		if(con == null){
-						     			db_object.openConnection();
-						  				con = db_object.getConnection();
-						  	        }
-					     			stm = con.createStatement();
-					     			rs  = stm.executeQuery(csQuery);
-					     			if ( !rs.next() ) { 
-					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
-					     												+  "Contoh penulisan yang benar:\n#Promo [spasi] #Travel \n#AskBNI [spasi] #Taplus");
-					     			} 
-					     			else
-					     			{
-					     				rs.beforeFirst();
-					     				while (rs.next()){
-						     				directMessagesPromoAndServices.add("[" + rs.getString("cs_title") + "] \n\r" + rs.getString("cs_content"));
-						     	   		}
-					     			}
-				     			} catch (SQLException e) {
-				     		   		e.printStackTrace();
-				     			} finally{
-					     		   	if(con != null){
-					  				  try {
-										db_object.closeConnection();
-					  				  } catch (SQLException e) {
-										e.printStackTrace();
-					  				  } finally{
-					  				  		con = null;
-					     		   		}
-					     		   	}
-				     		   	}
-				     		
-							}
-			
-				         // *We then send out all possible DM per hashTAGS
-				         for (String msg : directMessagesPromoAndServices) {
-					            recipientId = directMessage.getSenderScreenName();
-					            directMsg = msg;
-					            try {
-									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-									//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
-									//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
-					    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
-								} catch (TwitterException e) {
+	            		String askPoint   = hashtags.get(1);
+	            		if(askPoint.equalsIgnoreCase("poin") || askPoint.equalsIgnoreCase("point")) //Asking about point
+	            		{
+	            			// *We compose DM #AskBNI #Poin per #cardNo
+	            			String pointCardno  = hashtags.get(2);
+	            			//String pointQuery = "SELECT point_monthly, point_quarterly, point_grandprize FROM tbl_points WHERE point_cardno = '" + pointCardno + "'";
+	            			String pointMonthlyQuery    = "SELECT point_monthly FROM tbl_points_monthly WHERE point_cardno = '" + pointCardno + "'";
+	            			String pointQuarterlyQuery  = "SELECT point_quarterly FROM tbl_points_quarterly WHERE point_cardno = '" + pointCardno + "'";
+	            			String pointGrandprizeQuery = "SELECT point_grandprize FROM tbl_points_grandprize WHERE point_cardno = '" + pointCardno + "'";
+	            			
+	            			//System.out.println("Asking String: "    + hashtags.toString());
+	            			//System.out.println("Requested CardNo: " + pointCardno);
+	            			
+	            			stm = null; rs = null;
+	            			try {
+					     		if(con == null){
+					     			db_object.openConnection();
+					  				con = db_object.getConnection();
+					  	        }
+				     			stm  = con.createStatement();
+				     			rs   = stm.executeQuery(pointMonthlyQuery);
+				     			stm  = con.createStatement();
+				     			rs2  = stm.executeQuery(pointQuarterlyQuery);
+				     			stm  = con.createStatement();
+				     			rs3  = stm.executeQuery(pointGrandprizeQuery);
+				     			if ( !rs.next() && !rs2.next() && !rs3.next() ) { 
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info poin untuk Kartu #" + pointCardno + " tidak tersedia atau ada kesalahan penulisan No. Kartu. " 
+				     												+  "Silakan periksa kembali 16 Digit No. Kartu. Bila masih bermasalah, mohon menghubungi BNI Call 1500046 atau ke Kantor Cabang BNI terdekat.");
+				     			} 
+				     			else
+				     			{	String pointMonthly = "0", pointQuarterly = "0", pointGrandPrize = "0";
+				     				rs.beforeFirst(); rs2.beforeFirst(); rs3.beforeFirst();
+				     				while (rs.next()) { pointMonthly    = rs.getString("point_monthly");     break; }
+				     				while (rs2.next()){ pointQuarterly  = rs2.getString("point_quarterly");  break; }
+				     				while (rs3.next()){ pointGrandPrize = rs3.getString("point_grandprize"); break; }
+				     				directMessagesPromoAndServices.add(
+				     						"Poin Rejeki BNI Taplus untuk nomor kartu : " + pointCardno + "\n\n"
+				     						+ "1. Poin Bulanan : " + pointMonthly  + "\n"
+				     						+ "2. Poin 3 Bulanan : " + pointQuarterly  + "\n"
+				     						+ "3. Poin Grand Prize : " + pointGrandPrize + "\n\n" 
+				     						+ "Terus tingkatkan saldo dan transaksi Anda. \n" + "Periode Poin : 1 - 31 Oktober 2016."
+				     				);
+				     			}
+			     			} catch (SQLException e) {
+			     		   		e.printStackTrace();
+			     			} finally{
+				     		   	if(con != null){
+				  				  try {
+									db_object.closeConnection();
+				  				  } catch (SQLException e) {
 									e.printStackTrace();
+				  				  } finally{
+				  				  		con = null;
+				     		   		}
+				     		   	}
+			     		   	}
+	            			
+	            			// *We then send out points' information to customers
+					        for (String msg : directMessagesPromoAndServices) {
+						            recipientId = directMessage.getSenderScreenName();
+						            directMsg = msg;
+						            try {
+										DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+										//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+										//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+						    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+									} catch (TwitterException e) {
+										e.printStackTrace();
+									}
+					         }
+	            		}
+	            		else //Not Asking Point
+	            		{
+		            		// *We compose DM per #AskBNI hashTAGS
+				            String csQuery = "";
+				            stm = null; rs = null;
+				            for (String tag : hashtags) {
+				            	if ( tag.toLowerCase().equals("cs") || tag.toLowerCase().equals("askbni") )
+				            	      continue;
+				            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
+				            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
+				            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' AND tbl_hashtags.hashtag_deleted = '0' AND tbl_customerservices.cs_deleted = '0'";
+				            	//System.out.println(csQuery);
+				            	
+					     		try {
+							     		if(con == null){
+							     			db_object.openConnection();
+							  				con = db_object.getConnection();
+							  	        }
+						     			stm = con.createStatement();
+						     			rs  = stm.executeQuery(csQuery);
+						     			if ( !rs.next() ) { 
+						     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
+						     												+  "Contoh penulisan yang benar:\n#Promo [spasi] #Travel \n#AskBNI [spasi] #Taplus");
+						     			} 
+						     			else
+						     			{
+						     				rs.beforeFirst();
+						     				while (rs.next()){
+							     				directMessagesPromoAndServices.add("[" + rs.getString("cs_title") + "] \n\r" + rs.getString("cs_content"));
+							     	   		}
+						     			}
+					     			} catch (SQLException e) {
+					     		   		e.printStackTrace();
+					     			} finally{
+						     		   	if(con != null){
+						  				  try {
+											db_object.closeConnection();
+						  				  } catch (SQLException e) {
+											e.printStackTrace();
+						  				  } finally{
+						  				  		con = null;
+						     		   		}
+						     		   	}
+					     		   	}
+					     		
 								}
-				         }
+				
+					         // *We then send out all possible DM per hashTAGS
+					         for (String msg : directMessagesPromoAndServices) {
+						            recipientId = directMessage.getSenderScreenName();
+						            directMsg = msg;
+						            try {
+										DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+										//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
+										//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
+						    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
+									} catch (TwitterException e) {
+										e.printStackTrace();
+									}
+					         }
+	            		}//Else: Not Asking Point
 	            	}
 	            	
 	            	else if( hashtags.size() == 1 && command.equals("cs") )
