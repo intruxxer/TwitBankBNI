@@ -1059,8 +1059,8 @@ public class TwitterDaemon {
 				     			stm  = con.createStatement();
 				     			rs3  = stm.executeQuery(pointGrandprizeQuery);
 				     			if ( !rs.next() && !rs2.next() && !rs3.next() ) { 
-				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info poin untuk Kartu #" + pointCardno + " tidak tersedia atau ada kesalahan penulisan No. Kartu. " 
-				     												+  "Silakan periksa kembali 16 Digit No. Kartu. Bila masih bermasalah, mohon menghubungi BNI Call 1500046 atau ke Kantor Cabang BNI terdekat.");
+				     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info poin untuk Kartu Debit Anda #" + pointCardno + " tidak tersedia atau ada kesalahan penulisan No. Kartu. " 
+				     												+  "Silakan periksa kembali 16 Digit No. Kartu Anda. Bila masih bermasalah, mohon menghubungi BNI Call 1500046.");
 				     			} 
 				     			else
 				     			{	String pointMonthly = "0", pointQuarterly = "0", pointGrandPrize = "0";
@@ -1068,12 +1068,15 @@ public class TwitterDaemon {
 				     				while (rs.next()) { pointMonthly    = rs.getString("point_monthly");     break; }
 				     				while (rs2.next()){ pointQuarterly  = rs2.getString("point_quarterly");  break; }
 				     				while (rs3.next()){ pointGrandPrize = rs3.getString("point_grandprize"); break; }
+				     				
+				     				Calendar c = Calendar.getInstance();
+				     				String[] strMonths = new String[] { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
 				     				directMessagesPromoAndServices.add(
 				     						"Poin Rejeki BNI Taplus untuk nomor kartu : " + pointCardno + "\n\n"
 				     						+ "1. Poin Bulanan : " + pointMonthly  + "\n"
 				     						+ "2. Poin 3 Bulanan : " + pointQuarterly  + "\n"
 				     						+ "3. Poin Grand Prize : " + pointGrandPrize + "\n\n" 
-				     						+ "Terus tingkatkan saldo dan transaksi Anda. \n" + "Periode Poin : 1 - 31 Oktober 2016."
+				     						+ "Terus tingkatkan saldo dan transaksi Anda. \n" + "Periode Poin : 1 - " + c.getActualMaximum(Calendar.DATE) + " " + strMonths[c.get(Calendar.MONTH)-1] + " " + c.get(Calendar.YEAR)
 				     				);
 				     			}
 			     			} catch (SQLException e) {
