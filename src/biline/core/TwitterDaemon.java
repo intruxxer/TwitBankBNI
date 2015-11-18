@@ -1033,7 +1033,7 @@ public class TwitterDaemon {
 	            else if( command.equals("cs") || command.equals("askbni") ){
 	            	if(hashtags.size() > 1)
 	            	{
-	            		String askPoint   = hashtags.get(1);
+	            		String askPoint   = hashtags.get(1).toLowerCase();
 	            		if(askPoint.equalsIgnoreCase("poin") || askPoint.equalsIgnoreCase("point")) //Asking about point
 	            		{
 	            			// *We compose DM #AskBNI #Poin per #cardNo
