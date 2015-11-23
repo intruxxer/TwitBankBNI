@@ -732,7 +732,7 @@ public class TwitterDaemon {
 				            switch (msg.toLowerCase()) {
 				            	case "menu":
 				            	case "help":
-				            		 directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+				            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
 				                     break;
 				            	case "daftar":
 				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
@@ -1070,13 +1070,15 @@ public class TwitterDaemon {
 				     				while (rs3.next()){ pointGrandPrize = rs3.getString("point_grandprize"); break; }
 				     				
 				     				Calendar c = Calendar.getInstance();
+				     				c.add(Calendar.MONTH, -1);
+				     			    c.set(Calendar.DATE, 1);
 				     				String[] strMonths = new String[] { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
 				     				directMessagesPromoAndServices.add(
 				     						"Poin Rejeki BNI Taplus untuk nomor kartu : " + pointCardno + "\n\n"
 				     						+ "1. Poin Bulanan : " + pointMonthly  + "\n"
 				     						+ "2. Poin 3 Bulanan : " + pointQuarterly  + "\n"
 				     						+ "3. Poin Grand Prize : " + pointGrandPrize + "\n\n" 
-				     						+ "Terus tingkatkan saldo dan transaksi Anda. \n" + "Periode Poin : 1 - " + c.getActualMaximum(Calendar.DATE) + " " + strMonths[c.get(Calendar.MONTH)-1] + " " + c.get(Calendar.YEAR)
+				     						+ "Terus tingkatkan saldo dan transaksi Anda. \n" + "Periode Poin : " + c.get(Calendar.DATE) + " - " + c.getActualMaximum(Calendar.DATE) + " " + strMonths[c.get(Calendar.MONTH)] + " " + c.get(Calendar.YEAR)
 				     				);
 				     			}
 			     			} catch (SQLException e) {
@@ -1221,7 +1223,7 @@ public class TwitterDaemon {
 					            switch (msg.toLowerCase()) {
 					            	case "menu":
 					            	case "help":
-					            		 directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+					            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
 					                     break;
 					            	case "daftar":
 					            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
