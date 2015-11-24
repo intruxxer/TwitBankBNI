@@ -1112,6 +1112,7 @@ public class TwitterDaemon {
 	            		else //Not Asking Point
 	            		{
 		            		// *We compose DM per #AskBNI hashTAGS
+	            			System.out.println("Hashtag size: " + hashtags.size());
 				            String csQuery = "";
 				            stm = null; rs = null;
 				            for (String tag : hashtags) {
@@ -1221,10 +1222,10 @@ public class TwitterDaemon {
 			     		recipientId = directMessage.getSenderScreenName();
 				        for (String msg : menus) {
 					            switch (msg.toLowerCase()) {
-					            	case "menu":
-					            	case "help":
+					            	//case "menu":
+					            	//case "help":
 					            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
-					                     break;
+					                     //break;
 					            	case "daftar":
 					            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
 					            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 (tanpa prefix \"+\") ";
@@ -1246,7 +1247,8 @@ public class TwitterDaemon {
 					            }
 					            
 					            try {
-									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					            	//System.out.println("recipient: " + recipientId + " & DM: " + directMsg);
+					            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 								} catch (TwitterException e) {
 									e.printStackTrace();
 								}
