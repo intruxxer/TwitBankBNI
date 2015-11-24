@@ -741,13 +741,13 @@ public class TwitterDaemon {
 				            		 break;
 				            	//case "promo":
 				            	case "helppromo":
-				            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo + #Keyword \n";
+				            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
 				            		 directMsg += "\nContoh:\n #Promo #Travel \n\nDM kami dengan mengetik #HelpPromo untuk mengetahui semua #Keyword yang ada untuk #Promo dari BNI.";
 				            		 break;
 				            	//case "cs":	 
 				            	case "helpcs":
 				            	case "helpbni":
-				            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI + #Keyword \n";
+				            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
 				            		 directMsg += "\nContoh:\n #AskBNI #Taplus \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
 				            		 break;
 				            	default:
@@ -1132,7 +1132,7 @@ public class TwitterDaemon {
 						     			rs  = stm.executeQuery(csQuery);
 						     			if ( !rs.next() ) { 
 						     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
-						     												+  "Contoh penulisan yang benar:\n#Promo [spasi] #Travel \n#AskBNI [spasi] #Taplus");
+						     												+  "Contoh penulisan yang benar:\n#Promo (spasi) #Travel \n#AskBNI (spasi) #Taplus");
 						     			} 
 						     			else
 						     			{
@@ -1233,13 +1233,13 @@ public class TwitterDaemon {
 					            		 break;
 					            	//case "promo":
 					            	case "helppromo":
-					            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo + #Keyword \n";
+					            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
 					            		 directMsg += "\nContoh:\n #Promo #Travel \n\nDM kami dengan mengetik #HelpPromo untuk mengetahui semua #Keyword yang ada untuk #Promo dari BNI.";
 					            		 break;
 					            	//case "cs":	 
 					            	case "helpcs":
 					            	case "helpbni":
-					            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI + #Keyword \n";
+					            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
 					            		 directMsg += "\nContoh:\n #AskBNI #Taplus \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
 					            		 break;
 					            	default:
