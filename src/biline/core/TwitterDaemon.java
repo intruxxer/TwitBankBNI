@@ -773,7 +773,7 @@ public class TwitterDaemon {
 		     				keywords += "#" + alias + "\n";
 		     			}
 		     			
-		     			directMsg = "Ketik #Promo dan gunakan keywords berikut: \n" + keywords + "\nuntuk mendapatkan promo-promo menarik & terbaru dari BNI.";
+		     			directMsg = "Ketik #Promo dan gunakan keywords berikut: \n" + keywords + "\nuntuk mendapatkan promo-promo menarik & terbaru dari BNI.\nContoh Penggunaan: send DM, ketik: #Promo (spasi) #Hotel";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + directMessage.getSenderScreenName() + message.getText() + " to @" + directMessage.getSenderScreenName());
@@ -792,7 +792,7 @@ public class TwitterDaemon {
 		     				keywords += "#" + alias + "\n";
 		     			}
 		     			
-		     			directMsg = "Ketik #AskBNI dan gunakan keywords berikut: \n" + keywords + "\nuntuk mengakses topik-topik layanan nasabah dari BNI.";
+		     			directMsg = "Ketik #AskBNI dan gunakan keywords berikut: \n" + keywords + "\nuntuk mengakses topik-topik layanan nasabah dari BNI.\nContoh Penggunaan: send DM, ketik: #AskBNI (spasi) #Taplus";
 		     			try {
 							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
