@@ -604,7 +604,7 @@ public class TwitterDaemon {
 	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
 		                + source.getScreenName() + " Followed:@"
 		                + followedUser.getScreenName());
-	        	/*
+	        	
 	        	String responseDMQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'followed' ORDER BY message_id ASC";
      			String responseDM      = "";
      			
@@ -643,7 +643,7 @@ public class TwitterDaemon {
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
-				*/
+				
 	        }
 
 	        @Override
