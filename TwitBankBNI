@@ -1,6 +1,6 @@
 #!/bin/sh
 SERVICE_NAME=TwitBankBNI
-PATH_TO_JAR=/home/dev_fahmi/TwitBankBNI.jar
+PATH_TO_JAR=/home/dev_fahmi/twitbank/apps/TwitBankBNI.jar
 PID_PATH_NAME=/tmp/TwitBankBNI-pid
 case $1 in
     start)

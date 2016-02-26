@@ -974,4 +974,332 @@
  2015-10-19 23:33:21,222 INFO - MysqlConnect: Connection to MySQL DB retrieved.
  2015-10-19 23:33:21,223 INFO - MysqlConnect: Connection to MySQL DB retrieved.
  2015-10-19 23:33:21,223 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:24:50,332 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:24:50,341 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:24:50,499 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:24:50,500 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:24:50,503 INFO - Establishing connection.
+ 2016-02-26 04:24:50,504 INFO - Establishing connection.
+ 2016-02-26 04:24:52,048 INFO - Connection established.
+ 2016-02-26 04:24:52,048 INFO - Receiving status stream.
+ 2016-02-26 04:25:22,547 INFO - Connection established.
+ 2016-02-26 04:25:22,547 INFO - Receiving status stream.
+ 2016-02-26 04:25:59,150 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:25:59,150 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,151 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,151 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:25:59,156 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:25:59,156 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,171 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,171 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:25:59,177 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:25:59,177 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,178 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:25:59,178 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:43:29,710 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:43:29,710 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:43:29,780 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:43:29,782 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:43:29,786 INFO - Establishing connection.
+ 2016-02-26 04:43:29,786 INFO - Establishing connection.
+ 2016-02-26 04:43:31,105 INFO - Connection established.
+ 2016-02-26 04:43:31,105 INFO - Receiving status stream.
+ 2016-02-26 04:44:01,335 INFO - Connection established.
+ 2016-02-26 04:44:01,336 INFO - Receiving status stream.
+ 2016-02-26 04:44:16,267 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:44:16,267 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,267 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,268 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:44:16,274 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:44:16,274 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,275 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,276 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:44:16,280 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:44:16,280 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,280 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:44:16,280 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:27,274 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:27,274 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:27,336 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:27,337 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:27,341 INFO - Establishing connection.
+ 2016-02-26 04:52:27,341 INFO - Establishing connection.
+ 2016-02-26 04:52:28,728 INFO - Connection established.
+ 2016-02-26 04:52:28,728 INFO - Receiving status stream.
+ 2016-02-26 04:52:40,924 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,925 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,925 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,926 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:40,930 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,930 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,932 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,932 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:40,938 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,938 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,939 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,939 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:40,941 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,941 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,942 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,942 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:40,947 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,947 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,948 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,948 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:40,953 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 04:52:40,953 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,954 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 04:52:40,954 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 04:52:58,763 INFO - Connection established.
+ 2016-02-26 04:52:58,764 INFO - Receiving status stream.
+ 2016-02-26 05:01:46,544 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:01:46,545 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:01:46,610 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:01:46,611 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:01:46,615 INFO - Establishing connection.
+ 2016-02-26 05:01:46,615 INFO - Establishing connection.
+ 2016-02-26 05:01:48,028 INFO - Connection established.
+ 2016-02-26 05:01:48,028 INFO - Receiving status stream.
+ 2016-02-26 05:01:48,029 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 05:01:48,032 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 05:01:58,037 INFO - Establishing connection.
+ 2016-02-26 05:01:59,048 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 05:01:59,049 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 05:02:02,574 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,574 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,575 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,575 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,581 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,581 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,582 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,582 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,582 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,582 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,583 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,583 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,589 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,589 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,589 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,590 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,591 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,591 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,592 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,592 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,593 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,593 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,594 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,594 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,595 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,595 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,596 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,596 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,598 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,598 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,620 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,620 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:02,628 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 05:02:02,628 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,628 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 05:02:02,629 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 05:02:19,054 INFO - Establishing connection.
+ 2016-02-26 05:02:20,236 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 05:02:20,236 INFO - Waiting for 40000 milliseconds
+ 2016-02-26 06:17:43,244 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:17:43,245 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:17:43,306 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:17:43,307 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:17:43,311 INFO - Establishing connection.
+ 2016-02-26 06:17:43,311 INFO - Establishing connection.
+ 2016-02-26 06:17:44,665 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:17:44,667 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 06:17:44,698 INFO - Connection established.
+ 2016-02-26 06:17:44,698 INFO - Receiving status stream.
+ 2016-02-26 06:17:54,667 INFO - Establishing connection.
+ 2016-02-26 06:17:55,692 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:17:55,692 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 06:23:13,193 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:23:13,194 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:23:13,254 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:23:13,256 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:23:13,258 INFO - Establishing connection.
+ 2016-02-26 06:23:13,258 INFO - Establishing connection.
+ 2016-02-26 06:23:14,631 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:14,634 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 06:23:14,749 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:14,750 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 06:23:24,638 INFO - Establishing connection.
+ 2016-02-26 06:23:24,751 INFO - Establishing connection.
+ 2016-02-26 06:23:25,655 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:25,655 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 06:23:25,980 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:25,982 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 06:23:45,655 INFO - Establishing connection.
+ 2016-02-26 06:23:45,983 INFO - Establishing connection.
+ 2016-02-26 06:23:46,681 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:46,682 INFO - Waiting for 40000 milliseconds
+ 2016-02-26 06:23:47,023 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:23:47,024 INFO - Waiting for 40000 milliseconds
+ 2016-02-26 06:24:26,686 INFO - Establishing connection.
+ 2016-02-26 06:24:27,027 INFO - Establishing connection.
+ 2016-02-26 06:24:27,698 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:24:27,699 INFO - Waiting for 80000 milliseconds
+ 2016-02-26 06:24:28,045 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:24:28,045 INFO - Waiting for 80000 milliseconds
+ 2016-02-26 06:25:47,699 INFO - Establishing connection.
+ 2016-02-26 06:25:48,046 INFO - Establishing connection.
+ 2016-02-26 06:25:49,072 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:25:49,073 INFO - Waiting for 160000 milliseconds
+ 2016-02-26 06:25:49,220 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:25:49,220 INFO - Waiting for 160000 milliseconds
+ 2016-02-26 06:28:11,487 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:11,487 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:11,551 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:11,552 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:11,557 INFO - Establishing connection.
+ 2016-02-26 06:28:11,557 INFO - Establishing connection.
+ 2016-02-26 06:28:12,952 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:12,955 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 06:28:13,281 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:13,282 INFO - Waiting for 10000 milliseconds
+ 2016-02-26 06:28:22,955 INFO - Establishing connection.
+ 2016-02-26 06:28:23,286 INFO - Establishing connection.
+ 2016-02-26 06:28:24,041 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:24,042 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 06:28:24,356 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:24,358 INFO - Waiting for 20000 milliseconds
+ 2016-02-26 06:28:29,914 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,914 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,915 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,915 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,915 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,915 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:29,916 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,916 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:29,922 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,922 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,922 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,922 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,976 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,977 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:29,979 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,979 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:29,981 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,981 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,982 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,982 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:29,984 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-02-26 06:28:29,984 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,984 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-02-26 06:28:29,985 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-02-26 06:28:44,045 INFO - Establishing connection.
+ 2016-02-26 06:28:44,361 INFO - Establishing connection.
+ 2016-02-26 06:28:45,358 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:45,359 INFO - Waiting for 40000 milliseconds
+ 2016-02-26 06:28:45,450 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-02-26 06:28:45,451 INFO - Waiting for 40000 milliseconds
  

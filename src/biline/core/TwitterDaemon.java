@@ -26,6 +26,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +38,7 @@ import java.util.ListIterator;
 public class TwitterDaemon {
 	
 	private static final String twitterUser = "bni46";
-	//bni46 //fahmivanhero //amartha 
+	//bni46 //fahmivanhero //dev_amartha 
 	
 	private static String latestStatus;
 	private static Status status;
@@ -78,25 +80,25 @@ public class TwitterDaemon {
 	}
 
 	public static void main(String[] args) throws TwitterException {
-		// *Listener shared objects
-		hashtags     = new ArrayList<String>();
-		menus 		 = new ArrayList<String>();
+		// *Listeners' shared (data structured) objects
+		hashtags         = new ArrayList<String>();
+		menus 		     = new ArrayList<String>();
 		aliasmenus 		 = new ArrayList<String>();
 		
-		tagExtractor = new TwitterTweetExtractorUtil("");
+		tagExtractor     = new TwitterTweetExtractorUtil("");
 		
 		directMessagesForMentions       = new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
 		
-		dateFormat   =  new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat       =  new SimpleDateFormat("yyyy-MM-dd");
 		
 		// *Connecting to DB & Instantiate Accessing DB Object
 		stm = null; rs = null; rs2 = null; rs3 = null;
 		try{
 			db_object = new MysqlConnect();
 			con 	  = db_object.getConnection(); 
-		} catch(ClassNotFoundException nfe){
-			nfe.printStackTrace();
+		} catch(ClassNotFoundException cnfe){
+			cnfe.printStackTrace();
 		} catch(SQLException sqle){
 			sqle.printStackTrace();
 		}
@@ -144,8 +146,8 @@ public class TwitterDaemon {
 		   asyncTwitter   = AsyncTwitterFactory.getSingleton();
            asyncTwitterDM = AsyncTwitterFactory.getSingleton();
            
-           twitter = TwitterFactory.getSingleton();
-           twitterDM = TwitterFactory.getSingleton();
+           twitter        = TwitterFactory.getSingleton();
+           twitterDM      = TwitterFactory.getSingleton();
            //twitter      = new TwitterFactory().getInstance();
            // *twitter w/o Async must be prepared with TwitterException 
            // *either  (1) ..throws block OR (2) try-catch block
@@ -154,8 +156,8 @@ public class TwitterDaemon {
 		// Sets (a) the followed users id/handler name (optional) [+] (b) what keywords 
 		// to be tracked from the Stream.
 		   
-		   //args[0] = [1145,1426,2456]
-	       //args[1] = [#microfinance,#amartha,#life]
+		   //filters[0] = [1145,1426,2456]
+	       //filters[1] = [#microfinance,#amartha,#life]
 		   
 		   //ArrayList<Long>   follow  = new ArrayList<Long>();
 	       //ArrayList<String> track   = new ArrayList<String>();
@@ -220,7 +222,7 @@ public class TwitterDaemon {
 
 	       // *TO LISTEN TO STATUS MENTIONS
 	       //twitterStream.filter(filter);
-	       //twitterStream.filter("@dev_amartha #microfinance,@dev_amartha #life");
+	       //twitterStream.filter("@dev_amartha #microfinance, @dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
 	    
 	       // *TO LISTEN TO DM & OUR USER'S ACTIVITY
@@ -238,7 +240,7 @@ public class TwitterDaemon {
 	        public void onStatus(Status status) {
 	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
 	            //try {
-	    			//String msg = "You got DM from @dev_amartha. Thanks for tweeting our hashtags!";
+	    			//String msg = "You got DM from @" + twitterUser + ". Thanks for tweeting our hashtags!";
 	    			//DirectMessage message = twitter.sendDirectMessage(status.getUser().getScreenName(), msg);
 	    			//System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
 	    		//} catch (TwitterException e) {
@@ -662,11 +664,13 @@ public class TwitterDaemon {
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
-	            // (1) #menu | #help / #helppromo / #helpcs -> #HelpBNI | (2) #daftar #nama_lengkap #hape | (3) #promo keywords | (4) #cs keywords -> #AskBNI
+	            
+	            // First thing first, detect the tweet's text whether it has at least one hashtag.
+	            // To simplify, APART OF COMMANDS daftar, openaccount, csopen ALL HASHTAGS ARE LOWER CASED.
 	            if(hashtags.size() > 0)
 	            {
 	            	command = hashtags.get(0).toLowerCase();
-	            	if(!command.equals("daftar"))
+	            	if(!command.equals("daftar") || !command.equals("openaccount") || !command.equals("csopen"))
 	            	{
 	            		ListIterator<String> iterator = hashtags.listIterator();
 			            while (iterator.hasNext())
@@ -676,8 +680,20 @@ public class TwitterDaemon {
 	            	}
 	            }
 	            else
+	            {
 	            	command = "";
+	            	return;
+	            }
 	            //System.out.println("Command: " + command);
+	            
+	            
+	            //****************************************** LIST OF FEATURES IN TWITBANK BNI ******************************************//
+	            
+	            // (1) #menu | #help / #helppromo / #helpcs -> #HelpBNI 
+	            // (2) #daftar #nama_lengkap #hape 
+	            // (3) #promo keywords 
+	            // (4) #cs keywords -> #AskBNI
+	            // (5) #openaccount #taplusmuda for customers & #csopen #taplusmuda
 	            
 	            // (1) #menu | #help / #helppromo / #helpcs
 	            if( command.equals("menu") || command.equals("help") || 
@@ -809,7 +825,8 @@ public class TwitterDaemon {
 	            }
 	            
 	            // (2) #daftar #namalengkap #phone [DONE]
-	            else if( command.equals("daftar") ){
+	            else if( command.equals("daftar") )
+	            {
 	            	Boolean errorDaftar = false;
 	            	//System.out.println("Register Tags: " + hashtags.get(0) + " & " + hashtags.get(1) + " & " + hashtags.get(2));
 	            	//System.out.println("Hashtags Daftar User:" + hashtags.toString());
@@ -942,7 +959,8 @@ public class TwitterDaemon {
 	            }//else if(DM for Register)
 	            
 	            // (3) #promo #keyword #keyword [DONE]
-	            else if( command.equals("promo") ){
+	            else if( command.equals("promo") )
+	            {
 	            	if(hashtags.size() > 1)
 	            	{
 		            	// *We compose DM per hashTAGS
@@ -1029,8 +1047,9 @@ public class TwitterDaemon {
 			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for Promo)
 	            
-	         // (4) #cs or #askbni + #keyword #keyword [DONE] || #askbni + #poin + #cardNo
-	            else if( command.equals("cs") || command.equals("askbni") ){
+	            // (4) #cs or #askbni + #keyword #keyword || #askbni + #poin + #cardNo [DONE] 
+	            else if( command.equals("cs") || command.equals("askbni") )
+	            {
 	            	if(hashtags.size() > 1)
 	            	{
 	            		String askPoint   = hashtags.get(1).toLowerCase();
@@ -1259,6 +1278,578 @@ public class TwitterDaemon {
 	            	hashtags.clear(); menus.clear(); aliasmenus.clear();
 			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for CS & AskBNI)  
+	            
+	            // (5) #openaccount #taplusmuda + #Full_Name #PhoneNo [DONE] || #csopenaccount #taplusmuda + #AccountNo #AccountCode #CSEmployeeCode
+	            else if( command.equals("openaccount") || command.equals("csopen") )
+	            {	
+	            	//Once user gets the command right, server will reply with feedback accordingly.
+        			recipientId = directMessage.getSenderScreenName();
+        			
+	            	if(command.equals("openaccount")) // [DONE]
+	            	{
+	            		boolean requirement = true;
+	           
+	            		//Check: number of  hashtags to be at least 4 (four)
+	            		if(hashtags.size() < 4)
+	            		{ 
+	            			directMsg 	= "Maaf, format pesan Twitter DM untuk promo pembukaan rekening tabungan BNI anda tidak sesuai. ";
+	            			directMsg  += "Silakan DM dengan format: #OpenAccount #TaplusMuda #Nama_Lengkap #No_HP.";
+	            			directMsg  += "\nContoh:\n #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
+	            			try {
+				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	requirement			  = false;
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		//Check: 2nd hashtags must be "taplusmuda" WHEN num of hashtags is indeed 4 (four) or more.
+	            		if(requirement && !hashtags.get(1).equalsIgnoreCase("taplusmuda"))
+	            		{
+	            			directMsg 	= "Maaf, format pesan Twitter DM untuk promo pembukaan rekening tabungan BNI anda tidak sesuai. ";
+	            			directMsg  += "Silakan DM dengan format: #OpenAccount #TaplusMuda #Nama_Lengkap #No_HP.";
+	            			directMsg  += "\nContoh:\n #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
+	            			try {
+				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	requirement			  = false;
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		
+	            		if(requirement)
+	            		{
+	            			//Proceed as all req. satisfied by Customer
+	            			Date currentDate            	 = new Date();
+	            			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMMddHHmmss");
+	            			SimpleDateFormat dateFormat      = new SimpleDateFormat("yyyy-MM-dd");
+	            			SimpleDateFormat validDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	            			SimpleDateFormat readableFormat  = new SimpleDateFormat("dd MMMMM yyyy");
+	            			
+	            			String valid_date 			= validDateFormat.format(currentDate);
+	            			String account_date		    = dateFormat.format(currentDate); 
+	            			String account_code         = "TM" + codeFormat.format(currentDate);
+	            			//NOTE: next time, check whether it already exists in DB.
+	            			//For now, it is CLOSE to safe is it contians time until seconds.
+	            			String account_holder   		= hashtags.get(2);
+	            			String account_phone    		= hashtags.get(3);
+	            			String account_handler  		= recipientId; 
+	            			String account_merchandise 		= "0";
+	            			String account_merchandise_name = "Merchandise BNI";
+	            			
+	            			//Retrieving promotional merchandise from BNI, which is valid in period, in active promo, and of course: in stock.
+	            			String merchandiseQuery = "SELECT merchandise_id, merchandise_name FROM tbl_account_merchandise " 
+	            									+ "WHERE " + account_date + " <= valid_until AND merchandise_active = 1 AND merchandise_stock >= merchandise_redeemed "
+	            									+ "ORDER BY merchandise_priority ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(merchandiseQuery);
+						     	while (rs.next()){
+						     		account_merchandise 	 = rs.getString("merchandise_id");
+						     		account_merchandise_name = rs.getString("merchandise_name");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //After having all data, inserting the whole account-opening data into our database.
+				            //Sanitize the ACC HOLDER
+				            
+				            //Sanitize [1]: Remove '_'
+				            account_holder = account_holder.replace("_", " "); 
+				            
+				            //Sanitize [2]: Capitalize Each Word of Names
+				            String[] account_holder_tokens = account_holder.split(" ");
+				            account_holder 				   = "";
+
+				            for(int i = 0; i < account_holder_tokens.length; i++){
+				                char capLetter = Character.toUpperCase(account_holder_tokens[i].charAt(0));
+				                account_holder +=  " " + capLetter + account_holder_tokens[i].substring(1);
+				            }
+				            account_holder = account_holder.trim();
+				            
+				            //System.out.println(account_holder);
+				            String accountOpeningQuery = "INSERT INTO tbl_account_users(account_code, account_holder, account_handler, account_phone, account_merchandise, account_merchandise_name, account_code_date) " 
+				            						   + "VALUES ('" + account_code + "', '" + account_holder + "', '" + account_handler + "', '" + account_phone + "', '" + account_merchandise + "', '" + account_merchandise_name + "', '" + valid_date + "')";
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(accountOpeningQuery);
+							     	//System.out.println("Registered Taplus Muda Customer: " + directMessage.getSenderScreenName() + " [" + account_holder + " | " + account_code + "]" );
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //Finally, send DM to Customer with Account Reference Code
+				            String AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account' AND message_deleted = '0' ORDER BY message_id ASC";
+				            stm = null; rs = null; directMsg = "";
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(AccountOpeningResponseQuery);
+						     	while (rs.next()){
+						     		directMsg   += rs.getString("message_content");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //Prior to sending, replace some variables within the DM template & format the output valid date
+				            Date convertedValidDate = null;
+							try {
+								//Change from String to Date() by Parsing the String of Date.
+								DateFormat parser  = new SimpleDateFormat("yyyy-MM-dd");
+								convertedValidDate = (Date) parser.parse(valid_date);
+							} catch (ParseException pe) {
+								pe.printStackTrace();
+							}
+							//2nd, Format the Date Object into format we wish for.
+				            valid_date	= readableFormat.format(convertedValidDate);
+				            
+				            directMsg = directMsg.replace("@account_holder", account_holder);
+				            directMsg = directMsg.replace("@account_code", account_code);
+				            directMsg = directMsg.replace("@account_handler", account_handler);
+				            directMsg = directMsg.replace("@account_merchandise_name", account_merchandise_name);
+				            directMsg = directMsg.replace("@valid_date", valid_date);
+				            
+				            try {
+				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+				            
+	            		}
+	            		
+	            	}//END #OpenAccount
+	            	
+	            	else if(command.equals("csopen")) // [DONE]
+	            	{
+	            		boolean requirement = true;
+	            		
+	            		//Check: number of  hashtags to be at least 5 (five)
+	            		if(hashtags.size() < 5)
+	            		{ 
+	            			directMsg 	= "Maaf, format pesan Twitter DM untuk reporting pembukaan rekening tabungan BNI Nasabah anda tidak sesuai. ";
+	            			directMsg  += "Silakan DM dengan format: #CSOpen #TaplusMuda #NoRekening #NoReferensiUnik #NoKodePegawai.";
+	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
+	            			try {
+				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	requirement			  = false;
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		//Check: 2nd hashtags must be "taplusmuda" WHEN num of hashtags is indeed 5 (five) or more.
+	            		if(requirement && !hashtags.get(1).equalsIgnoreCase("taplusmuda"))
+	            		{ 
+	            			directMsg 	= "Maaf, format pesan Twitter DM untuk reporting pembukaan rekening tabungan BNI Nasabah anda tidak sesuai. ";
+	            			directMsg  += "Silakan DM dengan format: #CSOpen #TaplusMuda #NoRekening #NoReferensiUnik #NoKodePegawai.";
+	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
+	            			try {
+				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	requirement			  = false;
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		//Check: Genuine report or not. Avoid multiple account is attached to one customer.
+	            		if(requirement)
+	            		{
+	            			// We need to check whether a CS has peviously reported same #OpenAccount successfully,
+	            			// Preventing CS KPI getting increased by cheating.
+	            			// Hence, Customer Individual Information is checked & confirmed as a one-time only report from CS and associated to single CS Officer.
+	            			String account_no        = hashtags.get(2); 
+	            			String account_code   	 = hashtags.get(3); 
+	            			String customerInfoQuery = "SELECT account_no, account_cs, account_cs_name FROM tbl_account_users " 
+	            							   		 + "WHERE  account_no = '" + account_no + "' OR account_cs > 0 AND account_code = '" + account_code + "' "  
+	            							   		 + "ORDER BY account_no ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(customerInfoQuery);
+						     	while (rs.next()){
+						     		directMsg 	= "Maaf, data reporting pembukaan rekening tabungan BNI Nasabah anda sudah tercatat di DB sebelumnya. ";
+			            			directMsg  += "CS Officer tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan nasabah yang sama. ";
+			            			directMsg  += "Pelaporan berkali-kali akan dicatat sebagai usaha memanipulasi kinerja CS Officer ybs secara sengaja.";
+			            			try {
+						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							     		requirement	= false;
+									} catch (TwitterException e) {
+										e.printStackTrace();
+									}
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+	            		}
+	            		
+	            		//All Passed.
+	            		if(requirement)
+	            		{
+	            			//Proceed as all req. satisfied by CS
+	            			Date currentDate      = new Date();
+	            			
+	            			String account_no     = hashtags.get(2); 
+	            			String account_code   = hashtags.get(3); 
+	            			String account_cs_no  = hashtags.get(4);
+	            			
+	            			//String account_date		    = dateFormat.format(currentDate);
+	            			String account_holder   		= "Customer of BNI";
+	            			String account_handler  		= "Handler of Customer"; 
+	            			String account_merchandise      = "0";
+	            			String account_merchandise_name = "Merchandise BNI";
+	            			String valid_date				= "0000-00-00";
+	            			
+	            			String cs_id       = "0";
+	            			String cs_fullname = "CS BNI 46";
+	            			Integer cs_point   = 0;
+				            
+				            //(A) Update the reporting CS Officer's KPI Point.
+				            String csPointQuery = "UPDATE tbl_account_cs SET cs_point = cs_point + 100 "
+         						   				+ "WHERE cs_employee_code = '" + account_cs_no + "' ";
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(csPointQuery);
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //Retrieving CS Information to be associated to Customer's Account that a CS has recently opened.
+	            			String csInfoQuery = "SELECT cs_id, cs_fullname, cs_point FROM tbl_account_cs " 
+	            							   + "WHERE cs_employee_code = '" + account_cs_no + "' "
+	            							   + "ORDER BY cs_id ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(csInfoQuery);
+						     	while (rs.next()){
+						     		cs_id 	     = rs.getString("cs_id");
+						     		cs_fullname  = rs.getString("cs_fullname");
+						     		cs_point     = rs.getInt("cs_point");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //(B) After Having Updated CS KPI Point & Retrieved CS Profile,
+				            //    Then we update the customer's recently opened account data in our database & associate CS v Customers respectively.
+				            String accountOpeningQuery = "UPDATE tbl_account_users SET " 
+				            						   + "account_no = '" + account_no + "', account_cs = '" + cs_id + "', account_cs_name = '" + cs_fullname + "' "
+				            						   + "WHERE account_code = '" + account_code + "'";
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(accountOpeningQuery);
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //(C) Retrieving Customer Individual Information to confirm a report from CS. 
+				            //    This data is used for composing DM feedback upon CS finished open account process.
+	            			String customerInfoQuery = "SELECT account_holder, account_handler, account_merchandise, account_merchandise_name, account_code_date FROM tbl_account_users " 
+	            							   		 + "WHERE  account_code = '" + account_code + "' " + "ORDER BY cs_id ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(customerInfoQuery);
+						     	while (rs.next()){
+						     		account_holder 	 		 = rs.getString("account_holder");
+						     		account_handler  		 = rs.getString("account_handler");
+						     		account_merchandise      = rs.getString("account_merchandise");
+						     		account_merchandise_name = rs.getString("account_merchandise_name");
+						     		valid_date 				 = rs.getString("account_code_date");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //(D) Update the No. Merchandise redeemed stock (Incrementing No. of Merchandise's Redeemed Stock) 
+				            String merchandiseStockQuery = "UPDATE tbl_account_merchandise SET merchandise_redeemed = merchandise_redeemed + 1 "
+						   								 + "WHERE merchandise_id = '" + account_merchandise + "' ";
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(merchandiseStockQuery);
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //Finally, send DM to CS & Customer Respectively for Successful Opening Account's Confirmation. 
+				            //Populate all data by Customers' Account DB.
+				            
+				            //1. DM to CS
+				            String AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account_self' AND message_deleted = '0' ORDER BY message_id ASC";
+				            stm = null; rs = null; directMsg = "";
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(AccountOpeningResponseQuery);
+						     	while (rs.next()){
+						     		directMsg   += rs.getString("message_content");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //Prior to sending, replace some variables within the DM template & format the output of valid date.
+				            SimpleDateFormat readableDateFormat = new SimpleDateFormat("dd MMMMM yyyy");
+	            			String point_date 				    = readableDateFormat.format(currentDate);
+	            			
+	            			Date convertedValidDate = null;
+							try {
+								//1st, Change from String to Date() by Parsing the String of Date.
+								DateFormat parser  = new SimpleDateFormat("yyyy-MM-dd");
+								convertedValidDate = (Date) parser.parse(valid_date);
+							} catch (ParseException pe) {
+								pe.printStackTrace();
+							}
+							//2nd, Format the Date Object into format we wish for.
+				            valid_date	= readableDateFormat.format(convertedValidDate);
+	            			
+				            directMsg = directMsg.replace("@account_holder", account_holder);
+				            directMsg = directMsg.replace("@account_code", account_code);
+				            directMsg = directMsg.replace("@account_handler", account_handler);
+				            directMsg = directMsg.replace("@account_merchandise_name", account_merchandise_name);
+				            directMsg = directMsg.replace("@valid_date", valid_date);
+				            directMsg = directMsg.replace("@until_date", point_date);
+				            directMsg = directMsg.replace("@cs_point", cs_point.toString());
+				            
+				            try {
+				            	//System.out.println("#CSOpen #TaplusMuda with CS recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+				            
+				            
+				            //2. DM to Customer
+				            AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account_customer' AND message_deleted = '0' ORDER BY message_id ASC";
+				            stm = null; rs = null; directMsg = "";
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(AccountOpeningResponseQuery);
+						     	while (rs.next()){
+						     		directMsg   += rs.getString("message_content");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            try {
+				            	//System.out.println("#CSOpen #TaplusMuda with Customer recipient: " + recipientId + " & DM: " + directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+				            
+	            		}
+	            	} //END #CSOpen
+			        
+	            	hashtags.clear(); menus.clear(); aliasmenus.clear();
+			        directMessagesPromoAndServices.clear();
+			        
+	            }//else if(DM for Open Account & CS Open Account | Taplus Muda)
+	            
+	            //****************************************** END LIST OF FEATURES IN TWITBANK BNI ******************************************//
+	            
+	            // (1) #menu | #help / #helppromo / #helpcs -> #HelpBNI 
+	            // (2) #daftar #nama_lengkap #hape 
+	            // (3) #promo keywords 
+	            // (4) #cs keywords -> #AskBNI
+	            // (5) #openaccount #taplusmuda for customers & #csopen #taplusmuda
+	            
+	            //IF NO COMMAND from (1) to (5) is found:
+	            else
+	            {
+	            	recipientId = directMessage.getSenderScreenName();
+        			directMsg 	= "Yth. Bp/Ibu, Mohon Maaf. Permintaan info ataupun promo via Twitter DM @BNI anda tidak valid. ";
+        			directMsg  += "Silakan DM: #Promo / #HelpBNI / #Daftar / #AskBNI untuk info & registrasi CS BNI 46. ";
+        			directMsg  += "Untuk promo pembukaan rekening tabungan BNI 46, silakan DM: #OpenAccount #TaplusMuda #Nama_Lengkap #No_HP.\n\n";
+        			directMsg  += "Contoh:\n (1) #Promo #Travel \n (2) #HelpBNI \n (3) #Daftar #Andi_Waluyo #62213456789  \n (4) #AskBNI #KartuHilang \n\n atau \n\n (5) #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
+        			try {
+		            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
+		            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					} catch (TwitterException e) {
+						e.printStackTrace();
+					}
+        			
+        			hashtags.clear(); menus.clear(); aliasmenus.clear();
+			        directMessagesPromoAndServices.clear();
+	            }
 	        }
 
 	        @Override

@@ -45,13 +45,13 @@ public class TwitterTweetExtractorUtil {
 			String tweetText = "halo @facebook check http://facebook.com dude! Your site is down! By @yehgevni #facebook #social"; 
 			
 			String patternStr = "(?:\\s|\\A)[##]+([A-Za-z0-9-_]+)";
-		    Pattern pattern = Pattern.compile(patternStr);
-		    Matcher matcher = pattern.matcher(tweetText);
+		    Pattern pattern   = Pattern.compile(patternStr);
+		    Matcher matcher   = pattern.matcher(tweetText);
 		    
 		    //Looking for URL
 		    int indexOfHttp = tweetText.indexOf("http:");
-	        int endPoint = (tweetText.indexOf(' ', indexOfHttp) != -1) ? tweetText.indexOf(' ', indexOfHttp) : tweetText.length();
-		    String url = tweetText.substring(indexOfHttp, endPoint);
+	        int endPoint    = (tweetText.indexOf(' ', indexOfHttp) != -1) ? tweetText.indexOf(' ', indexOfHttp) : tweetText.length();
+		    String url      = tweetText.substring(indexOfHttp, endPoint);
 		    
 		    System.out.println(url);
 		    
@@ -68,57 +68,57 @@ public class TwitterTweetExtractorUtil {
 		         System.out.println(tagsMap);
 		     }
 		    
-		     //Looking for mentioned Users
-		     patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
-		     pattern = Pattern.compile(patternStr);
-		     matcher = pattern.matcher(tweetText);
-		     HashMap<String, String> usersMap = new HashMap<String, String>();
-		     i = 0;
-		     String resultUsers = "";
-		     while (matcher.find()) {
+		    //Looking for mentioned Users
+		    patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
+		    pattern    = Pattern.compile(patternStr);
+		    matcher    = pattern.matcher(tweetText);
+		    HashMap<String, String> usersMap = new HashMap<String, String>();
+		    i = 0;
+		    String resultUsers = "";
+		    while (matcher.find()) {
 		    	 resultUsers = matcher.group();
 		    	 resultUsers = resultUsers.replace(" ", "");
 		    	 resultUsers = resultUsers.replace("@", "");
 		    	 usersMap.put(i.toString(), resultUsers);
 		    	 i++;
 		    	 System.out.println(usersMap);
-		     }
+		    }
 	}
 	
 	public String parseTweetOriginal(String tweetText) {
 		 
 	     // Search for URLs
 	     if (!tweetText.equals("") && tweetText.contains("http:")) {
-	         int indexOfHttp = tweetText.indexOf("http:");
-	         int endPoint = (tweetText.indexOf(' ', indexOfHttp) != -1) ? tweetText.indexOf(' ', indexOfHttp) : tweetText.length();
-	         String url = tweetText.substring(indexOfHttp, endPoint);
-	         String targetUrlHtml=  "<a href='${url}' target='_blank'>${url}</a>";
-	         tweetText = tweetText.replace(url,targetUrlHtml );
+	         int indexOfHttp      = tweetText.indexOf("http:");
+	         int endPoint    	  = (tweetText.indexOf(' ', indexOfHttp) != -1) ? tweetText.indexOf(' ', indexOfHttp) : tweetText.length();
+	         String url           = tweetText.substring(indexOfHttp, endPoint);
+	         String targetUrlHtml =  "<a href='${url}' target='_blank'>${url}</a>";
+	         tweetText            = tweetText.replace(url,targetUrlHtml );
 	     }
 	 
 	     String patternStr = "(?:\\s|\\A)[##]+([A-Za-z0-9-_]+)";
-	     Pattern pattern = Pattern.compile(patternStr);
-	     Matcher matcher = pattern.matcher(tweetText);
-	     String result = "";
+	     Pattern pattern   = Pattern.compile(patternStr);
+	     Matcher matcher   = pattern.matcher(tweetText);
+	     String result     = "";
 	 
 	     // Search for Hashtags
 	     while (matcher.find()) {
-	         result = matcher.group();
-	         result = result.replace(" ", "");
-	         String search = result.replace("#", "");
-	         String searchHTML="<a href='http://search.twitter.com/search?q=" + search + "'>" + result + "</a>";
-	         tweetText = tweetText.replace(result,searchHTML);
+	         result 		   = matcher.group();
+	         result 		   = result.replace(" ", "");
+	         String search     = result.replace("#", "");
+	         String searchHTML ="<a href='http://search.twitter.com/search?q=" + search + "'>" + result + "</a>";
+	         tweetText         = tweetText.replace(result,searchHTML);
 	     }
 	 
 	     // Search for Users
 	     patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
-	     pattern = Pattern.compile(patternStr);
-	     matcher = pattern.matcher(tweetText);
+	     pattern    = Pattern.compile(patternStr);
+	     matcher    = pattern.matcher(tweetText);
 	     while (matcher.find()) {
 	         result = matcher.group();
 	         result = result.replace(" ", "");
-	         String rawName = result.replace("@", "");
-	         String userHTML="<a href='http://twitter.com/${rawName}'>" + result + "</a>";
+	         String rawName  = result.replace("@", "");
+	         String userHTML ="<a href='http://twitter.com/${rawName}'>" + result + "</a>";
 	         tweetText = tweetText.replace(result,userHTML);
 	     }
 	     
