@@ -1473,7 +1473,11 @@ public class TwitterDaemon {
 	            	
 	            	else if(command.equals("csopen")) // [DONE]
 	            	{
-	            		boolean requirement = true;
+	            		boolean requirement   = true;
+	            		
+	            		String account_no     = hashtags.get(2); 
+            			String account_code   = hashtags.get(3); 
+            			String account_cs_no  = hashtags.get(4);
 	            		
 	            		//Check: number of  hashtags to be at least 5 (five)
 	            		if(hashtags.size() < 5)
@@ -1505,14 +1509,107 @@ public class TwitterDaemon {
 							}
 	            		}
 	            		
-	            		//Check: Genuine report or not. Avoid multiple account is attached to one customer.
+	            		//Check: Genuine report or not. 
+	            		//1. Avoid non-exist-ref. no. report attempt over a single account is carried out by CS Officer.
+	            		if(requirement)
+	            		{
+	            			// We need to check whether a CS has accourately referenced a customer's ref. no. in #CSOpen,
+	            			// Preventing unnecessary lengthy process for assigning CS.
+	            			// Hence, Trx Information Ref. Code is checked & confirmed as an already existing Ref. Code.
+	            			String accInfoQuery = "SELECT id, account_holder FROM tbl_account_users " 
+	            							   	+ "WHERE  account_code = '" + account_code + "' "  
+	            							   	+ "ORDER BY id ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(accInfoQuery);
+						     	while (!rs.next()){
+						     		rs.beforeFirst();
+						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " gagal tercatat di DB karena invalid ref. no. ";
+			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan ref. no. valid untuk nasabah anda. ";
+			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
+			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
+			            			try {
+						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							     		requirement	= false;
+									} catch (TwitterException e) {
+										e.printStackTrace();
+									}
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+	            		}
+	            		
+	            		//2. Avoid non-exist-CS Code report attempt over a single account is carried out by CS Officer.
+	            		if(requirement)
+	            		{
+	            			// We need to check whether a CS has precisely reported her Officer Code for #OpenAccount correctly,
+	            			// Preventing CS not getting her KPI Point increased fairly.
+	            			// Hence, CS Officer Code is checked & confirmed as a one-time only report from CS and associated to single CS Officer.
+	            			String csInfoQuery = "SELECT cs_id, cs_full_name FROM tbl_account_cs " 
+	            							   + "WHERE  cs_employee_code = '" + account_cs_no + "' "  
+	            							   + "ORDER BY id ASC LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(csInfoQuery);
+						     	while (!rs.next()){
+						     		rs.beforeFirst();
+						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " gagal tercatat di DB karena Officer Code Anda invalid. ";
+			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan CS Officer code anda yg valid. ";
+			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
+			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
+			            			try {
+						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+							     		requirement	= false;
+									} catch (TwitterException e) {
+										e.printStackTrace();
+									}
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+	            		}
+	            		
+	            		//3. Avoid multiple report attempt over a single account is carried out by CS Officer.
 	            		if(requirement)
 	            		{
 	            			// We need to check whether a CS has peviously reported same #OpenAccount successfully,
 	            			// Preventing CS KPI getting increased by cheating.
 	            			// Hence, Customer Individual Information is checked & confirmed as a one-time only report from CS and associated to single CS Officer.
-	            			String account_no        = hashtags.get(2); 
-	            			String account_code   	 = hashtags.get(3); 
 	            			String customerInfoQuery = "SELECT account_no, account_cs, account_cs_name FROM tbl_account_users " 
 	            							   		 + "WHERE  account_no = '" + account_no + "' OR account_cs > 0 AND account_code = '" + account_code + "' "  
 	            							   		 + "ORDER BY account_no ASC LIMIT 0,1";
@@ -1525,8 +1622,8 @@ public class TwitterDaemon {
 						     	stm = con.createStatement();	     		
 						     	rs  = stm.executeQuery(customerInfoQuery);
 						     	while (rs.next()){
-						     		directMsg 	= "Maaf, data reporting pembukaan rekening tabungan BNI Nasabah anda sudah tercatat di DB sebelumnya. ";
-			            			directMsg  += "CS Officer tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan nasabah yang sama. ";
+						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " sudah pernah tercatat di DB sebelumnya. ";
+			            			directMsg  += "CS Officer tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan ref. no. yg sama untuk nasabah yang sama. ";
 			            			directMsg  += "Pelaporan berkali-kali akan dicatat sebagai usaha memanipulasi kinerja CS Officer ybs secara sengaja.";
 			            			try {
 						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
@@ -1557,10 +1654,6 @@ public class TwitterDaemon {
 	            		{
 	            			//Proceed as all req. satisfied by CS
 	            			Date currentDate      = new Date();
-	            			
-	            			String account_no     = hashtags.get(2); 
-	            			String account_code   = hashtags.get(3); 
-	            			String account_cs_no  = hashtags.get(4);
 	            			
 	            			//String account_date		    = dateFormat.format(currentDate);
 	            			String account_holder   		= "Customer of BNI";
@@ -1723,7 +1816,7 @@ public class TwitterDaemon {
 				            //Populate all data by Customers' Account DB.
 				            
 				            //1. DM to CS
-				            String AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account_self' AND message_deleted = '0' ORDER BY message_id ASC";
+				            String AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'cs_open_account_self' AND message_deleted = '0' ORDER BY message_id ASC";
 				            stm = null; rs = null; directMsg = "";
 				            try {
 						     	if(con == null){
@@ -1782,7 +1875,7 @@ public class TwitterDaemon {
 				            
 				            
 				            //2. DM to Customer
-				            AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account_customer' AND message_deleted = '0' ORDER BY message_id ASC";
+				            AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'cs_open_account_customer' AND message_deleted = '0' ORDER BY message_id ASC";
 				            stm = null; rs = null; directMsg = "";
 				            try {
 						     	if(con == null){
