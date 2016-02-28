@@ -3,8 +3,10 @@ String[] strMonths = new String[] { "Januari", "Februari", "Maret", "April", "Me
 Calendar c = Calendar.getInstance();
 
 //DAY AS TODAY
+c.get(Calendar.DATE);
+
 c.set(Calendar.DATE);
-String date = c.get(Calendar.DATE);
+String date = (String) c.get(Calendar.DATE);
 String dateEndOfMonth = c.getActualMaximum(Calendar.DATE);
 
 //MONTH AS TODAY

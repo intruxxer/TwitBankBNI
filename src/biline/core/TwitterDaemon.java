@@ -1131,7 +1131,7 @@ public class TwitterDaemon {
 	            		else //Not Asking Point
 	            		{
 		            		// *We compose DM per #AskBNI hashTAGS
-	            			System.out.println("Hashtag size: " + hashtags.size());
+	            			//System.out.println("Hashtag size: " + hashtags.size());
 				            String csQuery = "";
 				            stm = null; rs = null;
 				            for (String tag : hashtags) {
@@ -1284,6 +1284,16 @@ public class TwitterDaemon {
 	            {	
 	            	//Once user gets the command right, server will reply with feedback accordingly.
         			recipientId = directMessage.getSenderScreenName();
+
+        			Date currentDate            	 = new Date();
+        			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMMddHHmmss");
+        			SimpleDateFormat validDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        			SimpleDateFormat readableFormat  = new SimpleDateFormat("dd MMMMM yyyy");
+        			SimpleDateFormat dateDigit		 = new SimpleDateFormat("dd");
+        			SimpleDateFormat monthDigit		 = new SimpleDateFormat("MM");
+        			SimpleDateFormat yearDigit		 = new SimpleDateFormat("yyyy");
+        			
+        			String[] strMonths = new String[] { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
         			
 	            	if(command.equals("openaccount")) // [DONE]
 	            	{
@@ -1323,11 +1333,6 @@ public class TwitterDaemon {
 	            		if(requirement)
 	            		{
 	            			//Proceed as all req. satisfied by Customer
-	            			Date currentDate            	 = new Date();
-	            			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMMddHHmmss");
-	            			SimpleDateFormat dateFormat      = new SimpleDateFormat("yyyy-MM-dd");
-	            			SimpleDateFormat validDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	            			SimpleDateFormat readableFormat  = new SimpleDateFormat("dd MMMMM yyyy");
 	            			
 	            			String valid_date 			= validDateFormat.format(currentDate);
 	            			String account_date		    = dateFormat.format(currentDate); 
@@ -1452,7 +1457,11 @@ public class TwitterDaemon {
 								pe.printStackTrace();
 							}
 							//2nd, Format the Date Object into format we wish for.
-				            valid_date	= readableFormat.format(convertedValidDate);
+				            String valid_date_digit  = dateDigit.format(convertedValidDate);
+				            String valid_month_digit = monthDigit.format(convertedValidDate);
+				            String valid_year_digit  = yearDigit.format(convertedValidDate);
+				            valid_date				 = valid_date_digit + " " + strMonths[Integer.parseInt(valid_month_digit)-1] + " " + valid_year_digit;
+				            //valid_date			 = readableDateFormat.format(convertedValidDate);
 				            
 				            directMsg = directMsg.replace("@account_holder", account_holder);
 				            directMsg = directMsg.replace("@account_code", account_code);
@@ -1475,9 +1484,9 @@ public class TwitterDaemon {
 	            	{
 	            		boolean requirement   = true;
 	            		
-	            		String account_no     = hashtags.get(2); 
-            			String account_code   = hashtags.get(3); 
-            			String account_cs_no  = hashtags.get(4);
+	            		String account_no     = hashtags.get(2).toUpperCase(); 
+            			String account_code   = hashtags.get(3).toUpperCase(); 
+            			String account_cs_no  = hashtags.get(4).toUpperCase();
 	            		
 	            		//Check: number of  hashtags to be at least 5 (five)
 	            		if(hashtags.size() < 5)
@@ -1653,9 +1662,7 @@ public class TwitterDaemon {
 	            		if(requirement)
 	            		{
 	            			//Proceed as all req. satisfied by CS
-	            			Date currentDate      = new Date();
 	            			
-	            			//String account_date		    = dateFormat.format(currentDate);
 	            			String account_holder   		= "Customer of BNI";
 	            			String account_handler  		= "Handler of Customer"; 
 	            			String account_merchandise      = "0";
@@ -1788,7 +1795,7 @@ public class TwitterDaemon {
 				            
 				            //(D) Update the No. Merchandise redeemed stock (Incrementing No. of Merchandise's Redeemed Stock) 
 				            String merchandiseStockQuery = "UPDATE tbl_account_merchandise SET merchandise_redeemed = merchandise_redeemed + 1 "
-						   								 + "WHERE merchandise_id = '" + account_merchandise + "' ";
+						   								 + "WHERE merchandise_id = " + account_merchandise + " "; 
 				            stm = null; 
 				            try {
 							     	if(con == null){
@@ -1856,7 +1863,11 @@ public class TwitterDaemon {
 								pe.printStackTrace();
 							}
 							//2nd, Format the Date Object into format we wish for.
-				            valid_date	= readableDateFormat.format(convertedValidDate);
+				            String valid_date_digit  = dateDigit.format(convertedValidDate);
+				            String valid_month_digit = monthDigit.format(convertedValidDate);
+				            String valid_year_digit  = yearDigit.format(convertedValidDate);
+				            valid_date				 = valid_date_digit + " " + strMonths[Integer.parseInt(valid_month_digit)-1] + " " + valid_year_digit;
+				            //valid_date			 = readableDateFormat.format(convertedValidDate);
 	            			
 				            directMsg = directMsg.replace("@account_holder", account_holder);
 				            directMsg = directMsg.replace("@account_code", account_code);
