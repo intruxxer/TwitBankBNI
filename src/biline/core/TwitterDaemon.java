@@ -72,6 +72,7 @@ public class TwitterDaemon {
 	private static ArrayList<String> directMessagesPromoAndServices;
 	private static ArrayList<String> directMessagesForMentions;
 	private static TwitterTweetExtractorUtil tagExtractor;
+	private static TwitterStatisticsUtil statLogger;
 	
 	public TwitterDaemon() {	
 		//Constructor
@@ -86,6 +87,7 @@ public class TwitterDaemon {
 		aliasmenus 		 = new ArrayList<String>();
 		
 		tagExtractor     = new TwitterTweetExtractorUtil("");
+		statLogger		 = new TwitterStatisticsUtil();
 		
 		directMessagesForMentions       = new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
@@ -238,6 +240,7 @@ public class TwitterDaemon {
 	      
 		   @Override
 	        public void onStatus(Status status) {
+			  
 	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
 	            //try {
 	    			//String msg = "You got DM from @" + twitterUser + ". Thanks for tweeting our hashtags!";
@@ -290,7 +293,7 @@ public class TwitterDaemon {
 	            //System.out.println("DMes are: "); 
 	            //System.out.println(directMessagesForMentions);
 	            
-	         // *We then send out all possible DM per hashTAGS
+	            // *We then send out all possible DM per hashTAGS
 	            for (String msg : directMessagesForMentions) {
 		            recipientId = status.getUser().getScreenName();
 		            directMsg = msg;
@@ -304,7 +307,7 @@ public class TwitterDaemon {
 					}
 	            }
 	            
-	         // *Freeing up memory   
+	            // *Freeing up memory   
 	            hashtags.clear(); 
 	            directMessagesForMentions.clear();
 	        }
@@ -603,13 +606,15 @@ public class TwitterDaemon {
 
 	        @Override
 	        public void onFollow(User source, User followedUser) {
+	        	/*
 	        	System.out.println("onFollow fromUserStream with implementation. Follower:@"
 		                + source.getScreenName() + " Followed:@"
 		                + followedUser.getScreenName());
+	        	*/
 	        	
-	        	String responseDMQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'followed' ORDER BY message_id ASC";
-     			String responseDM      = "";
-     			
+	        	//String responseDMQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'followed' ORDER BY message_id ASC";
+     			//String responseDM      = "";
+     			/*
 	        	try {
 		     		if(con == null){
 		     			db_object.openConnection();
@@ -634,8 +639,9 @@ public class TwitterDaemon {
 	     		   		}
 	     		   	}
      		   	}
-     		
-	        	// *We then send out all possible menu via a single DM
+     			*/
+	        	/*
+	        	// We then send out all possible menu via a single DM
 	        	recipientId = source.getScreenName(); directMsg = responseDM;
 	     		try {
 					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
@@ -645,9 +651,9 @@ public class TwitterDaemon {
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
-				
+				*/
 	        }
-
+			
 	        @Override
 	        public void onUnfollow(User source, User followedUser) {
 	            

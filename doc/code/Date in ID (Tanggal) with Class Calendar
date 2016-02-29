@@ -15,3 +15,20 @@ String bulan = strMonths[c.get(Calendar.MONTH)];
 
 //YEAR AS TODAY
 c.get(Calendar.YEAR)
+
+
+String valid_date = "2016-02-28";
+Date convertedValidDate = null;
+//1st, Change from String to Date() by Parsing the String of Date.
+try {
+	DateFormat parser  = new SimpleDateFormat("yyyy-MM-dd");
+	convertedValidDate = (Date) parser.parse(valid_date);
+} catch (ParseException pe) {
+	pe.printStackTrace();
+}
+
+//2nd, Format the Date Object into format we wish for.
+String valid_date_digit  = dateDigit.format(convertedValidDate);
+String valid_month_digit = monthDigit.format(convertedValidDate);
+String valid_year_digit  = yearDigit.format(convertedValidDate);
+valid_date				 = valid_date_digit + " " + strMonths[Integer.parseInt(valid_month_digit)-1] + " " + valid_year_digit;

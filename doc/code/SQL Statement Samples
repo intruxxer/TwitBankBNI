@@ -1,0 +1,55 @@
+							[1]
+							//INSERT - UPDATE using Statement stm.executeUpdate(accountOpeningQuery);
+				            String accountOpeningQuery = "INSERT INTO tbl_account_users(account_code, account_holder, account_handler, account_phone, account_merchandise, account_merchandise_name, account_code_date) " 
+				            						   + "VALUES ('" + account_code + "', '" + account_holder + "', '" + account_handler + "', '" + account_phone + "', '" + account_merchandise + "', '" + account_merchandise_name + "', '" + valid_date + "')";
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(accountOpeningQuery);
+							     	//System.out.println("Registered Taplus Muda Customer: " + directMessage.getSenderScreenName() + " [" + account_holder + " | " + account_code + "]" );
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				            //SELECT using Statement stm.executeQuery(AccountOpeningResponseQuery) with Return Value is held by Result Set
+				            String AccountOpeningResponseQuery = "SELECT message_content FROM tbl_directmessages WHERE message_type = 'customer_open_account' AND message_deleted = '0' ORDER BY message_id ASC";
+				            stm = null; rs = null; directMsg = "";
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(AccountOpeningResponseQuery);
+						     	while (rs.next()){
+						     		directMsg   += rs.getString("message_content");
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
