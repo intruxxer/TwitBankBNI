@@ -37,16 +37,16 @@ public class TwitterStreamBuilderUtil {
 			this.ACCESS_TOKEN_SECRET = "oB7vp6SCnhBdBa6gI4YvmZeQAVOtgMjD3BqPEo84TXjiR";
 		}
 		else if(twitterHandler.equals("fahmivanhero")){
-			this.CONSUMER_KEY		  = "Q2V6Nx3160lSm8KAVgP67lpp9";
-			this.CONSUMER_SECRET 	  = "YimS1y7oDNF8Ni3nMRV9QxtOgDzD4PZ32qTqsI21NFQoeqWwCr";
-			this.ACCESS_TOKEN		  = "69868781-pCFlQfzOW5y182tcLAvkkSpwz9EEx7W3OuD5f2eXb";
-			this.ACCESS_TOKEN_SECRET  = "6rtdaoMZJ6gJPwUcuKt8yHDkJKoQ8M5etXmzZK6jLxrBA";
+			this.CONSUMER_KEY		  = "TEDkbbVcGS37C0G1Lf9BjHA0w";
+			this.CONSUMER_SECRET 	  = "V2YcsaiIYw2kO5k6ya8lQaWVU1nGjm0UlIOnf3A2dmvxlBo1qX";
+			this.ACCESS_TOKEN		  = "69868781-v9VfpKq1n7j0nu2dWVOG9O0FS8Rl6CwqQW8NU7VA9";
+			this.ACCESS_TOKEN_SECRET  = "GcORBA5esOJ99kgPhUJyXhibj6qXhBzGjsdj521tqd2NO";
 		}
 		else if(twitterHandler.equals("bni46")){
-			this.CONSUMER_KEY		  = "ieQr4cnkzw8vQHaamX3LcZOWL";
-			this.CONSUMER_SECRET 	  = "sAxJbBxZee39nXJSgKHhHbU4oRiSlfSZ6MBNddvaOsWKIFAGNk";
-			this.ACCESS_TOKEN		  = "62455266-TbRhx8jNzSKNdU5eSKh9q4lnNCgtWSqdKXKNytCc2";
-			this.ACCESS_TOKEN_SECRET  = "aj5Ffh3xfvgBHtz3ahxE1T1M6jCiDCGNW7swo3WNgJV6x";
+			this.CONSUMER_KEY		  = "mpmBSPcnCj0djPkIn4oQCtuvH";
+			this.CONSUMER_SECRET 	  = "QHVg6gTN9VqWPWJyknRwFdlHddqui4hSBYJzL1jQVSDPnIZS73";
+			this.ACCESS_TOKEN		  = "62455266-06Os7Be9lQD42tMfV3CwKXgD1LEhyKeoJzN0a8yWU";
+			this.ACCESS_TOKEN_SECRET  = "mWRVxhwh1ZPXtCSyrCL0cbor4UiBoTrw9YuHLksrcd34p";
 		}
 		else {
 			this.CONSUMER_KEY		  = "";

@@ -37,7 +37,7 @@ import java.util.ListIterator;
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser = "bni46";
+	private static final String twitterUser = "fahmivanhero";
 	//bni46 //fahmivanhero //dev_amartha 
 	
 	private static String latestStatus;
@@ -136,7 +136,7 @@ public class TwitterDaemon {
 		   
 		/* Using Stream API */
 		// [INIT]
-		// Connects to the Streaming API - with Amartha OAUTH2 Key n Token
+		// Connects to the Streaming API - with OAUTH2 Key n Token
 	       TwitterStreamBuilderUtil twitterStreamBuilder = new TwitterStreamBuilderUtil(twitterUser);
 		   twitterStream   = twitterStreamBuilder.getStream();
 		   twitterStreamDM = twitterStreamBuilder.getStream();
@@ -1286,7 +1286,7 @@ public class TwitterDaemon {
 	            }//else if(DM for CS & AskBNI)  
 	            
 	            // (5) #openaccount #taplusmuda + #Full_Name #PhoneNo [DONE] || #csopenaccount #taplusmuda + #AccountNo #AccountCode #CSEmployeeCode
-	            else if( command.equals("openaccount") || command.equals("csopen") )
+	            else if( command.equals("openaccount") || command.equals("open") || command.equals("csopen") )
 	            {	
 	            	//Once user gets the command right, server will reply with feedback accordingly.
         			recipientId = directMessage.getSenderScreenName();
@@ -1301,7 +1301,7 @@ public class TwitterDaemon {
         			
         			String[] strMonths = new String[] { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
         			
-	            	if(command.equals("openaccount")) // [DONE]
+	            	if(command.equals("openaccount") || command.equals("open")) // [DONE]
 	            	{
 	            		boolean requirement = true;
 	           
