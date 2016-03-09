@@ -43,10 +43,10 @@ public class TwitterStreamBuilderUtil {
 			this.ACCESS_TOKEN_SECRET  = "GcORBA5esOJ99kgPhUJyXhibj6qXhBzGjsdj521tqd2NO";
 		}
 		else if(twitterHandler.equals("bni46")){
-			this.CONSUMER_KEY		  = "mpmBSPcnCj0djPkIn4oQCtuvH";
-			this.CONSUMER_SECRET 	  = "QHVg6gTN9VqWPWJyknRwFdlHddqui4hSBYJzL1jQVSDPnIZS73";
-			this.ACCESS_TOKEN		  = "62455266-06Os7Be9lQD42tMfV3CwKXgD1LEhyKeoJzN0a8yWU";
-			this.ACCESS_TOKEN_SECRET  = "mWRVxhwh1ZPXtCSyrCL0cbor4UiBoTrw9YuHLksrcd34p";
+			this.CONSUMER_KEY		  = "zTHyBDaZzDBNpKQx98rNDWEtR";
+			this.CONSUMER_SECRET 	  = "mM2mwNfL2Vwga0DuteG9dDXuNOCNmPZzLZ1mZMlnKJPJkNf2TW";
+			this.ACCESS_TOKEN		  = "62455266-TbRhx8jNzSKNdU5eSKh9q4lnNCgtWSqdKXKNytCc2";
+			this.ACCESS_TOKEN_SECRET  = "aj5Ffh3xfvgBHtz3ahxE1T1M6jCiDCGNW7swo3WNgJV6x";
 		}
 		else {
 			this.CONSUMER_KEY		  = "";

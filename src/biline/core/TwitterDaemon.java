@@ -33,11 +33,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ListIterator;
+import java.util.Map;
 
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser = "fahmivanhero";
+	private static final String twitterUser = "bni46";
 	//bni46 //fahmivanhero //dev_amartha 
 	
 	private static String latestStatus;
@@ -173,11 +174,16 @@ public class TwitterDaemon {
 	        }   
 			stm = con.createStatement();
 			rs  = stm.executeQuery(listOfTagsQuery);
-			System.out.print("Trackings: ");
+			System.out.print("\n[KEYWORDS] Trackings: ");
+			int n = 0;
 			while (rs.next()){
+				if(n % 10 == 0)
+					System.out.print("\n");
 				System.out.print("#" + rs.getString("hashtag_term") + " ");
 				track.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
-	   		   }
+				n++;
+	   		}
+			System.out.print("\n[KEYWORDS] " + n + " keywords being tracked." + "\n");
 		   } catch (SQLException e) {
 			e.printStackTrace();
 		   } finally{
@@ -213,6 +219,7 @@ public class TwitterDaemon {
 	       twitterStream.addListener(userStreamlistener);
 	       twitterStream.addRateLimitStatusListener(rateLimitStatusListener);
 	       twitterStreamDM.addListener(userDMStreamlistener);
+	       twitterStreamDM.addRateLimitStatusListener(rateLimitStatusListener);
 	    
 	       // *TO LISTEN TO TIMELINE   
 	       //FilterQuery filter = new FilterQuery();
@@ -231,7 +238,40 @@ public class TwitterDaemon {
 	       twitterStreamDM.user( );
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
-	       
+	       /*
+	       //try {
+	       //   String endpointAPI = "/direct_messages/new";
+	       //   Map<String ,RateLimitStatus> rateLimitStatus = twitter.getRateLimitStatus();
+	            //System.out.println("rate limit keysets:\n\n" + rateLimitStatus.keySet() + "\n");
+	            /* 
+	             * /application/rate_limit_status
+	             * /account/verify_credentials
+	             * /direct_messages/new
+	             * 
+	             * */
+	       /*
+	            System.out.println( "rate limit:" + rateLimitStatus.get(endpointAPI).getLimit() );
+	            System.out.println( "remaining limit:" + rateLimitStatus.get(endpointAPI).getRemaining() );
+	            System.out.println( "reset time (s):" + rateLimitStatus.get(endpointAPI).getResetTimeInSeconds() );
+	            System.out.println( "remaining time before reset (s):" + rateLimitStatus.get(endpointAPI).getSecondsUntilReset() );
+	       */
+	            /*
+	            for (String endpoint : rateLimitStatus.keySet()) {
+	                RateLimitStatus status = rateLimitStatus.get(endpoint);
+	                System.out.println("Endpoint: " + endpoint);
+	                System.out.println(" Limit: " + status.getLimit());
+	                System.out.println(" Remaining: " + status.getRemaining());
+	                System.out.println(" ResetTimeInSeconds: " + status.getResetTimeInSeconds());
+	                System.out.println(" SecondsUntilReset: " + status.getSecondsUntilReset());
+	            }
+	            */
+	            //System.exit(0);
+	        //} catch (TwitterException te) {
+	        //    te.printStackTrace();
+	        //    System.out.println("Failed to get rate limit status: " + te.getMessage());
+	        //    //System.exit(-1);
+	        //}
+	        /**/
 	}
 	
 	// *Implement a stream listener to track from the Stream prior to being assigned to stream. 
@@ -676,13 +716,16 @@ public class TwitterDaemon {
 	            if(hashtags.size() > 0)
 	            {
 	            	command = hashtags.get(0).toLowerCase();
-	            	if(!command.equals("daftar") || !command.equals("openaccount") || !command.equals("csopen"))
+	            	if( !command.equals("daftar") )
 	            	{
-	            		ListIterator<String> iterator = hashtags.listIterator();
-			            while (iterator.hasNext())
-			            {
-			                iterator.set(iterator.next().toLowerCase());
-			            }
+	            		if( !command.equals("openaccount") || !command.equals("open") || !command.equals("csopen") ){
+	            			ListIterator<String> iterator = hashtags.listIterator();
+				            while (iterator.hasNext())
+				            {
+				                iterator.set(iterator.next().toLowerCase());
+				            }
+	            		}
+	            		
 	            	}
 	            }
 	            else
@@ -995,7 +1038,8 @@ public class TwitterDaemon {
 					     			stm = con.createStatement();
 					     			rs  = stm.executeQuery(promoQuery);
 					     			if ( !rs.next() ) { 
-					     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo #" + tag + " dari BNI yang Anda inginkan tidak tersedia.");
+					     				//directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Promo #" + tag + " dari BNI yang Anda inginkan tidak tersedia.");
+					     				directMessagesPromoAndServices.add("");
 					     			} 
 					     			else
 					     			{
@@ -1037,16 +1081,17 @@ public class TwitterDaemon {
 	            	}
 	            	else if(hashtags.size() == 1)
 	            	{
-	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #Promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
-		     			try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            		//UNCOMMENT
+	            		//recipientId = directMessage.getSenderScreenName();
+	            		//directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #Promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
+		     			//try {
+						//	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
-						} catch (TwitterException e) {
-							e.printStackTrace();
-						}
+						//} catch (TwitterException e) {
+						//	e.printStackTrace();
+						//}
 	            	}
 	            	
 			        hashtags.clear(); 
@@ -1144,8 +1189,8 @@ public class TwitterDaemon {
 				            	if ( tag.toLowerCase().equals("cs") || tag.toLowerCase().equals("askbni") )
 				            	      continue;
 				            	csQuery = "SELECT * FROM tbl_customerservices LEFT JOIN tbl_hashtags " 
-				            				+ "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
-				            				+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' AND tbl_hashtags.hashtag_deleted = '0' AND tbl_customerservices.cs_deleted = '0'";
+				            			  + "ON tbl_hashtags.hashtag_id = tbl_customerservices.cs_hashtag "
+				            			  + "WHERE tbl_hashtags.hashtag_term = '" + tag + "' AND tbl_hashtags.hashtag_deleted = '0' AND tbl_customerservices.cs_deleted = '0'";
 				            	//System.out.println(csQuery);
 				            	
 					     		try {
@@ -1199,17 +1244,18 @@ public class TwitterDaemon {
 	            	}
 	            	
 	            	else if( hashtags.size() == 1 && command.equals("cs") )
-	            	{
-	            		recipientId = directMessage.getSenderScreenName();
-	            		directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #CS yang melalui #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
-		     			try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            	{	
+	            		//UNCOMMENT
+	            		//recipientId = directMessage.getSenderScreenName();
+	            		//directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #CS yang melalui #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
+		     			//try {
+							//DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
-						} catch (TwitterException e) {
-							e.printStackTrace();
-						}
+						//} catch (TwitterException e) {
+						//	e.printStackTrace();
+						//}
 	            	}
 	            	else if( hashtags.size() == 1 && command.equals("askbni") )
 	            	{
@@ -1765,10 +1811,36 @@ public class TwitterDaemon {
 					     		   	}
 			  		   		}
 				            
-				            //(C) Retrieving Customer Individual Information to confirm a report from CS. 
+				            //(C) Update the No. Merchandise redeemed stock (Incrementing No. of Merchandise's Redeemed Stock) 
+				            String merchandiseStockQuery = "UPDATE tbl_account_merchandise SET merchandise_redeemed = merchandise_redeemed + 1 "
+						   								 + "WHERE merchandise_id = " + account_merchandise + " "; 
+				            stm = null; 
+				            try {
+							     	if(con == null){
+							     		db_object.openConnection();
+							  			con = db_object.getConnection();
+							        }
+							     	stm = con.createStatement();	     		
+							     	stm.executeUpdate(merchandiseStockQuery);
+				            } catch (SQLException e) {
+					     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+				          //(D) Retrieving Customer Individual Information to confirm a report from CS. 
 				            //    This data is used for composing DM feedback upon CS finished open account process.
 	            			String customerInfoQuery = "SELECT account_holder, account_handler, account_merchandise, account_merchandise_name, account_code_date FROM tbl_account_users " 
-	            							   		 + "WHERE  account_code = '" + account_code + "' " + "ORDER BY cs_id ASC LIMIT 0,1";
+	            							   		 + "WHERE  account_code = '" + account_code + "' " + "ORDER BY id ASC LIMIT 0,1";
 	            			stm = null; rs = null;
 				            try {
 						     	if(con == null){
@@ -1786,32 +1858,6 @@ public class TwitterDaemon {
 						     	}
 				            } catch (SQLException e) {
 				     	   	 	e.printStackTrace();
-					     	} 
-				            finally{
-					    		   	if(con != null){
-					  				  try {
-										db_object.closeConnection();
-					  				  } catch (SQLException e) {
-										e.printStackTrace();
-					  				  } finally{
-					  				  		con = null;
-					     		   		}
-					     		   	}
-			  		   		}
-				            
-				            //(D) Update the No. Merchandise redeemed stock (Incrementing No. of Merchandise's Redeemed Stock) 
-				            String merchandiseStockQuery = "UPDATE tbl_account_merchandise SET merchandise_redeemed = merchandise_redeemed + 1 "
-						   								 + "WHERE merchandise_id = " + account_merchandise + " "; 
-				            stm = null; 
-				            try {
-							     	if(con == null){
-							     		db_object.openConnection();
-							  			con = db_object.getConnection();
-							        }
-							     	stm = con.createStatement();	     		
-							     	stm.executeUpdate(merchandiseStockQuery);
-				            } catch (SQLException e) {
-					     	   	 	e.printStackTrace();
 					     	} 
 				            finally{
 					    		   	if(con != null){
@@ -1921,7 +1967,7 @@ public class TwitterDaemon {
 				            
 				            try {
 				            	//System.out.println("#CSOpen #TaplusMuda with Customer recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	DirectMessage message = twitterDM.sendDirectMessage(account_handler, directMsg);
 							} catch (TwitterException e) {
 								e.printStackTrace();
 							}
@@ -1945,6 +1991,7 @@ public class TwitterDaemon {
 	            //IF NO COMMAND from (1) to (5) is found:
 	            else
 	            {
+	            	/*
 	            	recipientId = directMessage.getSenderScreenName();
         			directMsg 	= "Yth. Bp/Ibu, Mohon Maaf. Permintaan info ataupun promo via Twitter DM @BNI anda tidak valid. ";
         			directMsg  += "Silakan DM: #Promo / #HelpBNI / #Daftar / #AskBNI untuk info & registrasi CS BNI 46. ";
@@ -1959,6 +2006,7 @@ public class TwitterDaemon {
         			
         			hashtags.clear(); menus.clear(); aliasmenus.clear();
 			        directMessagesPromoAndServices.clear();
+			        */
 	            }
 	        }
 
@@ -2056,12 +2104,27 @@ public class TwitterDaemon {
 		public void onRateLimitStatus(RateLimitStatusEvent event) {
 			System.out.println("onRateLimitStatus: " + event.toString());
 			System.out.println("Limit["+event.getRateLimitStatus().getLimit() + "], Remaining[" +event.getRateLimitStatus().getRemaining()+"]");
+			int remaining = event.getRateLimitStatus().getRemaining();
+			int resetInterval = event.getRateLimitStatus().getSecondsUntilReset() * 1000;
+			if(remaining < 2)
+			{
+				try {
+					Thread.sleep(resetInterval+5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		@Override
 		public void onRateLimitReached(RateLimitStatusEvent event) {
 			System.out.println("onRateLimitReached: " + event.toString());
 			System.out.println("Limit["+event.getRateLimitStatus().getLimit() + "], Remaining[" +event.getRateLimitStatus().getRemaining()+"]");
+			try {
+				Thread.sleep(900000+5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	};
