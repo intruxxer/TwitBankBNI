@@ -18,7 +18,7 @@ public class TwitterStatisticsUtil {
 	private static ResultSet rs;
 	private static MysqlConnect db_object;
 	
-	
+	/* object: statLogger */
 	public TwitterStatisticsUtil() {
 		/* 
 		 * 1  : Mention - #Promo

@@ -38,8 +38,9 @@ import java.util.Map;
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser = "bni46";
-	//bni46 //fahmivanhero //dev_amartha 
+	private static final String twitterUser    = "bni46_cs";
+	private static final String twitterAccount = "BNICustomerCare";
+	//bni46 //bni46_cs //fahmivanhero //dev_amartha
 	
 	private static String latestStatus;
 	private static Status status;
@@ -47,6 +48,7 @@ public class TwitterDaemon {
 	
 	private static TwitterStream twitterStream;
 	private static TwitterStream twitterStreamDM;
+	private static TwitterLogging twitterLog;
 	
 	private static String recipientId;
 	private static String directMsg;
@@ -89,6 +91,7 @@ public class TwitterDaemon {
 		
 		tagExtractor     = new TwitterTweetExtractorUtil("");
 		statLogger		 = new TwitterStatisticsUtil();
+		twitterLog   	 = new TwitterLogging();
 		
 		directMessagesForMentions       = new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
@@ -280,7 +283,7 @@ public class TwitterDaemon {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-			  
+			   	
 	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
 	            //try {
 	    			//String msg = "You got DM from @" + twitterUser + ". Thanks for tweeting our hashtags!";
@@ -292,6 +295,7 @@ public class TwitterDaemon {
 	            
 	            // *We extract hashTAGS from status
 	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
+	            
 	            // *We compose DM per hashTAGS
 	            String promotionsQuery = "";
 	            stm = null; rs = null;
@@ -329,22 +333,34 @@ public class TwitterDaemon {
 		     		   		}
 		     		   	}
 	     		   	}
+	     		   	
+	     		   	// *Log for Statistics
+		            statLogger.eventsLog("1", status.getUser().getScreenName(), tag);
 				}
 	            //System.out.println("DMes are: "); 
 	            //System.out.println(directMessagesForMentions);
 	            
 	            // *We then send out all possible DM per hashTAGS
+	            int i = 0;
 	            for (String msg : directMessagesForMentions) {
 		            recipientId = status.getUser().getScreenName();
 		            directMsg = msg;
 		            try {
-						DirectMessage message = twitter.sendDirectMessage(recipientId, directMsg);
+		            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+	     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	     				}
 						//System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
 			            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
 		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 					} catch (TwitterException e) {
 						e.printStackTrace();
 					}
+		            
+		            // *Log for Statistics
+		            if(i <hashtags.size()){
+		            	twitterLog.saveOutwardDM(status.getUser().getScreenName(), msg, "Mention Reply", hashtags.get(i));
+		            }
+		            i++;
 	            }
 	            
 	            // *Freeing up memory   
@@ -684,7 +700,9 @@ public class TwitterDaemon {
 	        	// We then send out all possible menu via a single DM
 	        	recipientId = source.getScreenName(); directMsg = responseDM;
 	     		try {
-					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     			DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     		}
 					//System.out.println("Sent: " + message.getText() + " to @" + source.getScreenName());
 		            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 	    		    //System.out.println("Sent: " + directMsg + " to @" + source.getScreenName());
@@ -702,7 +720,7 @@ public class TwitterDaemon {
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
 	        	
-	            System.out.println("onDirectMessage text:" + directMessage.getText());
+	            System.out.println("onDirectMessage from " + directMessage.getSenderScreenName() + " |text:" + directMessage.getText());
 	            
 	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
@@ -710,7 +728,6 @@ public class TwitterDaemon {
 	            
 	            // LATER WE WILL DECIDE WHAT RESPONSES/HOW TO RESPOND 
 	            // BASED ON FIRST COMMAND/FIRST TAG
-	            
 	            // First thing first, detect the tweet's text whether it has at least one hashtag.
 	            // To simplify, APART OF COMMANDS daftar, openaccount, csopen ALL HASHTAGS ARE LOWER CASED.
 	            if(hashtags.size() > 0)
@@ -734,6 +751,13 @@ public class TwitterDaemon {
 	            	return;
 	            }
 	            //System.out.println("Command: " + command);
+	            for(int n=1;n<hashtags.size();n++)
+	            //tags n = 0 is command 
+	            //tags 0 < n < size are #hashtags
+	            {	
+	            	if(!command.equals(""))
+	            		twitterLog.saveInwardDM(directMessage.getSenderScreenName(), directMessage.getText(), command, hashtags.get(n));
+	            }
 	            
 	            
 	            //****************************************** LIST OF FEATURES IN TWITBANK BNI ******************************************//
@@ -752,12 +776,18 @@ public class TwitterDaemon {
 	            	// *We compose DMes sending list of menus/helps/cses
 	            	stm = null; rs = null;
 	            	String menuQuery = "";
-	            	if( command.equals("menu") || command.equals("help") )
+	            	if( command.equals("menu") || command.equals("help") ){
 	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'menu' AND hashtag_deleted = '0'";
-	            	else if( command.equals("helppromo") )
+	            		statLogger.eventsLog("2", directMessage.getSenderScreenName(), command);
+	            	}
+	            	else if( command.equals("helppromo") ){
 	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'promo' AND hashtag_deleted = '0'";
-	            	else if( command.equals("helpcs") || command.equals("helpbni") )
+	            		statLogger.eventsLog("5", directMessage.getSenderScreenName(), command);
+	            	}
+	            	else if( command.equals("helpcs") || command.equals("helpbni") ){
 	            		menuQuery = "SELECT hashtag_term, hashtag_alias FROM tbl_hashtags WHERE hashtag_category = 'cs' AND hashtag_deleted = '0'";
+	            		statLogger.eventsLog("2", directMessage.getSenderScreenName(), command);
+	            	}
 	            	//System.out.println(menuQuery);
 	            	
 	            	try {
@@ -787,6 +817,7 @@ public class TwitterDaemon {
 			     		   		}
 			     		   	}
 		     		}
+	    
 	            	
 		     		// *We then send out all possible menu via a single DM
 		     		recipientId = directMessage.getSenderScreenName();
@@ -797,22 +828,22 @@ public class TwitterDaemon {
 				            switch (msg.toLowerCase()) {
 				            	case "menu":
 				            	case "help":
-				            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+				            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@" + twitterAccount + ") via Twitter. ";
 				                     break;
 				            	case "daftar":
-				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
+				            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
 				            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 (tanpa prefix \"+\") ";
 				            		 directMsg += "sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
 				            		 break;
 				            	//case "promo":
 				            	case "helppromo":
-				            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
+				            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
 				            		 directMsg += "\nContoh:\n #Promo #Travel \n\nDM kami dengan mengetik #HelpPromo untuk mengetahui semua #Keyword yang ada untuk #Promo dari BNI.";
 				            		 break;
 				            	//case "cs":	 
 				            	case "helpcs":
 				            	case "helpbni":
-				            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
+				            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
 				            		 directMsg += "\nContoh:\n #AskBNI #Taplus \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
 				            		 break;
 				            	default:
@@ -820,7 +851,10 @@ public class TwitterDaemon {
 				            }
 				            
 				            try {
-								DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					twitterLog.saveOutwardDM(recipientId, directMsg, "AskBNI", msg);
+			     				}
 								//System.out.println("Sent: " + message.getText() + " to @" + recipientId);
 					            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 				    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
@@ -840,7 +874,10 @@ public class TwitterDaemon {
 		     			
 		     			directMsg = "Ketik #Promo dan gunakan keywords berikut: \n" + keywords + "\nuntuk mendapatkan promo-promo menarik & terbaru dari BNI.\nContoh Penggunaan: send DM, ketik: #Promo (spasi) #Hotel";
 		     			try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     					twitterLog.saveOutwardDM(recipientId, directMsg, "HelpPromo", "HelpPromo");
+		     				}
 							//System.out.println("Sent: " + directMessage.getSenderScreenName() + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
@@ -859,7 +896,10 @@ public class TwitterDaemon {
 		     			
 		     			directMsg = "Ketik #AskBNI dan gunakan keywords berikut: \n" + keywords + "\nuntuk mengakses topik-topik layanan nasabah dari BNI.\nContoh Penggunaan: send DM, ketik: #AskBNI (spasi) #Taplus";
 		     			try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     					twitterLog.saveOutwardDM(recipientId, directMsg, "HelpBNI", "HelpBNI");
+		     				}
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
@@ -920,7 +960,10 @@ public class TwitterDaemon {
 	            	{
 	            		recipientId = directMessage.getSenderScreenName();
 			            try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     					twitterLog.saveOutwardDM(recipientId, directMsg, "Error #Daftar", "#Daftar");
+		     				}
 							//System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
@@ -994,14 +1037,19 @@ public class TwitterDaemon {
 			            //System.out.println("Registered user:" + directMessage.getSenderScreenName() + " will be responded by DM." );
 			            
 			            try {
-							DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     					twitterLog.saveOutwardDM(recipientId, directMsg, "Sukses #Daftar", "Daftar");
+		     				}
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 						} catch (TwitterException e) {
 							e.printStackTrace();
 						}
-			        }
+			            
+	            		statLogger.eventsLog("3", directMessage.getSenderScreenName(), name);
+	            	}
 	            	
 	            	hashtags.clear();
 		             
@@ -1062,20 +1110,28 @@ public class TwitterDaemon {
 					     		   	}
 				     		   	}
 				     		
+				     			statLogger.eventsLog("4", directMessage.getSenderScreenName(), tag);
+				     		
 						}
 			            	
 				        // *We then send out all possible DM per hashTAGS
+			            int i = 0;
 				        for (String msg : directMessagesPromoAndServices) {
 					            recipientId = directMessage.getSenderScreenName();
 					            directMsg = msg;
 					            try {
-									DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+				     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				     					if(i>0)
+				     						twitterLog.saveOutwardDM(recipientId, directMsg, "Promo", hashtags.get(i));
+				     				}
 									//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 									//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 					    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
 								} catch (TwitterException e) {
 									e.printStackTrace();
 								}
+					            i++;
 				        }
 			        
 	            	}
@@ -1085,13 +1141,16 @@ public class TwitterDaemon {
 	            		//recipientId = directMessage.getSenderScreenName();
 	            		//directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #Promo memerlukan minimal satu #keyword topik. Cth: #Promo #Travel, #Promo #Hotel #eCommerce. ";
 		     			//try {
-						//	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+						//	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+     					//		DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+     					//	}
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 						//} catch (TwitterException e) {
 						//	e.printStackTrace();
 						//}
+	            		statLogger.eventsLog("4", directMessage.getSenderScreenName(), "");
 	            	}
 	            	
 			        hashtags.clear(); 
@@ -1170,7 +1229,10 @@ public class TwitterDaemon {
 						            recipientId = directMessage.getSenderScreenName();
 						            directMsg = msg;
 						            try {
-										DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+						            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					     					twitterLog.saveOutwardDM(recipientId, directMsg, "Point", "Point");
+					     				}
 										//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 										//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 						    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
@@ -1178,6 +1240,8 @@ public class TwitterDaemon {
 										e.printStackTrace();
 									}
 					         }
+					        
+					        statLogger.eventsLog("6", directMessage.getSenderScreenName(), "Point");
 	            		}
 	            		else //Not Asking Point
 	            		{
@@ -1201,8 +1265,9 @@ public class TwitterDaemon {
 						     			stm = con.createStatement();
 						     			rs  = stm.executeQuery(csQuery);
 						     			if ( !rs.next() ) { 
-						     				directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
-						     												+  "Contoh penulisan yang benar:\n#Promo (spasi) #Travel \n#AskBNI (spasi) #Taplus");
+						     				//directMessagesPromoAndServices.add("Yth. Bp/Ibu, Mohon maaf. Info tentang #" + tag + " yang Anda inginkan tidak tersedia atau ada kesalahan penulisan. " 
+						     				//								+  "Contoh penulisan yang benar:\n#Promo (spasi) #Travel \n#AskBNI (spasi) #Taplus");
+						     				directMessagesPromoAndServices.add("");
 						     			} 
 						     			else
 						     			{
@@ -1224,21 +1289,29 @@ public class TwitterDaemon {
 						     		   		}
 						     		   	}
 					     		   	}
+					     			
+					     		statLogger.eventsLog("6", directMessage.getSenderScreenName(), tag);
 					     		
-								}
+							 }
 				
 					         // *We then send out all possible DM per hashTAGS
+				             int i = 0; 
 					         for (String msg : directMessagesPromoAndServices) {
 						            recipientId = directMessage.getSenderScreenName();
 						            directMsg = msg;
 						            try {
-										DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+						            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					     					if(i>0)
+					     						twitterLog.saveOutwardDM(recipientId, directMsg, "AskBNI", hashtags.get(i));
+					     				}
 										//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 										//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 						    		    //System.out.println("Sent: " + directMsg + " to @" + directMessage.getSenderScreenName());
 									} catch (TwitterException e) {
 										e.printStackTrace();
 									}
+						            i++;
 					         }
 	            		}//Else: Not Asking Point
 	            	}
@@ -1249,13 +1322,16 @@ public class TwitterDaemon {
 	            		//recipientId = directMessage.getSenderScreenName();
 	            		//directMsg = "Yth. Bp/Ibu, Mohon Maaf. Permintaan info #CS yang melalui #AskBNI memerlukan minimal satu #keyword topik. Cth: #AskBNI #KartuHilang, #AskBNI #TaplusMuda #KartuTertelan. ";
 		     			//try {
-							//DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            			//if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+	            			//	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            			//}
 							//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 				            //asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
 			    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
 						//} catch (TwitterException e) {
 						//	e.printStackTrace();
 						//}
+	            		statLogger.eventsLog("6", directMessage.getSenderScreenName(), "");
 	            	}
 	            	else if( hashtags.size() == 1 && command.equals("askbni") )
 	            	{
@@ -1295,22 +1371,22 @@ public class TwitterDaemon {
 					            switch (msg.toLowerCase()) {
 					            	//case "menu":
 					            	//case "help":
-					            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@bni46) via Twitter. ";
+					            		 //directMsg 	= "Anda dapat mengirim DM dengan \"#Help\" (tanpa double quote) untuk mengakses daftar menu layanan BNI (@" + twitterAccount + ") via Twitter. ";
 					                     //break;
 					            	case "daftar":
-					            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@bni46) via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
+					            		 directMsg 	= "Anda dapat mendaftar layanan BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #daftar #nama_lengkap #nohandphone \n";
 					            		 directMsg += "\nContoh:\n  #daftar #Andi_Waluyo #62213456789 \n\nNote: \nNama Awal dan Akhir dipisah dengan \"_\". Gunakan 62 (tanpa prefix \"+\") ";
 					            		 directMsg += "sebagai pengganti digit \"0\" di depan nomor telepon Anda.";
 					            		 break;
 					            	//case "promo":
 					            	case "helppromo":
-					            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@bni46) via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
+					            		 directMsg 	= "Anda dapat mengakses informasi promo BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #Promo (spasi) #Keyword \n";
 					            		 directMsg += "\nContoh:\n #Promo #Travel \n\nDM kami dengan mengetik #HelpPromo untuk mengetahui semua #Keyword yang ada untuk #Promo dari BNI.";
 					            		 break;
 					            	//case "cs":	 
 					            	case "helpcs":
 					            	case "helpbni":
-					            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@bni46) via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
+					            		 directMsg 	= "Anda dapat mengakses informasi tentang produk dan layanan BNI (@" + twitterAccount + ") via Twitter DM dengan format:\n #AskBNI (spasi) #Keyword \n";
 					            		 directMsg += "\nContoh:\n #AskBNI #Taplus \n\nDM kami dengan mengetik #HelpBNI untuk mengetahui semua #keyword yang ada untuk #AskBNI.";
 					            		 break;
 					            	default:
@@ -1319,11 +1395,17 @@ public class TwitterDaemon {
 					            
 					            try {
 					            	//System.out.println("recipient: " + recipientId + " & DM: " + directMsg);
-					            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+				     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				     					twitterLog.saveOutwardDM(recipientId, directMsg, "AskBNI", "#AskBNI");
+				     					
+				     				}
 								} catch (TwitterException e) {
 									e.printStackTrace();
 								}
 				        }
+				        
+				        statLogger.eventsLog("6", directMessage.getSenderScreenName(), "AskBNI");
 		            	
 	            	}
 			        
@@ -1359,7 +1441,9 @@ public class TwitterDaemon {
 	            			directMsg  += "\nContoh:\n #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
 	            			try {
 				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     				}
 				            	requirement			  = false;
 							} catch (TwitterException e) {
 								e.printStackTrace();
@@ -1374,7 +1458,9 @@ public class TwitterDaemon {
 	            			directMsg  += "\nContoh:\n #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
 	            			try {
 				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     				}
 				            	requirement			  = false;
 							} catch (TwitterException e) {
 								e.printStackTrace();
@@ -1523,10 +1609,15 @@ public class TwitterDaemon {
 				            
 				            try {
 				            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					twitterLog.saveOutwardDM(recipientId, directMsg, "Open Account", "#OpenAccount");
+			     				}
 							} catch (TwitterException e) {
 								e.printStackTrace();
 							}
+				            
+				            statLogger.eventsLog("7", directMessage.getSenderScreenName(), "OpenAccount");
 				            
 	            		}
 	            		
@@ -1548,7 +1639,9 @@ public class TwitterDaemon {
 	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
 	            			try {
 				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     				}
 				            	requirement			  = false;
 							} catch (TwitterException e) {
 								e.printStackTrace();
@@ -1563,7 +1656,9 @@ public class TwitterDaemon {
 	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
 	            			try {
 				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     				}
 				            	requirement			  = false;
 							} catch (TwitterException e) {
 								e.printStackTrace();
@@ -1595,7 +1690,9 @@ public class TwitterDaemon {
 			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
 			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
 			            			try {
-						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					     				}
 							     		requirement	= false;
 									} catch (TwitterException e) {
 										e.printStackTrace();
@@ -1642,7 +1739,9 @@ public class TwitterDaemon {
 			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
 			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
 			            			try {
-						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					     				}
 							     		requirement	= false;
 									} catch (TwitterException e) {
 										e.printStackTrace();
@@ -1687,7 +1786,9 @@ public class TwitterDaemon {
 			            			directMsg  += "CS Officer tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan ref. no. yg sama untuk nasabah yang sama. ";
 			            			directMsg  += "Pelaporan berkali-kali akan dicatat sebagai usaha memanipulasi kinerja CS Officer ybs secara sengaja.";
 			            			try {
-						            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+					     				}
 							     		requirement	= false;
 									} catch (TwitterException e) {
 										e.printStackTrace();
@@ -1931,7 +2032,10 @@ public class TwitterDaemon {
 				            
 				            try {
 				            	//System.out.println("#CSOpen #TaplusMuda with CS recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					twitterLog.saveOutwardDM(recipientId, directMsg, "Open Account", "#CSOpen");
+			     				}
 							} catch (TwitterException e) {
 								e.printStackTrace();
 							}
@@ -1967,10 +2071,15 @@ public class TwitterDaemon {
 				            
 				            try {
 				            	//System.out.println("#CSOpen #TaplusMuda with Customer recipient: " + recipientId + " & DM: " + directMsg);
-				            	DirectMessage message = twitterDM.sendDirectMessage(account_handler, directMsg);
+				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					twitterLog.saveOutwardDM(recipientId, directMsg, "Open Account", "#CustOpen");
+			     				}
 							} catch (TwitterException e) {
 								e.printStackTrace();
 							}
+				            
+				            statLogger.eventsLog("7", directMessage.getSenderScreenName(), "CSOpen");
 				            
 	            		}
 	            	} //END #CSOpen
@@ -1999,7 +2108,9 @@ public class TwitterDaemon {
         			directMsg  += "Contoh:\n (1) #Promo #Travel \n (2) #HelpBNI \n (3) #Daftar #Andi_Waluyo #62213456789  \n (4) #AskBNI #KartuHilang \n\n atau \n\n (5) #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
         			try {
 		            	//System.out.println("#OpenAccount #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
-		            	DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+		     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+		     			}
 					} catch (TwitterException e) {
 						e.printStackTrace();
 					}

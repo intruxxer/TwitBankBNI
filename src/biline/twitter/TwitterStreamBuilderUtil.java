@@ -48,6 +48,12 @@ public class TwitterStreamBuilderUtil {
 			this.ACCESS_TOKEN		  = "62455266-TbRhx8jNzSKNdU5eSKh9q4lnNCgtWSqdKXKNytCc2";
 			this.ACCESS_TOKEN_SECRET  = "aj5Ffh3xfvgBHtz3ahxE1T1M6jCiDCGNW7swo3WNgJV6x";
 		}
+		else if(twitterHandler.equals("bni46_cs")){
+			this.CONSUMER_KEY		  = "n9BLTunGxilyRKFmdnVTKx6d3";
+			this.CONSUMER_SECRET 	  = "rVsQwwhDIMp2Qmaa0uvTKKOgzp3BgYH8fXjgYfcj8k8EQWM0im";
+			this.ACCESS_TOKEN		  = "3272444328-mD2oKkeDdb9wZd4yXhC9lrwHSkG249Rtmz0NXxb";
+			this.ACCESS_TOKEN_SECRET  = "7O78fyKyTy9V3ytZdFSSdFiVSTLgqEaBbISbzPTIXeL6n";
+		}
 		else {
 			this.CONSUMER_KEY		  = "";
 			this.CONSUMER_SECRET 	  = "";
