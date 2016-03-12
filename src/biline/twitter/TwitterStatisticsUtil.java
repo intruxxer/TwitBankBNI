@@ -30,7 +30,15 @@ public class TwitterStatisticsUtil {
 		 * s_remarks  = "default";
 		 * 
 		 * */
-		 con = null; stm = null; 
+		 con = null; stm = null;
+		 try{
+				db_object = new MysqlConnect();
+				con 	  = db_object.getConnection(); 
+			} catch(ClassNotFoundException cnfe){
+				cnfe.printStackTrace();
+			} catch(SQLException sqle){
+				sqle.printStackTrace();
+			}
 	}
 	
 	public void eventsLog(String stat_id, String username, String keyword)

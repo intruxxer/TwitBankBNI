@@ -35,6 +35,7 @@ public class TwitterLogging {
 		try{
 			int rows = 0;
 	        String logQuery = "INSERT INTO tbl_dm_in (username, message, topic, hashtags) VALUES ('"+ username +"', '" + message +"', '" + topic + "', '" + hashtags +"')";
+	        //System.out.println("[INWARD DM] logQuery: " + logQuery);
 	        try {
 	        	PreparedStatement prepStmt = con.prepareStatement(logQuery);
 	            rows = prepStmt.executeUpdate();
@@ -54,6 +55,7 @@ public class TwitterLogging {
 		try{
 			int rows = 0;
 	        String logQuery = "INSERT INTO tbl_dm_out (username, message, topic, hashtags) VALUES ('"+ username +"', '" + message +"', '" + topic + "', '" + hashtags +"')";
+	        //System.out.println("[OUTWARD DM] logQuery: " + logQuery);
 	        try {
 	        	PreparedStatement prepStmt = con.prepareStatement(logQuery);
 	            rows = prepStmt.executeUpdate();

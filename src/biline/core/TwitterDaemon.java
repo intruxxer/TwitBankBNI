@@ -720,7 +720,7 @@ public class TwitterDaemon {
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
 	        	
-	            System.out.println("onDirectMessage from " + directMessage.getSenderScreenName() + " |text:" + directMessage.getText());
+	            System.out.println("onDirectMessage from @" + directMessage.getSenderScreenName() + " '" + directMessage.getText());
 	            
 	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
@@ -1115,15 +1115,13 @@ public class TwitterDaemon {
 						}
 			            	
 				        // *We then send out all possible DM per hashTAGS
-			            int i = 0;
 				        for (String msg : directMessagesPromoAndServices) {
 					            recipientId = directMessage.getSenderScreenName();
 					            directMsg = msg;
 					            try {
 					            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
 				     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-				     					if(i>0)
-				     						twitterLog.saveOutwardDM(recipientId, directMsg, "Promo", hashtags.get(i));
+				     					twitterLog.saveOutwardDM(recipientId, directMsg, "Promo", hashtags.toArray().toString());
 				     				}
 									//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 									//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
@@ -1131,7 +1129,6 @@ public class TwitterDaemon {
 								} catch (TwitterException e) {
 									e.printStackTrace();
 								}
-					            i++;
 				        }
 			        
 	            	}
@@ -1295,15 +1292,13 @@ public class TwitterDaemon {
 							 }
 				
 					         // *We then send out all possible DM per hashTAGS
-				             int i = 0; 
 					         for (String msg : directMessagesPromoAndServices) {
 						            recipientId = directMessage.getSenderScreenName();
 						            directMsg = msg;
 						            try {
 						            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
 					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-					     					if(i>0)
-					     						twitterLog.saveOutwardDM(recipientId, directMsg, "AskBNI", hashtags.get(i));
+					     					twitterLog.saveOutwardDM(recipientId, directMsg, "AskBNI", hashtags.toArray().toString());
 					     				}
 										//System.out.println("Sent: " + message.getText() + " to @" + directMessage.getSenderScreenName());
 										//asyncTwitterDM.sendDirectMessage(recipientId, directMsg);
@@ -1311,7 +1306,6 @@ public class TwitterDaemon {
 									} catch (TwitterException e) {
 										e.printStackTrace();
 									}
-						            i++;
 					         }
 	            		}//Else: Not Asking Point
 	            	}

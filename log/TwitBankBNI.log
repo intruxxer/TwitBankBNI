@@ -1346,4 +1346,94 @@ Exceeded connection limit for user
  2016-03-04 00:25:02,977 INFO - MysqlConnect: Connection to MySQL DB terminated.
  2016-03-04 00:25:22,210 INFO - Connection established.
  2016-03-04 00:25:22,210 INFO - Receiving status stream.
+ 2016-03-11 23:16:30,039 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:16:30,039 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:16:30,135 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:16:30,137 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:16:30,141 INFO - Establishing connection.
+ 2016-03-11 23:16:30,141 INFO - Establishing connection.
+ 2016-03-11 23:16:32,452 INFO - Connection established.
+ 2016-03-11 23:16:32,452 INFO - Receiving status stream.
+ 2016-03-11 23:17:03,158 INFO - Connection established.
+ 2016-03-11 23:17:03,158 INFO - Receiving status stream.
+ 2016-03-11 23:17:08,481 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:17:08,481 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:17:08,508 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:17:08,508 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:21:54,469 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:21:54,469 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:21:54,488 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:21:54,488 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:21:54,553 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:21:54,554 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:21:54,558 INFO - Establishing connection.
+ 2016-03-11 23:21:54,558 INFO - Establishing connection.
+ 2016-03-11 23:21:56,379 INFO - Connection established.
+ 2016-03-11 23:21:56,379 INFO - Receiving status stream.
+ 2016-03-11 23:22:14,115 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:22:14,115 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,116 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,117 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:22:14,128 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:22:14,128 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,131 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,131 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:22:14,151 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,151 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:22:14,157 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:22:14,157 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,158 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:22:14,158 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:22:26,582 INFO - Connection established.
+ 2016-03-11 23:22:26,582 INFO - Receiving status stream.
+ 2016-03-11 23:24:07,647 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:24:07,647 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,648 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,648 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:24:07,653 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:24:07,653 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,655 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,655 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:24:07,659 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:24:07,659 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,659 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,660 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:24:07,678 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:24:07,678 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,679 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:24:07,679 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:29:50,998 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:29:50,998 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:50,999 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:29:50,999 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:50,999 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,000 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:29:51,000 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,000 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:29:51,004 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:29:51,004 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,004 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,004 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:29:51,008 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:29:51,008 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,009 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:29:51,009 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:56:47,838 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:56:47,839 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:56:47,859 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-03-11 23:56:47,859 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:56:47,928 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-03-11 23:56:47,930 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-03-11 23:56:47,933 INFO - Establishing connection.
+ 2016-03-11 23:56:47,934 INFO - Establishing connection.
+ 2016-03-11 23:56:49,799 INFO - Connection established.
+ 2016-03-11 23:56:49,799 INFO - Receiving status stream.
+ 2016-03-11 23:56:49,912 INFO - 420:Returned by the Search and Trends API when you are being rate limited (https://dev.twitter.com/docs/rate-limiting).
+Returned by the Streaming API:
+ Too many login attempts in a short period of time.
+ Running too many copies of the same application authenticating with the same account name.
+Exceeded connection limit for user
+
+ 2016-03-11 23:56:49,915 INFO - Waiting for 10000 milliseconds
+ 2016-03-11 23:56:59,919 INFO - Establishing connection.
  
