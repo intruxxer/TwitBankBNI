@@ -38,8 +38,8 @@ import java.util.Map;
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser    = "bni46_cs";
-	private static final String twitterAccount = "BNICustomerCare";
+	private static final String twitterUser    = "bni46";
+	private static final String twitterAccount = "BNI46";
 	//bni46 //bni46_cs //fahmivanhero //dev_amartha
 	
 	private static String latestStatus;
