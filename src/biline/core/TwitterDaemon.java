@@ -38,10 +38,10 @@ import java.util.Map;
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser    = "bni46";
-	//bni46 //bni46_cs //fahmivanhero //dev_amartha
-	private static final String twitterAccount = "BNI46";
-	//BNI46 //BNICustomerCare
+	private static final String twitterUser    = "bilinedev";
+	//bni46 //bni46_cs //fahmivanhero //bilinedev //dev_amartha
+	private static final String twitterAccount = "biline_dev";
+	//BNI46 //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
 	
 	private static String latestStatus;
 	private static Status status;
@@ -721,7 +721,7 @@ public class TwitterDaemon {
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
 	        	
-	            System.out.println("onDirectMessage from @" + directMessage.getSenderScreenName() + " '" + directMessage.getText());
+	            System.out.println("onDirectMessage from @" + directMessage.getSenderScreenName() + " '" + directMessage.getText() + "' ");
 	            
 	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
@@ -734,9 +734,9 @@ public class TwitterDaemon {
 	            if(hashtags.size() > 0)
 	            {
 	            	command = hashtags.get(0).toLowerCase();
-	            	if( !command.equals("daftar") )
+	            	if( !command.equals("daftar") || !command.equals("open") || !command.equals("csopen") || !command.equals("csregister") )
 	            	{
-	            		if( !command.equals("openaccount") || !command.equals("open") || !command.equals("csopen") ){
+	            		if( !command.equals("openaccount") || !command.equals("registercs") ){
 	            			ListIterator<String> iterator = hashtags.listIterator();
 				            while (iterator.hasNext())
 				            {
@@ -1408,8 +1408,8 @@ public class TwitterDaemon {
 			        directMessagesPromoAndServices.clear();
 	            }//else if(DM for CS & AskBNI)  
 	            
-	            // (5) #openaccount #taplusmuda + #Full_Name #PhoneNo [DONE] || #csopenaccount #taplusmuda + #AccountNo #AccountCode #CSEmployeeCode
-	            else if( command.equals("openaccount") || command.equals("open") || command.equals("csopen") )
+	            // (5) #openaccount #taplusmuda + #Full_Name #PhoneNo [DONE] || #csopenaccount #taplusmuda + #AccountNo #AccountCode #CSEmployeeCode [DONE]
+	            else if( command.equals("openaccount") || command.equals("open") || command.equals("csopen") || command.equals("csregister") || command.equals("registercs") )
 	            {	
 	            	//Once user gets the command right, server will reply with feedback accordingly.
         			recipientId = directMessage.getSenderScreenName();
@@ -1471,7 +1471,7 @@ public class TwitterDaemon {
 	            			String account_date		    = dateFormat.format(currentDate); 
 	            			String account_code         = "TM" + codeFormat.format(currentDate);
 	            			//NOTE: next time, check whether it already exists in DB.
-	            			//For now, it is CLOSE to safe is it contians time until seconds.
+	            			//For now, it is CLOSE to safe, unique as it contains time until seconds.
 	            			String account_holder   		= hashtags.get(2);
 	            			String account_phone    		= hashtags.get(3);
 	            			String account_handler  		= recipientId; 
@@ -2074,10 +2074,151 @@ public class TwitterDaemon {
 								e.printStackTrace();
 							}
 				            
-				            statLogger.eventsLog("7", directMessage.getSenderScreenName(), "CSOpen");
+				            statLogger.eventsLog("8", directMessage.getSenderScreenName(), "CSOpen");
 				            
 	            		}
 	            	} //END #CSOpen
+	            	
+	            	else if(command.equals("csregister") || command.equals("registercs")) // [DONE]
+	            	{
+	            		boolean requirement = true; 
+	            		//#CSRegister #Nama_Lengkap #NumPegawai #Unit_Kerja
+	     	           
+	            		//Check: number of  hashtags to be at least 4 (four)
+	            		if(hashtags.size() < 4)
+	            		{ 
+	            			directMsg 	= "Maaf, format pesan Twitter DM anda untuk pendaftaran akun CS Officer program Twitter Banking tidak sesuai. ";
+	            			directMsg  += "Silakan DM dengan format: #CSRegister #Nama_Lengkap #NumPegawai #Unit_Kerja.";
+	            			directMsg  += "\nContoh:\n #CSRegister #Nungki_Kusumawati #NPP8888 #KC_Bojonegoro.";
+	            			directMsg  += "\nGunakan Kode KC sbg Kantor Cabang, KLN sbg Kantor Layanan Nasabah, atau KW sbg Kantor Wilayah.";
+	            			try {
+				            	//System.out.println("#CSRegister #Nama_Lengkap #NumPegawai #Unit_Kerja with recipient: " + recipientId + " & DM: " + directMsg);
+	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     				}
+				            	requirement	= false;
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		if(requirement)
+	            		{
+	            			//Proceed as all req. satisfied by CS Officer
+	            			String officer_fullname    		= hashtags.get(1);
+	            			String officer_employee_code   	= hashtags.get(2);
+	            			String officer_uker				= hashtags.get(3);
+	            			String officer_handler 			= directMessage.getSenderScreenName();
+	            			
+	            			//SANITATION FOR USER INPUT
+	            			
+	            			//A
+	            			//Sanitize CS Full Name [1]: Remove '_'
+	            			officer_fullname = officer_fullname.replace("_", " ");
+				            
+				            //Sanitize CS Full Name [2]: Capitalize Each Word of Names
+				            String[] officer_fullname_tokens = officer_fullname.split(" ");
+				            officer_fullname 				 = "";
+
+				            for(int i = 0; i < officer_fullname_tokens.length; i++){
+				                char capLetter = Character.toUpperCase(officer_fullname_tokens[i].charAt(0));
+				                officer_fullname +=  " " + capLetter + officer_fullname_tokens[i].substring(1);
+				            }
+				            officer_fullname = officer_fullname.trim();
+				            
+				            //B
+				            //Sanitize CS Unit Kerja [1]: Remove '_'
+				            officer_uker	 = officer_uker.replace("_", " "); 
+				            
+				            //Sanitize CS Unit Kerja [2]: Capitalize Each Word of Names
+				            String[] officer_uker_tokens = officer_uker.split(" ");
+				            officer_uker 			     = "" + officer_uker_tokens[0].toUpperCase();
+
+				            for(int i = 1; i < officer_uker_tokens.length; i++){
+				                char capLetter = Character.toUpperCase(officer_uker_tokens[i].charAt(0));
+				                officer_uker +=  " " + capLetter + officer_uker_tokens[i].substring(1);
+				            }
+				            officer_uker = officer_uker.trim();
+				            
+	            			//A. CHECK whether CS OFFICER RECORD already exists.
+	            			String existingCSQuery = "SELECT cs_fullname, cs_employee_code, cs_unit_kerja FROM tbl_account_cs WHERE cs_employee_code = '" + officer_employee_code + "' AND deleted = '0' ORDER BY cs_id ASC LIMIT 1";
+				            stm = null; rs = null; directMsg = "";
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(existingCSQuery);
+						     	while (rs.next()){
+						     		directMsg   += "CS Officer bernama " + rs.getString("cs_fullname")  + " (No Officer: " + rs.getString("cs_employee_code") + ") telah terdaftar & aktif.";
+						     		directMsg   += "\nAnda tidak perlu mendaftar CS Officer lagi.\nTerima Kasih.";
+						     		requirement = false;
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+	            			
+	            			//B. IF NOT EXISTS, INSERT into CS OFFICER DB.
+				            if(requirement){
+			            		String csRegistrationQuery = "INSERT INTO tbl_account_cs(cs_employee_code, cs_fullname, cs_twitter, cs_unit_kerja) " 
+			            				   + "VALUES ('" + officer_employee_code + "', '" + officer_fullname + "', '" + officer_handler + "', '" + officer_uker + "')";
+			            		stm = null; 
+			            		try {
+			            		if(con == null){
+				            		db_object.openConnection();
+				            		con = db_object.getConnection();
+			            		}
+			            		stm = con.createStatement();	     		
+			            		stm.executeUpdate(csRegistrationQuery);
+			            		//System.out.println("Registered CS Officer: " + officer_fullname + " [" + officer_handler + " | " + officer_employee_code + "]" );
+			            		} catch (SQLException e) {
+			            			e.printStackTrace();
+			            		} 
+			            		finally{
+			            			if(con != null){
+			            			try {
+			            				db_object.closeConnection();
+			            			} catch (SQLException e) {
+			            				e.printStackTrace();
+			            			} finally{
+			            				con = null;
+			            				}
+			            			}
+			            		}
+			            		
+			            		directMsg   += "Selamat, Anda baru saja terdaftar aktif sebagai CS Officer program Twitter Banking BNI sebagai " +  officer_fullname + " (No Officer: " + officer_employee_code + ", Unit Kerja: " + officer_uker + ").";
+					     		directMsg   += "\nGunakan akun @" + officer_handler + " ini untuk reporting pada @BNI46 seperti pembukaan Taplus Muda sbb: #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda.";
+					     		directMsg   += "\nTerima Kasih.";
+					     		
+					     		statLogger.eventsLog("9", directMessage.getSenderScreenName(), "CSRegister");
+				            }
+				            
+		            		//C. REPLY to CS OFFICER twitter's Account notifying success/error.
+		            		try {
+				            	//System.out.println("#CSRegister #Nama_Lengkap #NumPegawai #Unit_Kerja with Customer recipient: " + recipientId + " & DM: " + directMsg);
+				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					twitterLog.saveOutwardDM(recipientId, directMsg, "CS Register", "#CSRegister");
+			     				}
+							} catch (TwitterException e) {
+								e.printStackTrace();
+							}
+	            		}
+	            		
+	            		
+	            	}//END #CSRegister
 			        
 	            	hashtags.clear(); menus.clear(); aliasmenus.clear();
 			        directMessagesPromoAndServices.clear();
