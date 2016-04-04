@@ -38,10 +38,10 @@ import java.util.Map;
 
 public class TwitterDaemon {
 	
-	private static final String twitterUser    = "bilinedev";
+	private static final String twitterUser    = "bni46";
 	//bni46 //bni46_cs //fahmivanhero //bilinedev //dev_amartha
-	private static final String twitterAccount = "biline_dev";
-	//BNI46 //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
+	private static final String twitterAccount = "BNI";
+	//BNI //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
 	
 	private static String latestStatus;
 	private static Status status;
@@ -1415,7 +1415,8 @@ public class TwitterDaemon {
         			recipientId = directMessage.getSenderScreenName();
 
         			Date currentDate            	 = new Date();
-        			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMMddHHmmss");
+        			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMd");
+        			SimpleDateFormat codeStdFormat   = new SimpleDateFormat("yyMMddHHmmss");
         			SimpleDateFormat validDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         			SimpleDateFormat readableFormat  = new SimpleDateFormat("dd MMMMM yyyy");
         			SimpleDateFormat dateDigit		 = new SimpleDateFormat("dd");
@@ -1467,9 +1468,38 @@ public class TwitterDaemon {
 	            		{
 	            			//Proceed as all req. satisfied by Customer
 	            			
+	            			//Check leving the latest sequence number of recorded account openings.
+	            			Integer lastSeqAccNumber = 1;
+	            			String lastAccountQuery  = "SELECT id as last_id FROM tbl_account_users ORDER BY id DESC LIMIT 1";
+							stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(lastAccountQuery);
+						     	while (rs.next()){
+						     		lastSeqAccNumber = rs.getInt("last_id") + 1;
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally {
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+						   	}
+	            			
 	            			String valid_date 			= validDateFormat.format(currentDate);
 	            			String account_date		    = dateFormat.format(currentDate); 
-	            			String account_code         = "TM" + codeFormat.format(currentDate);
+	            			String account_code         = "BNI" + codeFormat.format(currentDate) + lastSeqAccNumber.toString();
 	            			//NOTE: next time, check whether it already exists in DB.
 	            			//For now, it is CLOSE to safe, unique as it contains time until seconds.
 	            			String account_holder   		= hashtags.get(2);
@@ -1631,7 +1661,7 @@ public class TwitterDaemon {
 	            		{ 
 	            			directMsg 	= "Maaf, format pesan Twitter DM untuk reporting pembukaan rekening tabungan BNI Nasabah anda tidak sesuai. ";
 	            			directMsg  += "Silakan DM dengan format: #CSOpen #TaplusMuda #NoRekening #NoReferensiUnik #NoKodePegawai.";
-	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
+	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI123456 #NPP30000";
 	            			try {
 				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
 	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
@@ -1648,7 +1678,7 @@ public class TwitterDaemon {
 	            		{ 
 	            			directMsg 	= "Maaf, format pesan Twitter DM untuk reporting pembukaan rekening tabungan BNI Nasabah anda tidak sesuai. ";
 	            			directMsg  += "Silakan DM dengan format: #CSOpen #TaplusMuda #NoRekening #NoReferensiUnik #NoKodePegawai.";
-	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM123456 #NPP30000";
+	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI123456 #NPP30000";
 	            			try {
 				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
 	            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
@@ -1680,15 +1710,16 @@ public class TwitterDaemon {
 						     	rs  = stm.executeQuery(accInfoQuery);
 						     	while (!rs.next()){
 						     		rs.beforeFirst();
-						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " gagal tercatat di DB karena invalid ref. no. ";
-			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan ref. no. valid untuk nasabah anda. ";
+						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan No Referensi #" + account_code + " gagal tercatat karena No Referensi Anda yg invalid.";
+			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan No Referensi yg valid dari nasabah anda. ";
 			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
-			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
+			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI1234567890 #NPP30000";
 			            			try {
 			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
 					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 					     				}
 							     		requirement	= false;
+				            			break;
 									} catch (TwitterException e) {
 										e.printStackTrace();
 									}
@@ -1716,9 +1747,9 @@ public class TwitterDaemon {
 	            			// We need to check whether a CS has precisely reported her Officer Code for #OpenAccount correctly,
 	            			// Preventing CS not getting her KPI Point increased fairly.
 	            			// Hence, CS Officer Code is checked & confirmed as a one-time only report from CS and associated to single CS Officer.
-	            			String csInfoQuery = "SELECT cs_id, cs_full_name FROM tbl_account_cs " 
+	            			String csInfoQuery = "SELECT cs_id FROM tbl_account_cs " 
 	            							   + "WHERE  cs_employee_code = '" + account_cs_no + "' "  
-	            							   + "ORDER BY id ASC LIMIT 0,1";
+	            							   + "ORDER BY cs_id ASC LIMIT 0,1";
 	            			stm = null; rs = null;
 				            try {
 						     	if(con == null){
@@ -1727,17 +1758,18 @@ public class TwitterDaemon {
 						        }
 						     	stm = con.createStatement();	     		
 						     	rs  = stm.executeQuery(csInfoQuery);
-						     	while (!rs.next()){
+						     	while(!rs.next()){
 						     		rs.beforeFirst();
-						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " gagal tercatat di DB karena Officer Code Anda invalid. ";
-			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan CS Officer code anda yg valid. ";
+						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan No Referensi #" + account_code + " gagal tercatat karena Officer Code Anda yg invalid. ";
+			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan CS Officer Code Anda yg valid. ";
 			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
-			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #TM1234567890 #NPP30000";
+			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI1234567890 #NPP30000";
 			            			try {
 			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
 					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
 					     				}
-							     		requirement	= false;
+			            				requirement	= false;
+			            				break;
 									} catch (TwitterException e) {
 										e.printStackTrace();
 									}
@@ -1759,7 +1791,58 @@ public class TwitterDaemon {
 				            
 	            		}
 	            		
-	            		//3. Avoid multiple report attempt over a single account is carried out by CS Officer.
+	            		//3. Avoid CS reports #OpenAccount from others' Twitter Account other than her own account. (UNTESTED)
+	            		if(requirement)
+	            		{
+	            			// If we want to only allow report attempt from HER OWN registered Twitter Account,
+					     	// We need to check whether a CS has eported #OpenAccount using her own Twitter handler,
+	            			// Preventing CS getting her KPI Point increased unfairly by other account.
+	            			// Hence, CS Officer Account handler is checked & confirmed as a registered, valid Twitter account of a CS Officer.
+	            			String registeredCSTwitterAccount = "";
+	            			String csAccTwitterQuery = "SELECT cs_twitter FROM tbl_account_cs WHERE cs_employee_code = '" + account_cs_no + "' "  
+	            							         + "LIMIT 0,1";
+	            			stm = null; rs = null;
+				            try {
+						     	if(con == null){
+						     		db_object.openConnection();
+						  			con = db_object.getConnection();
+						        }
+						     	stm = con.createStatement();	     		
+						     	rs  = stm.executeQuery(csAccTwitterQuery);
+						     	while(rs.next()){
+						     		registeredCSTwitterAccount = rs.getString("cs_twitter");
+						     		if(!recipientId.equalsIgnoreCase(registeredCSTwitterAccount)){
+						     			directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan No Referensi #" + account_code + " gagal tercatat ";
+				            			directMsg  += "karena anda tidak menggunakan Akun Twitter sesuai yg terdaftar. Silakan laporkan kembali pembukaan rekening tabungan menggunakan Akun Twitter Anda yg terdaftar di sistem. ";
+				            			directMsg  += "\n\n(Gunakan akun @" + registeredCSTwitterAccount + " Anda)";
+				            			try {
+				            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+						     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+						     				}
+				            				requirement	= false;
+										} catch (TwitterException e) {
+											e.printStackTrace();
+										}
+						     		}
+						     	}
+				            } catch (SQLException e) {
+				     	   	 	e.printStackTrace();
+					     	} 
+				            finally{
+					    		   	if(con != null){
+					  				  try {
+										db_object.closeConnection();
+					  				  } catch (SQLException e) {
+										e.printStackTrace();
+					  				  } finally{
+					  				  		con = null;
+					     		   		}
+					     		   	}
+			  		   		}
+				            
+	            		}
+	            		
+	            		//4. Avoid a single account's multiple report attempt carried out by CS Officer.
 	            		if(requirement)
 	            		{
 	            			// We need to check whether a CS has peviously reported same #OpenAccount successfully,
@@ -1777,9 +1860,9 @@ public class TwitterDaemon {
 						     	stm = con.createStatement();	     		
 						     	rs  = stm.executeQuery(customerInfoQuery);
 						     	while (rs.next()){
-						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan ref. no. #" + account_code + " sudah pernah tercatat di DB sebelumnya. ";
-			            			directMsg  += "CS Officer tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan ref. no. yg sama untuk nasabah yang sama. ";
-			            			directMsg  += "Pelaporan berkali-kali akan dicatat sebagai usaha memanipulasi kinerja CS Officer ybs secara sengaja.";
+						     		directMsg 	= "Maaf, report pembukaan rekening:";
+						     		directMsg  += "\n\nNomor Rekening: " + account_no + " \nRef. No.: #" + account_code + " \nStatus: Sudah Tercatat pada Database. \n";
+			            			directMsg  += "\nCustomer Service tidak diperkenankan melaporkan berkali-kali atas pembukaan satu rekening tabungan dengan nomor referensi yg sama untuk nasabah yang sama. ";
 			            			try {
 			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
 					     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
@@ -1811,11 +1894,18 @@ public class TwitterDaemon {
 	            		{
 	            			//Proceed as all req. satisfied by CS
 	            			
-	            			String account_holder   		= "Customer of BNI";
-	            			String account_handler  		= "Handler of Customer"; 
-	            			String account_merchandise      = "0";
-	            			String account_merchandise_name = "Merchandise BNI";
-	            			String valid_date				= "0000-00-00";
+	            			//DEFAULT VALUE leads to DIRTY DATA
+	            			//String account_holder   		  = "Customer of BNI";
+	            			//String account_handler  		  = "Handler of Customer"; 
+	            			//String account_merchandise      = "0";
+	            			//String account_merchandise_name = "Merchandise BNI";
+	            			//String valid_date				  = "0000-00-00";
+	            			
+	            			String account_holder   		= null;
+	            			String account_handler  		= null; 
+	            			String account_merchandise      = null;
+	            			String account_merchandise_name = null;
+	            			String valid_date				= null;
 	            			
 	            			String cs_id       = "0";
 	            			String cs_fullname = "CS BNI 46";
@@ -2067,7 +2157,7 @@ public class TwitterDaemon {
 				            try {
 				            	//System.out.println("#CSOpen #TaplusMuda with Customer recipient: " + recipientId + " & DM: " + directMsg);
 				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
-			     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+			     					DirectMessage message = twitterDM.sendDirectMessage(account_handler, directMsg);
 			     					twitterLog.saveOutwardDM(recipientId, directMsg, "Open Account", "#CustOpen");
 			     				}
 							} catch (TwitterException e) {
@@ -2111,12 +2201,12 @@ public class TwitterDaemon {
 	            			String officer_handler 			= directMessage.getSenderScreenName();
 	            			
 	            			//SANITATION FOR USER INPUT
-	            			
-	            			//A
-	            			//Sanitize CS Full Name [1]: Remove '_'
+	            			officer_employee_code = officer_employee_code.toUpperCase();
+	            			//a) Sanitize CS Full Name
+	            			//[1]: Remove '_'
 	            			officer_fullname = officer_fullname.replace("_", " ");
 				            
-				            //Sanitize CS Full Name [2]: Capitalize Each Word of Names
+				            //[2]: Capitalize Each Word of Names
 				            String[] officer_fullname_tokens = officer_fullname.split(" ");
 				            officer_fullname 				 = "";
 
@@ -2126,11 +2216,11 @@ public class TwitterDaemon {
 				            }
 				            officer_fullname = officer_fullname.trim();
 				            
-				            //B
-				            //Sanitize CS Unit Kerja [1]: Remove '_'
+				            //b) Sanitize CS Unit Kerja
+				            //[1]: Remove '_'
 				            officer_uker	 = officer_uker.replace("_", " "); 
 				            
-				            //Sanitize CS Unit Kerja [2]: Capitalize Each Word of Names
+				            //[2]: Capitalize Each Word of Names
 				            String[] officer_uker_tokens = officer_uker.split(" ");
 				            officer_uker 			     = "" + officer_uker_tokens[0].toUpperCase();
 
@@ -2180,9 +2270,9 @@ public class TwitterDaemon {
 				            		db_object.openConnection();
 				            		con = db_object.getConnection();
 			            		}
-			            		stm = con.createStatement();	     		
-			            		stm.executeUpdate(csRegistrationQuery);
-			            		//System.out.println("Registered CS Officer: " + officer_fullname + " [" + officer_handler + " | " + officer_employee_code + "]" );
+			            			stm = con.createStatement();	     		
+			            			stm.executeUpdate(csRegistrationQuery);
+			            			//System.out.println("Registered CS Officer: " + officer_fullname + " [" + officer_handler + " | " + officer_employee_code + "]" );
 			            		} catch (SQLException e) {
 			            			e.printStackTrace();
 			            		} 
@@ -2199,13 +2289,13 @@ public class TwitterDaemon {
 			            		}
 			            		
 			            		directMsg   += "Selamat, Anda baru saja terdaftar aktif sebagai CS Officer program Twitter Banking BNI sebagai " +  officer_fullname + " (No Officer: " + officer_employee_code + ", Unit Kerja: " + officer_uker + ").";
-					     		directMsg   += "\nGunakan akun @" + officer_handler + " ini untuk reporting pada @BNI46 seperti pembukaan Taplus Muda sbb: #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda.";
+					     		directMsg   += "\nGunakan akun @" + officer_handler + " ini untuk reporting pada @" + twitterAccount + " seperti pembukaan Taplus Muda sbb: #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda.";
 					     		directMsg   += "\nTerima Kasih.";
 					     		
 					     		statLogger.eventsLog("9", directMessage.getSenderScreenName(), "CSRegister");
 				            }
 				            
-		            		//C. REPLY to CS OFFICER twitter's Account notifying success/error.
+		            		//C. REPLY to CS OFFICER twitter's Account notifying SUCCESS/ERROR.
 		            		try {
 				            	//System.out.println("#CSRegister #Nama_Lengkap #NumPegawai #Unit_Kerja with Customer recipient: " + recipientId + " & DM: " + directMsg);
 				            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
