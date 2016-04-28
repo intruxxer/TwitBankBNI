@@ -1699,7 +1699,7 @@ public class TwitterDaemon {
 	            		if(hashtags.size() < 5)
 	            		{ 
 	            			directMsg 	= "Maaf, Reporting Pembukaan Rekening Tabungan BNI Nasabah Anda tidak sesuai. ";
-	            			directMsg  += "Silakan DM dengan format: #CSOpen #PromoPembukaanRekening #NoRekening #NoReferensiUnik #NoKodePegawai.";
+	            			directMsg  += "Silakan DM dengan format: #CSOpen #PromoRekening #NoRekNasabah #NoRef #NPP.";
 	            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI123456 #NPP30000";
 	            			try {
 				            	//System.out.println("#CSOpen #TaplusMuda with recipient: " + recipientId + " & DM: " + directMsg);
@@ -1750,7 +1750,7 @@ public class TwitterDaemon {
 	            	        
 	            			if(campaign_code.equalsIgnoreCase("")){
 	            				directMsg 	= "Maaf, Reporting Promo Pembukaan Rekening Nasabah Anda gagal untuk promo yg diinginkan karena tidak tersedia/telah berakhir. ";
-		            			directMsg  += "\nSilakan DM dengan Promo lainnya yg tersedia/masih berlaku untuk Pembukaan Rekening dgn DM: #CSOpen #PromoPembukaanRekening #NoRekening #NoReferensiUnik #NoKodePegawai.";
+		            			directMsg  += "\nSilakan DM dengan Promo lainnya yg tersedia/masih berlaku untuk Pembukaan Rekening dgn DM: #CSOpen #PromoRekening #NoRekNasabah #NoRef #NPP.";
 		            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI123456 #NPP30000";
 		            			try {
 					            	//System.out.println("#OpenAccount #PromoRekening with recipient: " + recipientId + " & DM: " + directMsg);
@@ -1787,7 +1787,7 @@ public class TwitterDaemon {
 						     		rs.beforeFirst();
 						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan No Referensi #" + account_code + " gagal tercatat karena No Referensi Anda yg invalid.";
 			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan No Referensi yg valid dari nasabah anda. ";
-			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
+			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRef #NPP";
 			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI1234567890 #NPP30000";
 			            			try {
 			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
@@ -1837,7 +1837,7 @@ public class TwitterDaemon {
 						     		rs.beforeFirst();
 						     		directMsg 	= "Maaf, report pembukaan rekening " + account_no + " tabungan BNI Nasabah anda dengan No Referensi #" + account_code + " gagal tercatat karena Officer Code Anda yg invalid. ";
 			            			directMsg  += "Silakan periksa dan koreksi kembali laporan pembukaan rekening tabungan dengan CS Officer Code Anda yg valid. ";
-			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda";
+			            			directMsg  += "\nFormat:\n #CSOpen #TaplusMuda #NoRekNasabah #NoRef #NPP";
 			            			directMsg  += "\nContoh:\n #CSOpen #TaplusMuda #0191063890 #BNI1234567890 #NPP30000";
 			            			try {
 			            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
@@ -2322,7 +2322,7 @@ public class TwitterDaemon {
 						     	rs  = stm.executeQuery(existingCSQuery);
 						     	while (rs.next()){
 						     		directMsg   += "CS Officer bernama " + rs.getString("cs_fullname")  + " (No Officer: " + rs.getString("cs_employee_code") + ") telah terdaftar & aktif.";
-						     		directMsg   += "\nAnda tidak perlu mendaftar CS Officer lagi.\nTerima Kasih.";
+						     		directMsg   += "\nAnda tidak perlu mendaftar sbg CS Officer lagi.\nTerima Kasih.";
 						     		requirement = false;
 						     	}
 				            } catch (SQLException e) {
@@ -2368,8 +2368,8 @@ public class TwitterDaemon {
 			            			}
 			            		}
 			            		
-			            		directMsg   += "Selamat, Anda baru saja terdaftar aktif sebagai CS Officer program Twitter Banking BNI sebagai " +  officer_fullname + " (No Officer: " + officer_employee_code + ", Unit Kerja: " + officer_uker + ").";
-					     		directMsg   += "\nGunakan akun @" + officer_handler + " ini untuk reporting pada @" + twitterAccount + " seperti pembukaan Taplus Muda sbb: #CSOpen #TaplusMuda #NoRekNasabah #NoRefNasabah #NoKodeCSOfficerAnda.";
+			            		directMsg   += "Selamat, Anda baru saja terdaftar dengan data sebagai berikut:\n" + "\nNama: "  + officer_fullname + "\nNPP: " + officer_employee_code + "\nUnit: " + officer_uker + "\n";
+					     		directMsg   += "\nGunakan akun @" + officer_handler + " ini untuk mengirimkan laporan kepada @" + twitterAccount + "\n\nFormat Direct Message untuk laporan:\n\n #CSOpen #TaplusMuda #NoRekNasabah #NoRef #NPP \n";
 					     		directMsg   += "\nTerima Kasih.";
 					     		
 					     		statLogger.eventsLog("9", directMessage.getSenderScreenName(), "CSRegister");
