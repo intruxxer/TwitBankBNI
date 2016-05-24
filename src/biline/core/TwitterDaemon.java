@@ -172,26 +172,26 @@ public class TwitterDaemon {
 		   String listOfTagsQuery    = "SELECT * FROM tbl_hashtags"; 
 		   
 		   try {
-			   if(con == null){
-				  db_object.openConnection();
-				  con = db_object.getConnection();
-	        }   
-			stm = con.createStatement();
-			rs  = stm.executeQuery(listOfTagsQuery);
-			System.out.print("\n[KEYWORDS] Trackings: ");
-			int n = 0;
-			while (rs.next()){
-				if(n % 10 == 0)
-					System.out.print("\n");
-				System.out.print("#" + rs.getString("hashtag_term") + " ");
-				track.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
-				n++;
-	   		}
-			System.out.print("\n[KEYWORDS] " + n + " keywords being tracked." + "\n");
+			    if(con == null){
+					  db_object.openConnection();
+					  con = db_object.getConnection();
+		        }   
+				stm = con.createStatement();
+				rs  = stm.executeQuery(listOfTagsQuery);
+				System.out.print("\n[KEYWORDS] Trackings: ");
+				int n = 0;
+				while (rs.next()){
+					if(n % 10 == 0)
+						System.out.print("\n");
+					System.out.print("#" + rs.getString("hashtag_term") + " ");
+					track.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
+					n++;
+		   		}
+				System.out.print("\n[KEYWORDS] " + n + " keywords being tracked." + "\n");
 		   } catch (SQLException e) {
-			e.printStackTrace();
+			   	e.printStackTrace();
 		   } finally{
-			   if(con != null){
+			    if(con != null){
 					  try {
 						db_object.closeConnection();
 					  } catch (SQLException e) {
@@ -238,7 +238,7 @@ public class TwitterDaemon {
 	       //twitterStream.filter("@dev_amartha #microfinance, @dev_amartha #life");
 	       twitterStream.filter( new FilterQuery( track.toArray( new String[track.size()] ) ) );
 	    
-	       // *TO LISTEN TO DM & OUR USER'S ACTIVITY
+	       // *TO LISTEN TO DM & OUR TWITTER USER'S ACTIVITY
 	       twitterStreamDM.user( );
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
 	    // Methods: user() & filter() then call the appropriate listener methods according to each stream events (such as status, favorite, RT, DM, etc) continuously.
