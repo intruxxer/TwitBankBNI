@@ -119,7 +119,7 @@ public class TwitterDaemonStatus {
            twitter         = TwitterFactory.getSingleton();
            
 		   ArrayList<String> trackMention   = new ArrayList<String>();
-		   String listOfTagsQuery           = "SELECT * FROM tbl_mention_hashtags"; 
+		   String listOfTagsQuery           = "SELECT * FROM tbl_hashtags_mention"; 
 		   
 		   try {
 			    if(con == null){
@@ -137,7 +137,7 @@ public class TwitterDaemonStatus {
 					trackMention.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
 					n++;
 		   		}
-				System.out.print("\n[KEYWORDS] " + n + " keywords being tracked." + "\n");
+				System.out.print("\n[KEYWORDS] " + n + " keywords being tracked for handler @" + twitterUser + "\n");
 		   } catch (SQLException e) {
 			   	e.printStackTrace();
 		   } finally{
@@ -153,8 +153,9 @@ public class TwitterDaemonStatus {
 		   }
 		   
 		   FilterQuery fq    = new FilterQuery();
-	       String keywords[] = { "@biline_dev #bni" };
-		   //String kwords[] = { "#microfinance", "#life" };
+	       String keywords[] = { "@biline_dev #taplusmuda", "@biline_dev #twitbank", "@biline_dev #bni" };
+		   //String keywords[] = { "#microfinance", "#life" };
+		   //String keywords[]   = trackMention.toArray(new String[trackMention.size()]);
 	       //String[] trackArray = trackMention.toArray(new String[trackMention.size()]);
 	       fq.track(keywords);
 		   
@@ -166,7 +167,8 @@ public class TwitterDaemonStatus {
 	       // *TO LISTEN TO STATUS MENTIONS
 	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance, @dev_amartha #life");
-	       twitterStream.filter(fq);
+	       //twitterStream.filter(fq);
+	       twitterStream.user();
 	   
 	}
 	
@@ -176,13 +178,18 @@ public class TwitterDaemonStatus {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-			   	
-	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+			   System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+//			   	String hashtag_string = "";
+//			    //Extract hashTAGS from status
+//	            hashtags              = tagExtractor.parseTweetForHashtags(status.getText());
+//	            
+//	            for (String tag : hashtags) { hashtag_string += tag.toLowerCase(); }
+//	            
+//
+//	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+//	            System.out.println("Hash Tags' String: " + hashtag_string + "\n\n");
 	            
-	            // *We extract hashTAGS from status
 	            /*
-	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
-	            
 	            // *We compose DM per hashTAGS
 	            String promotionsQuery = "";
 	            stm = null; rs = null;

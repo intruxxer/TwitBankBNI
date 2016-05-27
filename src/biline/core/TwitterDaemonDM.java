@@ -74,7 +74,6 @@ public class TwitterDaemonDM {
 	private static ArrayList<String> menus;
 	private static ArrayList<String> aliasmenus;
 	private static ArrayList<String> directMessagesPromoAndServices;
-	private static ArrayList<String> directMessagesForMentions;
 	private static TwitterTweetExtractorUtil tagExtractor;
 	private static TwitterStatisticsUtil statLogger;
 	
@@ -94,7 +93,7 @@ public class TwitterDaemonDM {
 		statLogger		 = new TwitterStatisticsUtil();
 		twitterLog   	 = new TwitterLogging();
 		
-		directMessagesForMentions       = new ArrayList<String>();
+		new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
 		
 		dateFormat       =  new SimpleDateFormat("yyyy-MM-dd");
