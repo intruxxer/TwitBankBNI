@@ -13,6 +13,7 @@ import twitter4j.RateLimitStatusListener;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -21,7 +22,9 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
+import twitter4j.UploadedMedia;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,6 +78,7 @@ public class TwitterDaemonStatus {
 	private static ArrayList<String> aliasmenus;
 	private static ArrayList<String> directMessagesPromoAndServices;
 	private static ArrayList<String> directMessagesForMentions;
+	private static ArrayList<String> replyTweetsForMentions;
 	private static TwitterTweetExtractorUtil tagExtractor;
 	private static TwitterStatisticsUtil statLogger;
 	
@@ -96,6 +100,7 @@ public class TwitterDaemonStatus {
 		
 		directMessagesForMentions       = new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
+		replyTweetsForMentions          = new ArrayList<String>();
 		
 		dateFormat       =  new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -178,89 +183,102 @@ public class TwitterDaemonStatus {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-			    //System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
-			   	String hashtag_string = "";
+			    
+			    long mTweetId    = status.getId();
+			    String mUsername = "@" + status.getUser().getScreenName() + " ";
+	            StatusUpdate statusUpdate;
+	            String mReplyText;
+	            String mReplyImg;
+	            String mReplyImgText;
+	            File fileImg;
+	            UploadedMedia mediaImg;
+	            long mediaImgId;
+			   
+			   	Date now = new Date();
+			   	today    = dateFormat.format(now);
+			   	
 			    //Extract hashtags from status
+			   	//String hashtag_string       = "";
 	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
 	            
-	            for (String tag : hashtags) { hashtag_string += tag.toLowerCase() + " "; }
-	            
-
-	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
-	            System.out.println("HashTags String: " + hashtag_string + "\n\n");
-	            
-	            /*
-	            // *We compose DM per hashTAGS
-	            String promotionsQuery = "";
 	            stm = null; rs = null;
-	            
-	            for (String tag : hashtags) {
-	            	Date now = new Date();
-	            	today    = dateFormat.format(now);
-	            	promotionsQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
-	            					+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
-	            					+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
-	            	//System.out.println(promotionsQuery);
+	            for (String tag : hashtags)
+	            { 
+	            	//If we want to enable multihashtags feature
+	            	//hashtag_string += tag.toLowerCase() + " "; 
+	            	String listOfTagsQuery = "SELECT * FROM tbl_hashtags_mention " + 
+	            						     "WHERE tbl_hashtags_mention.hashtag_term = '" + tag + "' " +
+	            						     "AND tbl_hashtags_mention.hashtag_end_date >= '" + today + "' " + 
+	            						     "AND tbl_hashtags_mention.hashtag_status = '1' AND tbl_hashtags_mention.hashtag_deleted = '0'";
 	            	
-	     		   	try {
-			     		if(con == null){
-			     			db_object.openConnection();
-			  				con = db_object.getConnection();
-			  	        }
-		     			stm = con.createStatement();
-		     			rs  = stm.executeQuery(promotionsQuery);
-		     			while (rs.next()){
-		     				directMessagesForMentions.add(rs.getString("promotion_content"));
-		     				//System.out.println("DM with: " + tag);
-		     	   		   }
-	     		   	} catch (SQLException e) {
-	     		   		e.printStackTrace();
-	     		   	} finally{
-		     		   	if(con != null){
-		  				  try {
-							db_object.closeConnection();
-		  				  } catch (SQLException e) {
-							e.printStackTrace();
-		  				  } finally{
-		  				  		con = null;
+		     		try 
+		     		{
+		     			    if(con == null){
+		     					  db_object.openConnection();
+		     					  con = db_object.getConnection();
+		     		        }   
+		     				stm = con.createStatement();
+		     				rs  = stm.executeQuery(listOfTagsQuery);
+		     				while (rs.next()){
+		     					//replyTweetsForMentions.add("#" + rs.getString("hashtag_wording"));
+		     		            // *Reply
+		     		           try {
+		     			          
+		     			          //mediaImg     = twitter.uploadMedia(fileImg);
+		     			          //mediaImgId   = mediaImg.getMediaId();
+		     			          
+		     			          mReplyText    = rs.getString("hashtag_wording");
+		     			          mReplyImg     = rs.getString("hashtag_picture");
+		     			          //fileImg     = new File("askbni.png");
+		     			          fileImg       = new File(mReplyImg);
+		     			          mReplyImgText = rs.getString("hashtag_picture_wording");
+		     			           
+		     		        	  statusUpdate  = new StatusUpdate(mUsername + mReplyText);
+		     			          statusUpdate.inReplyToStatusId(mTweetId);
+		     			          
+		     			          statusUpdate.setMedia(fileImg);
+		     			          twitter.updateStatus(statusUpdate);
+		     			          //Output
+		     			          System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText() + "\n");
+		     		        	  System.out.println("Reply Wording:" + mReplyText);
+		     		           } catch(Exception e){
+		     		        	  e.printStackTrace();
+		     		           }
+		     		           
 		     		   		}
-		     		   	}
-	     		   	}
-	     		   	
-	     		   	// *Log for Statistics
-		            statLogger.eventsLog("1", status.getUser().getScreenName(), tag);
-				}
-	            //System.out.println("DMes are: "); 
-	            //System.out.println(directMessagesForMentions);
-	            
-	            // *We then send out all possible DM per hashTAGS
-	            int i = 0;
-	            for (String msg : directMessagesForMentions) {
-		            recipientId = status.getUser().getScreenName();
-		            directMsg = msg;
-		            try {
-		            	if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
-	     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
-	     				}
-						//System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
-			            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
-		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
-					} catch (TwitterException e) {
-						e.printStackTrace();
-					}
-		            
-		            // *Log for Statistics
-		            if(i <hashtags.size()){
-		            	twitterLog.saveOutwardDM(status.getUser().getScreenName(), msg, "Mention Reply", hashtags.get(i));
-		            }
-		            i++;
+		     		} catch (SQLException e) {
+		     			   	e.printStackTrace();
+		     		} finally{
+		     			    if(con != null){
+		     					  try {
+		     						db_object.closeConnection();
+		     					  } catch (SQLException e) {
+		     						e.printStackTrace();
+		     					  } finally{
+		     						  con = null;
+		     					  }
+		     		        }
+		     		}
+		     		
+		     		// *Log for Statistics
+ 		            statLogger.eventsLog("11", status.getUser().getScreenName(), tag);
 	            }
+	            
+	            // *Log for Statistics
+	            int i = 0;
+	            if(i <hashtags.size()){
+	            	twitterLog.saveOutwardDM(
+	            			status.getUser().getScreenName(), 
+	            			"Reply Tweet @" + status.getUser().getScreenName(), 
+	            			"Mention Reply", 
+	            			hashtags.get(i)
+	            	);
+	            }
+	            i++;
 	            
 	            // *Freeing up memory   
 	            hashtags.clear(); 
-	            directMessagesForMentions.clear();
-	            */
+	            replyTweetsForMentions.clear();
 	        }
 
 	        @Override
