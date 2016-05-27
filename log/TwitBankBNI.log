@@ -2327,4 +2327,13 @@ No filter parameters found. Expect at least one parameter: follow track location
  2016-05-27 11:56:49,031 INFO - Establishing connection.
  2016-05-27 11:56:50,581 INFO - Connection established.
  2016-05-27 11:56:50,581 INFO - Receiving status stream.
+ 2016-05-27 12:33:04,663 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-05-27 12:33:04,664 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-05-27 12:33:04,682 INFO - MysqlConnect: Connection to MySQL DB established.
+ 2016-05-27 12:33:04,682 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-05-27 12:33:04,745 INFO - MysqlConnect: Connection to MySQL DB retrieved.
+ 2016-05-27 12:33:04,747 INFO - MysqlConnect: Connection to MySQL DB terminated.
+ 2016-05-27 12:33:04,750 INFO - Establishing connection.
+ 2016-05-27 12:33:06,126 INFO - Connection established.
+ 2016-05-27 12:33:06,126 INFO - Receiving status stream.
  

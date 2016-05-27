@@ -178,16 +178,16 @@ public class TwitterDaemonStatus {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-			   System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
-//			   	String hashtag_string = "";
-//			    //Extract hashTAGS from status
-//	            hashtags              = tagExtractor.parseTweetForHashtags(status.getText());
-//	            
-//	            for (String tag : hashtags) { hashtag_string += tag.toLowerCase(); }
-//	            
-//
-//	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
-//	            System.out.println("Hash Tags' String: " + hashtag_string + "\n\n");
+			    //System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+			   	String hashtag_string = "";
+			    //Extract hashtags from status
+	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
+	            
+	            for (String tag : hashtags) { hashtag_string += tag.toLowerCase() + " "; }
+	            
+
+	            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+	            System.out.println("HashTags String: " + hashtag_string + "\n\n");
 	            
 	            /*
 	            // *We compose DM per hashTAGS
