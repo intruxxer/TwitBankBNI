@@ -38,10 +38,10 @@ import java.util.Map;
 
 public class TwitterDaemonDM {
 	
-	private static final String twitterUser    = "biline_dev";
-	//bni46 //bni46_cs //fahmivanhero //biline_dev //dev_amartha
-	private static final String twitterAccount = "biline_dev";
-	//BNI //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
+	private static final String twitterUser    = "bni46";
+	//bni46 //bni46_2 //bni46_cs //fahmivanhero //biline_dev //dev_amartha
+	private static final String twitterAccount = "BNI";
+	//BNI //BNI //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
 	
 	private static String latestStatus;
 	private static Status status;
