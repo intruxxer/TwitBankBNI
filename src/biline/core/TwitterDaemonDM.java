@@ -13,15 +13,18 @@ import twitter4j.RateLimitStatusListener;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
+import twitter4j.UploadedMedia;
 import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -74,6 +77,7 @@ public class TwitterDaemonDM {
 	private static ArrayList<String> menus;
 	private static ArrayList<String> aliasmenus;
 	private static ArrayList<String> directMessagesPromoAndServices;
+	private static ArrayList<String> replyTweetsForMentions;
 	private static TwitterTweetExtractorUtil tagExtractor;
 	private static TwitterStatisticsUtil statLogger;
 	
@@ -95,6 +99,7 @@ public class TwitterDaemonDM {
 		
 		new ArrayList<String>();
 		directMessagesPromoAndServices  = new ArrayList<String>();
+		replyTweetsForMentions          = new ArrayList<String>();
 		
 		dateFormat       =  new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -163,8 +168,11 @@ public class TwitterDaemonDM {
 		   
 		   //ArrayList<Long>   follow  = new ArrayList<Long>();
 	       //ArrayList<String> track   = new ArrayList<String>();
+           
+           /*
 		   ArrayList<String> trackDM        = new ArrayList<String>();
-		   String listOfTagsQuery           = "SELECT * FROM tbl_hashtags"; 
+		   ArrayList<String> trackTweet     = new ArrayList<String>();
+		   String listOfTagsQuery           = "SELECT hashtag_term FROM tbl_hashtags"; 
 		   
 		   try {
 			    if(con == null){
@@ -173,7 +181,7 @@ public class TwitterDaemonDM {
 		        }   
 				stm = con.createStatement();
 				rs  = stm.executeQuery(listOfTagsQuery);
-				System.out.print("\n[KEYWORDS] Trackings: ");
+				System.out.print("\n[DM KEYWORDS] Trackings: ");
 				int n = 0;
 				while (rs.next()){
 					if(n % 10 == 0)
@@ -182,7 +190,7 @@ public class TwitterDaemonDM {
 					trackDM.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
 					n++;
 		   		}
-				System.out.print("\n[KEYWORDS] " + n + " keywords being tracked." + "\n");
+				System.out.print("\n[DM KEYWORDS] " + n + " keywords being tracked." + "\n");
 		   } catch (SQLException e) {
 			   	e.printStackTrace();
 		   } finally{
@@ -196,6 +204,41 @@ public class TwitterDaemonDM {
 					  }
 		        }
 		   }
+		   
+		   
+		   listOfTagsQuery  = "SELECT hashtag_term FROM tbl_hashtags_mention"; 
+		   
+		   try {
+			    if(con == null){
+					  db_object.openConnection();
+					  con = db_object.getConnection();
+		        }   
+				stm = con.createStatement();
+				rs  = stm.executeQuery(listOfTagsQuery);
+				System.out.print("\n[MENTION KEYWORDS] Trackings: ");
+				int n = 0;
+				while (rs.next()){
+					if(n % 10 == 0)
+						System.out.print("\n");
+					System.out.print("#" + rs.getString("hashtag_term") + " ");
+					trackTweet.add("@" + twitterUser + " #" + rs.getString("hashtag_term"));
+					n++;
+		   		}
+				System.out.print("\n[MENTION KEYWORDS] " + n + " keywords being tracked." + "\n");
+		   } catch (SQLException e) {
+			   	e.printStackTrace();
+		   } finally{
+			    if(con != null){
+					  try {
+						db_object.closeConnection();
+					  } catch (SQLException e) {
+						e.printStackTrace();
+					  } finally{
+						  con = null;
+					  }
+		        }
+		   }
+		   */
 		   
 		   //for (String arg : args) {
 	       //   if (isNumericalArgument(arg)) {
@@ -224,7 +267,7 @@ public class TwitterDaemonDM {
 	    
 	       // *TO LISTEN TO DM & OUR TWITTER USER'S ACTIVITY
 	       //twitterStreamDM.filter( new FilterQuery( trackMention.toArray( new String[trackMention.size()] ) ) );
-	       twitterStreamDM.user( );
+	       twitterStreamDM.user();
 	       //twitterStreamDM.filter(fq);
 	    
 	    // Methods: user() & filter() internally create threads respectively, manipulating TwitterStream; e.g. user() simply gets all tweets from its following users.
@@ -269,71 +312,110 @@ public class TwitterDaemonDM {
 	      
 		   @Override
 	        public void onStatus(Status status) {
-			   
-			   /*
-			   System.out.println("onStatus from DM Stream @" + status.getUser().getScreenName() + " - " + status.getText());
-	            
-	            // *We extract hashTAGS from status
-	            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
-	            // *We compose DM per hashTAGS
-	            String promotionsQuery = "";
-	            stm = null; rs = null;
-	            
-	            for (String tag : hashtags) {
-	            	Date now = new Date();
-	            	today    = dateFormat.format(now);
-	            	promotionsQuery = "SELECT * FROM tbl_promotions LEFT JOIN tbl_hashtags " 
-	            					+ "ON tbl_hashtags.hashtag_id = tbl_promotions.promotion_hashtag "
-	            					+ "WHERE tbl_hashtags.hashtag_term = '" + tag + "' "
-	            					+ "AND tbl_promotions.promotion_enddate >= '" + today + "' AND tbl_promotions.promotion_deleted = '0'";
-	            	System.out.println(promotionsQuery);
-	            	
-	     		   	try {
-			     		if(con == null){
-			     			db_object.openConnection();
-			  				con = db_object.getConnection();
-			  	        }
-		     			stm = con.createStatement();
-		     			rs  = stm.executeQuery(promotionsQuery);
-		     			while (rs.next()){
-		     				directMessagesForMentions.add("[" + rs.getString("promotion_title") + "] " + rs.getString("promotion_content"));
-		     				System.out.println("DM with: " + tag);
-		     	   		   }
-	     		   	} catch (SQLException e) {
-	     		   		e.printStackTrace();
-	     		   	} finally{
-		     		   	if(con != null){
-		  				  try {
-							db_object.closeConnection();
-		  				  } catch (SQLException e) {
-							e.printStackTrace();
-		  				  } finally{
-		  				  		con = null;
-		     		   		}
-		     		   	}
-	     		   	}
-				}
-	            //System.out.println("DMes are: "); 
-	            //System.out.println(directMessagesForMentions);
-	            
-	         // *We then send out all possible DM per hashTAGS
-	            for (String msg : directMessagesForMentions) {
-		            recipientId = status.getUser().getScreenName();
-		            directMsg = msg;
-		            try {
-						DirectMessage message = twitter.sendDirectMessage(recipientId, directMsg);
-						System.out.println("Sent: " + message.getText() + " to @" + status.getUser().getScreenName());
-			            //asyncTwitter.sendDirectMessage(recipientId, directMsg);
-		    		    //System.out.println("Sent: " + directMsg + " to @" + status.getUser().getScreenName());
-					} catch (TwitterException e) {
-						e.printStackTrace();
-					}
-	            }
-	            
-	         // *Freeing up memory   
-	            hashtags.clear(); 
-	            directMessagesForMentions.clear();
-	            */
+			            String mentioningUser = status.getUser().getScreenName();
+			            if(mentioningUser.equalsIgnoreCase(twitterAccount))
+			            	return;
+					    long mTweetId    = status.getId();
+					    String mUsername = "@" + mentioningUser + " ";
+			            StatusUpdate statusUpdate;
+			            String mReplyText;
+			            String mReplyImg;
+			            String mReplyImgText;
+			            File fileImg;
+			            UploadedMedia mediaImg;
+			            long mediaImgId;
+					   
+					   	Date now = new Date();
+					   	today    = dateFormat.format(now);
+					   	
+					    //Extract hashtags from status
+					   	//String hashtag_string       = "";
+			            hashtags = tagExtractor.parseTweetForHashtags(status.getText());
+			            
+			            stm = null; rs = null;
+			            for (String tag : hashtags)
+			            { 
+			            	//If we want to enable multihashtags feature
+			            	//hashtag_string += tag.toLowerCase() + " "; 
+			            	String listOfTagsQuery = "SELECT * FROM tbl_hashtags_mention " + 
+			            						     "WHERE tbl_hashtags_mention.hashtag_term = '" + tag + "' " +
+			            						     "AND tbl_hashtags_mention.hashtag_end_date >= '" + today + "' " + 
+			            						     "AND tbl_hashtags_mention.hashtag_status = '1' AND tbl_hashtags_mention.hashtag_deleted = '0'";
+			            	
+				     		try 
+				     		{
+				     			    if(con == null){
+				     					  db_object.openConnection();
+				     					  con = db_object.getConnection();
+				     		        }   
+				     				stm = con.createStatement();
+				     				rs  = stm.executeQuery(listOfTagsQuery);
+//				     				if(!mentioningUser.equalsIgnoreCase(twitterAccount))
+//				     					{ rs  = stm.executeQuery(listOfTagsQuery); }
+//				     				else
+//				     					{ return; }
+				     				while (rs.next()){
+				     					//replyTweetsForMentions.add("#" + rs.getString("hashtag_wording"));
+				     		            // *Reply
+				     		           try {
+				     			          
+				     			          //mediaImg     = twitter.uploadMedia(fileImg);
+				     			          //mediaImgId   = mediaImg.getMediaId();
+				     			          
+				     			          mReplyText    = rs.getString("hashtag_wording");
+				     			          mReplyImg     = rs.getString("hashtag_picture");
+				     			          //fileImg     = new File("askbni.png");
+				     			          fileImg       = new File(mReplyImg);
+				     			          mReplyImgText = rs.getString("hashtag_picture_wording");
+				     			           
+				     		        	  statusUpdate  = new StatusUpdate(mUsername + mReplyText);
+				     			          statusUpdate.inReplyToStatusId(mTweetId);
+				     			          
+				     			          statusUpdate.setMedia(fileImg);
+				     			          twitterDM.updateStatus(statusUpdate);
+				     			          //Output
+				     			          System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText() + "\n");
+				     		        	  System.out.println("Reply Wording:" + mUsername + mReplyText);
+				     		           } catch(Exception e){
+				     		        	  e.printStackTrace();
+				     		           }
+				     		           
+				     		   		}
+				     		} catch (SQLException e) {
+				     			   	e.printStackTrace();
+				     		} finally{
+				     			    if(con != null){
+				     					  try {
+				     						db_object.closeConnection();
+				     					  } catch (SQLException e) {
+				     						e.printStackTrace();
+				     					  } finally{
+				     						  con = null;
+				     					  }
+				     		        }
+				     		}
+				     		
+				     		// *Log for Statistics
+				     		if(!mentioningUser.equalsIgnoreCase(twitterAccount))
+				     		{ statLogger.eventsLog("11", status.getUser().getScreenName(), tag); }
+			            }
+			            
+			            // *Log for Statistics
+			            int i = 0;
+			            if(i <hashtags.size()){
+			            	twitterLog.saveOutwardDM(
+			            			status.getUser().getScreenName(), 
+			            			"Reply Tweet @" + status.getUser().getScreenName(), 
+			            			"Mention Reply", 
+			            			hashtags.get(i)
+			            	);
+			            }
+			            i++;
+			            
+			            // *Freeing up memory   
+			            hashtags.clear(); 
+			            replyTweetsForMentions.clear();
+			
 	        }
 
 	        @Override
@@ -433,7 +515,7 @@ public class TwitterDaemonDM {
 	        @Override
 	        public void onDirectMessage(DirectMessage directMessage) {
 	        	
-	            System.out.println("onDirectMessage from @" + directMessage.getSenderScreenName() + " '" + directMessage.getText() + "' ");
+	            //System.out.println("onDirectMessage from @" + directMessage.getSenderScreenName() + " '" + directMessage.getText() + "' ");
 	            
 	            // *We extract hashTAGS from status then lowercase all the tags
 	            hashtags = tagExtractor.parseTweetForHashtags(directMessage.getText());
@@ -1127,6 +1209,7 @@ public class TwitterDaemonDM {
         			recipientId = directMessage.getSenderScreenName();
 
         			Date currentDate            	 = new Date();
+        			Date campaignDate				 = new Date();
         			SimpleDateFormat codeFormat      = new SimpleDateFormat("yyMd");
         			SimpleDateFormat codeStdFormat   = new SimpleDateFormat("yyMMddHHmmss");
         			SimpleDateFormat validDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -1167,7 +1250,7 @@ public class TwitterDaemonDM {
 	            		{
 	            			Date now = new Date();
 	    	            	today    = validDateFormat.format(now);
-	            			String campaigntypeQuery  = "SELECT campaign_code FROM tbl_account_campaign WHERE campaign_tag = '" + campaign_tag  + "' " 
+	            			String campaigntypeQuery  = "SELECT campaign_code, campaign_enddate FROM tbl_account_campaign WHERE campaign_tag = '" + campaign_tag  + "' " 
 	            									  + "AND campaign_enddate >= '" + today + "' AND campaign_status = 1 AND campaign_deleted = '0' LIMIT 1";
 	            			System.out.println("\n[Open Query] "+ campaigntypeQuery);
 	            			stm = null; rs = null;
@@ -1180,6 +1263,7 @@ public class TwitterDaemonDM {
 	            		     	rs  = stm.executeQuery(campaigntypeQuery);
 	            		     	while (rs.next()){
 	            		     		campaign_code = rs.getString("campaign_code");
+	            		     		campaignDate  = rs.getDate("campaign_enddate");
 	            		     		System.out.println("Campaign type's Code: "+ campaign_code);
 	            		     	}
 	            	        } catch (SQLException e) {
@@ -1201,6 +1285,57 @@ public class TwitterDaemonDM {
 	            				directMsg 	= "Maaf, Pesan Twitter DM tentang Promo Pembukaan Rekening yg Anda inginkan tidak tersedia/telah berakhir. ";
 		            			directMsg  += "\nSilakan DM dengan Promo Pembukaan Rekening yg tersedia/masih berlaku dgn DM: #OpenAccount #PromoPembukaanRekening #Nama_Lengkap #No_HP.";
 		            			directMsg  += "\nContoh:\n #OpenAccount #TaplusMuda #Denny_Dalvian #08118824686";
+		            			try {
+					            	//System.out.println("#OpenAccount #PromoRekening with recipient: " + recipientId + " & DM: " + directMsg);
+		            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
+				     					DirectMessage message = twitterDM.sendDirectMessage(recipientId, directMsg);
+				     				}
+					            	requirement = false;
+								} catch (TwitterException e) {
+									e.printStackTrace();
+								}
+	            			}
+	            			
+	            		}
+	            		
+	            		//Check: Only new user will get the promo. Check their username (and/or phone?)
+	            		
+	            		if(requirement)
+	            		{
+	            			String existingUserAccount = "";
+	            			String existingUserPhone   = "";
+	            			String existingUserQuery   = "SELECT account_holder, account_phone FROM tbl_account_users " +
+	            										"WHERE account_handler = '" + recipientId  + "' LIMIT 1";
+	            			System.out.println("\n[Existing User Query] "+ existingUserQuery);
+	            			stm = null; rs = null;
+	            	        try {
+	            		     	if(con == null){
+	            		     		db_object.openConnection();
+	            		  			con = db_object.getConnection();
+	            		        }
+	            		     	stm = con.createStatement();	     		
+	            		     	rs  = stm.executeQuery(existingUserQuery);
+	            		     	while (rs.next()){
+	            		     		existingUserAccount = rs.getString("account_holder");
+	            		     		existingUserPhone   = rs.getString("account_phone");
+	            		     	}
+	            	        } catch (SQLException e) {
+	            	 	   	 	e.printStackTrace();
+	            	     	} 
+	            	        finally {
+	            	    		   	if(con != null){
+	            	  				  try {
+	            						db_object.closeConnection();
+	            	  				  } catch (SQLException e) {
+	            						e.printStackTrace();
+	            	  				  } finally{
+	            	  				  		con = null;
+	            	     		   		}
+	            	     		   	}
+	            		   	}
+	            	        
+	            			if(!existingUserAccount.equals("")){
+	            				directMsg 	= "Akun Twitter Anda telah terdaftar dalam promo #OpenAccount ini a/n:  " + existingUserAccount + " (" + existingUserPhone + ") .";
 		            			try {
 					            	//System.out.println("#OpenAccount #PromoRekening with recipient: " + recipientId + " & DM: " + directMsg);
 		            				if(!recipientId.equalsIgnoreCase(twitterAccount) && !directMsg.equalsIgnoreCase("")){
@@ -1248,7 +1383,7 @@ public class TwitterDaemonDM {
 					     		   	}
 						   	}
 	            			
-	            			String valid_date 			= validDateFormat.format(currentDate);
+	            			String valid_date 		    = validDateFormat.format(currentDate);
 	            			String account_date		    = dateFormat.format(currentDate); 
 	            			String account_code         = "BNI" + campaign_code + codeFormat.format(currentDate) + lastSeqAccNumber.toString();
 	            			//NOTE: next time, check whether it already exists in DB.
@@ -1362,11 +1497,12 @@ public class TwitterDaemonDM {
 			  		   		}
 				            
 				            //Prior to sending, replace some variables within the DM template & format the output valid date
-				            Date convertedValidDate = null;
+				            Date convertedValidDate   = null;
+				            String campaignDateString = campaignDate.toString();
 							try {
 								//Change from String to Date() by Parsing the String of Date.
 								DateFormat parser  = new SimpleDateFormat("yyyy-MM-dd");
-								convertedValidDate = (Date) parser.parse(valid_date);
+								convertedValidDate = (Date) parser.parse(campaignDateString); //BEFORE: valid_date
 							} catch (ParseException pe) {
 								pe.printStackTrace();
 							}

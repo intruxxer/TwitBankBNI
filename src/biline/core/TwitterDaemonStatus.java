@@ -41,9 +41,9 @@ import java.util.Map;
 
 public class TwitterDaemonStatus {
 	
-	private static final String twitterUser    = "biline_dev";
-	//bni46 //bni46 //bni46_cs //fahmivanhero //biline_dev //dev_amartha
-	private static final String twitterAccount = "biline_dev";
+	private static final String twitterUser    = "bni46_2";
+	//bni46 //bni46_2 //bni46_cs //fahmivanhero //biline_dev //dev_amartha
+	private static final String twitterAccount = "BNI";
 	//BNI //BNI //BNICustomerCare //fahmivanhero //biline_dev //dev_amartha
 	
 	private static String latestStatus;
@@ -157,12 +157,14 @@ public class TwitterDaemonStatus {
 		        }
 		   }
 		   
-		   FilterQuery fq    = new FilterQuery();
-	       String keywords[] = { "@biline_dev #taplusmuda", "@biline_dev #twitbank", "@biline_dev #bni" };
+		   //FilterQuery fq    = new FilterQuery();
+		   
+	       //String keywords[] = { "@biline_dev #taplusmuda", "@biline_dev #twitbank", "@biline_dev #bni" };
 		   //String keywords[] = { "#microfinance", "#life" };
 		   //String keywords[]   = trackMention.toArray(new String[trackMention.size()]);
 	       //String[] trackArray = trackMention.toArray(new String[trackMention.size()]);
-	       fq.track(keywords);
+		   
+	       //fq.track(keywords);
 		   
 	       // Sets stream listener(s) to track events from the Stream: 
 	       // (1) User stream & (2) Stream's rate limit. 
@@ -172,6 +174,7 @@ public class TwitterDaemonStatus {
 	       // *TO LISTEN TO STATUS MENTIONS
 	       //twitterStream.filter(filter);
 	       //twitterStream.filter("@dev_amartha #microfinance, @dev_amartha #life");
+	       
 	       //twitterStream.filter(fq);
 	       twitterStream.user();
 	   
