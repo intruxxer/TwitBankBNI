@@ -1305,7 +1305,7 @@ public class TwitterDaemonDM {
 	            			String existingUserAccount = "";
 	            			String existingUserPhone   = "";
 	            			String existingUserQuery   = "SELECT account_holder, account_phone FROM tbl_account_users " +
-	            										"WHERE account_handler = '" + recipientId  + "' LIMIT 1";
+	            										"WHERE account_handler = '" + recipientId  + "' AND deleted = '0' LIMIT 1";
 	            			System.out.println("\n[Existing User Query] "+ existingUserQuery);
 	            			stm = null; rs = null;
 	            	        try {
